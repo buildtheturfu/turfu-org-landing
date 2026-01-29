@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "TURFu — Yeni paradigmanın altyapısı",
+    "description": "İnsan koordinasyonunu dönüştürmek için etiği, kolektif zekayı ve merkeziyetsiz teknolojileri uyumlu hale getiren transdisipliner meta-yapı.",
+    "keywords": "metaetik, yönetişim, şeffaflık, DAO, Web3, kolektif zeka, transdisiplinerlik"
+  },
+  "nav": {
+    "vision": "Vizyon",
+    "ecosystem": "Ekosistem",
+    "principles": "İlkeler",
+    "join": "Katıl"
+  },
+  "hero": {
+    "tagline": "Yeni paradigmanın altyapısı",
+    "subtitle": "Metaetik · Yönetişim · Şeffaflık · Eylem",
+    "description": "TURFu, insan koordinasyonunu dönüştürmek için etiği, kolektif zekayı ve merkeziyetsiz teknolojileri uyumlu hale getiren transdisipliner bir meta-yapıdır.",
+    "cta_primary": "Lightpaper'ı Oku",
+    "cta_secondary": "Bize Katıl"
+  },
+  "problem": {
+    "title": "Neden şimdi?",
+    "point_1_title": "Epistemik kriz",
+    "point_1_desc": "Bilgi üreten kurumlar meşruiyetini kaybediyor. Otorite olarak konsensüs artık yeterli değil.",
+    "point_2_title": "Başarısız koordinasyon",
+    "point_2_desc": "Sistemik karmaşıklık karşısında miras yönetişim modelleri sınırlarını gösteriyor.",
+    "point_3_title": "Uyumsuz teknolojiler",
+    "point_3_desc": "Yapay zeka ve DLT'ler kanıt, itibar ve koordinasyonu dönüştürüyor — sağlam bir etik çerçeve olmadan."
+  },
+  "vision": {
+    "title": "Eylem için bir meta-yapı",
+    "intro": "TURFu, dönüşüm yörüngeleri inşa etmek için transdisipliner bir çerçeve ve somut araçlar sunuyor — bireysel, örgütsel, toplumsal.",
+    "quote": "Praksis olmadan, gerçek metamorfoz olmaz."
+  },
+  "ecosystem": {
+    "title": "Çok katmanlı mimari",
+    "layer0_name": "Katman 0 — TURFu ORG",
+    "layer0_role": "Metaetik koruyucu",
+    "layer0_desc": "Tüzük, standartlar, tutarlılık, değer çatışmalarının hakemliği.",
+    "layer1_name": "Katman 1 — OZAM",
+    "layer1_role": "Kuluçka & Lab",
+    "layer1_desc": "Uyumlu projelerin hızlandırılması, şeffaf tahsis, paylaşılan teknoloji altyapısı (SDK).",
+    "layer2_name": "Katman 2 — Projeler",
+    "layer2_role": "Uygulamalar, DAO'lar, Deneyler",
+    "layer2_desc": "Somut uygulama: topluluklar, hizmetler, üçüncü mekanlar, açık bilim."
+  },
+  "principles": {
+    "title": "Kurucu ilkeler",
+    "p1_name": "Metaetik",
+    "p1_desc": "Dogmatizm ve göreceliliğin ötesinde: sağlam, izlenebilir, revize edilebilir meşruiyet.",
+    "p2_name": "Doğrulanabilir şeffaflık",
+    "p2_desc": "Kararların, bütçelerin, katkıların izlenebilirliği. Süreç kanıtı.",
+    "p3_name": "Stigmerji",
+    "p3_desc": "Sinyal ve izler aracılığıyla koordinasyon — dikey komut değil.",
+    "p4_name": "Bireysel egemenlik",
+    "p4_desc": "Bireysel kontrol altında veriler. Tasarımda gizlilik."
+  },
+  "cta": {
+    "title": "Harekete katıl",
+    "contributor": "Katkıda bulunan",
+    "contributor_desc": "Discord'a katılın, Manifesto'ya katkıda bulunun.",
+    "contributor_btn": "Discord",
+    "builder": "İnşa eden",
+    "builder_desc": "OZAM aracılığıyla uyumlu bir proje önerin.",
+    "builder_btn": "Öner",
+    "partner": "Ortak / Fon sağlayıcı",
+    "partner_desc": "İşbirliği için bizimle iletişime geçin.",
+    "partner_btn": "İletişim"
+  },
+  "footer": {
+    "manifeste": "Manifesto",
+    "lightpaper": "Lightpaper",
+    "copyright": "© 2026 TURFu ORG. Açık Kaynak."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "TURFu — L'infrastructure du paradigme suivant",
+    "description": "Métastructure transdisciplinaire alignant éthique, intelligence collective et technologies décentralisées pour transformer la coordination humaine.",
+    "keywords": "métaéthique, gouvernance, transparence, DAO, Web3, intelligence collective, transdisciplinarité"
+  },
+  "nav": {
+    "vision": "Vision",
+    "ecosystem": "Écosystème",
+    "principles": "Principes",
+    "join": "Rejoindre"
+  },
+  "hero": {
+    "tagline": "L'infrastructure du paradigme suivant",
+    "subtitle": "Métaéthique · Gouvernance · Transparence · Action",
+    "description": "TURFu est une métastructure transdisciplinaire alignant éthique, intelligence collective et technologies décentralisées pour transformer la coordination humaine.",
+    "cta_primary": "Lire le Lightpaper",
+    "cta_secondary": "Rejoindre"
+  },
+  "problem": {
+    "title": "Pourquoi maintenant ?",
+    "point_1_title": "Crise épistémique",
+    "point_1_desc": "Les institutions de production du savoir perdent en légitimité. Le consensus comme autorité ne suffit plus.",
+    "point_2_title": "Coordination défaillante",
+    "point_2_desc": "Face à la complexité systémique, les modèles de gouvernance hérités montrent leurs limites.",
+    "point_3_title": "Technologies non alignées",
+    "point_3_desc": "L'IA et les DLT transforment la preuve, la réputation et la coordination — sans cadre éthique robuste."
+  },
+  "vision": {
+    "title": "Une métastructure pour agir",
+    "intro": "TURFu propose un cadre transdisciplinaire et des outils concrets pour construire des trajectoires de transformation — individuelle, organisationnelle, sociétale.",
+    "quote": "Sans praxis, pas de véritable métamorphose."
+  },
+  "ecosystem": {
+    "title": "Architecture multi-layer",
+    "layer0_name": "Layer 0 — TURFu ORG",
+    "layer0_role": "Gardien métaéthique",
+    "layer0_desc": "Charte, standards, cohérence, arbitrage des conflits de valeurs.",
+    "layer1_name": "Layer 1 — OZAM",
+    "layer1_role": "Incubateur & Lab",
+    "layer1_desc": "Accélération de projets alignés, allocation transparente, infrastructure tech partagée (SDK).",
+    "layer2_name": "Layer 2 — Projets",
+    "layer2_role": "Apps, DAOs, Expérimentations",
+    "layer2_desc": "Mise en œuvre concrète : communautés, services, tiers-lieux, open science."
+  },
+  "principles": {
+    "title": "Principes fondateurs",
+    "p1_name": "Métaéthique",
+    "p1_desc": "Au-delà du dogmatisme et du relativisme : une légitimité robuste, traçable, révisable.",
+    "p2_name": "Transparence vérifiable",
+    "p2_desc": "Traçabilité des décisions, budgets, contributions. Proof-of-process.",
+    "p3_name": "Stigmergie",
+    "p3_desc": "Coordination par signaux et traces — pas par commandement vertical.",
+    "p4_name": "Souveraineté individuelle",
+    "p4_desc": "Données sous contrôle des individus. Privacy by design."
+  },
+  "cta": {
+    "title": "Rejoindre le mouvement",
+    "contributor": "Contributeur",
+    "contributor_desc": "Rejoignez le Discord, participez au Manifeste.",
+    "contributor_btn": "Discord",
+    "builder": "Builder",
+    "builder_desc": "Proposez un projet aligné via OZAM.",
+    "builder_btn": "Proposer",
+    "partner": "Partenaire / Funder",
+    "partner_desc": "Contactez-nous pour collaborer.",
+    "partner_btn": "Contact"
+  },
+  "footer": {
+    "manifeste": "Manifeste",
+    "lightpaper": "Lightpaper",
+    "copyright": "© 2026 TURFu ORG. Open Source."
+  }
+}

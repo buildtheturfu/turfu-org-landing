@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+
+  body {
+    @apply bg-turfu-dark text-white antialiased;
+  }
+
+  ::selection {
+    @apply bg-turfu-accent/30 text-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3
+           bg-gradient-turfu hover:bg-gradient-turfu-hover
+           text-white font-medium rounded-lg
+           transition-all duration-200
+           hover:shadow-lg hover:shadow-turfu-accent/25
+           focus:outline-none focus:ring-2 focus:ring-turfu-accent focus:ring-offset-2 focus:ring-offset-turfu-dark;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3
+           border border-white/20 hover:border-white/40
+           text-white font-medium rounded-lg
+           transition-all duration-200
+           hover:bg-white/5
+           focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-turfu-dark;
+  }
+
+  .section {
+    @apply py-20 md:py-32;
+  }
+
+  .container-narrow {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
