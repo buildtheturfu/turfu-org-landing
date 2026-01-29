@@ -51,10 +51,10 @@ Plans:
   1. User sees back-to-top button appear after scrolling down significantly
   2. User can tap button to smooth-scroll back to page top
   3. Screen reader users hear accessible label describing button purpose
-**Plans**: TBD (1 plan expected)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Create BackToTop component and integrate into global layout
 
 ## Progress
 
@@ -65,4 +65,4 @@ Phases execute in numeric order: 1 -> 2 -> 3
 |-------|----------------|--------|-----------|
 | 1. Horizontal Overflow | 1/1 | Complete | 2026-01-29 |
 | 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
-| 3. Back to Top | 0/TBD | Not started | - |
+| 3. Back to Top | 0/1 | Not started | - |
