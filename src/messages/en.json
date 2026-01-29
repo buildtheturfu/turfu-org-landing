@@ -9,6 +9,7 @@
     "ecosystem": "Ecosystem",
     "architecture": "Architecture",
     "principles": "Principles",
+    "content": "Content",
     "join": "Join"
   },
   "hero": {
@@ -140,5 +141,18 @@
     "concept_3_desc": "The architecture aims for an intelligent, decentralized governance model fundamentally aligned with the well-being of people and the planet.",
     "quote": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete.",
     "version": "TURFU Architecture v2.0 — Multi-Layer Metastructure 2025"
+  },
+  "content": {
+    "title": "Content",
+    "subtitle": "Documentation, guides and resources",
+    "search": "Search...",
+    "categories": "Categories",
+    "all": "All",
+    "articles": "Articles",
+    "no_articles": "No articles found",
+    "back": "Back",
+    "toc": "Table of contents",
+    "reading_time": "min read",
+    "published": "Published on"
   }
 }

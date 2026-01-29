@@ -9,6 +9,7 @@
     "ecosystem": "Ekosistem",
     "architecture": "Mimari",
     "principles": "İlkeler",
+    "content": "İçerik",
     "join": "Katıl"
   },
   "hero": {
@@ -140,5 +141,18 @@
     "concept_3_desc": "Mimari, insanların ve gezegenin refahıyla temelden uyumlu, akıllı, merkeziyetsiz bir yönetişim modeli hedefler.",
     "quote": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete.",
     "version": "TURFU Mimari v2.0 — Çok Katmanlı Meta-Yapı 2025"
+  },
+  "content": {
+    "title": "İçerik",
+    "subtitle": "Belgeler, kılavuzlar ve kaynaklar",
+    "search": "Ara...",
+    "categories": "Kategoriler",
+    "all": "Tümü",
+    "articles": "Makaleler",
+    "no_articles": "Makale bulunamadı",
+    "back": "Geri",
+    "toc": "İçindekiler",
+    "reading_time": "dk okuma",
+    "published": "Yayınlanma tarihi"
   }
 }

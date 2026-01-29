@@ -9,6 +9,7 @@
     "ecosystem": "Écosystème",
     "architecture": "Architecture",
     "principles": "Principes",
+    "content": "Contenu",
     "join": "Rejoindre"
   },
   "hero": {
@@ -140,5 +141,18 @@
     "concept_3_desc": "L'architecture vise un modèle de gouvernance intelligent, décentralisé, fondamentalement aligné avec le bien-être des personnes et de la planète.",
     "quote": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete.",
     "version": "TURFU Architecture v2.0 — Metastructure Multi-Couches 2025"
+  },
+  "content": {
+    "title": "Contenu",
+    "subtitle": "Documentation, guides et ressources",
+    "search": "Rechercher...",
+    "categories": "Catégories",
+    "all": "Tout",
+    "articles": "Articles",
+    "no_articles": "Aucun article trouvé",
+    "back": "Retour",
+    "toc": "Table des matières",
+    "reading_time": "min de lecture",
+    "published": "Publié le"
   }
 }

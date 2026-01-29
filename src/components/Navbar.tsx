@@ -1,20 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const t = useTranslations('nav');
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { href: '#problem', label: t('vision') },
-    { href: '#ecosystem', label: t('ecosystem') },
-    { href: '#architecture', label: t('architecture') },
-    { href: '#principles', label: t('principles') },
+    { href: `/${locale}#problem`, label: t('vision') },
+    { href: `/${locale}#ecosystem`, label: t('ecosystem') },
+    { href: `/${locale}#architecture`, label: t('architecture') },
+    { href: `/${locale}#principles`, label: t('principles') },
+    { href: `/${locale}/content`, label: t('content'), isLink: true },
   ];
 
   return (
@@ -29,19 +31,29 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-turfu-muted hover:text-white transition-colors"
-              >
-                {link.label}
-              </a>
+              link.isLink ? (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-turfu-muted hover:text-white transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-turfu-muted hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
+              )
             ))}
           </div>
 
           <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
-            <a href="#cta" className="btn-primary text-sm">
+            <a href={`/${locale}#cta`} className="btn-primary text-sm">
               {t('join')}
             </a>
           </div>
@@ -60,18 +72,29 @@ export default function Navbar() {
           <div className="md:hidden py-4 border-t border-white/5">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-turfu-muted hover:text-white transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </a>
+                link.isLink ? (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-turfu-muted hover:text-white transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-turfu-muted hover:text-white transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
               <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                 <LanguageSwitcher />
-                <a href="#cta" className="btn-primary text-sm" onClick={() => setIsOpen(false)}>
+                <a href={`/${locale}#cta`} className="btn-primary text-sm" onClick={() => setIsOpen(false)}>
                   {t('join')}
                 </a>
               </div>
