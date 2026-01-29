@@ -4,7 +4,7 @@ import { validatePassword, getAuthCookieName } from '@/lib/auth';
 export async function POST(request: Request) {
   const { password } = await request.json();
 
-  if (validatePassword(password)) {
+  if (await validatePassword(password)) {
     const response = NextResponse.json({ success: true });
     response.cookies.set(getAuthCookieName(), 'authenticated', {
       httpOnly: true,
