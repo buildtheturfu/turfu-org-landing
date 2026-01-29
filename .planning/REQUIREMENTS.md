@@ -52,22 +52,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OVER-01 | Pending | Pending |
-| OVER-02 | Pending | Pending |
-| OVER-03 | Pending | Pending |
-| NAV-01 | Pending | Pending |
-| NAV-02 | Pending | Pending |
-| NAV-03 | Pending | Pending |
-| NAV-04 | Pending | Pending |
-| BTT-01 | Pending | Pending |
-| BTT-02 | Pending | Pending |
-| BTT-03 | Pending | Pending |
+| OVER-01 | Phase 1 | Pending |
+| OVER-02 | Phase 1 | Pending |
+| OVER-03 | Phase 1 | Pending |
+| NAV-01 | Phase 2 | Pending |
+| NAV-02 | Phase 2 | Pending |
+| NAV-03 | Phase 2 | Pending |
+| NAV-04 | Phase 2 | Pending |
+| BTT-01 | Phase 3 | Pending |
+| BTT-02 | Phase 3 | Pending |
+| BTT-03 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 10 total
-- Mapped to phases: 0
-- Unmapped: 10 ⚠️
+- Mapped to phases: 10
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after initial definition*
+*Last updated: 2026-01-29 after roadmap creation*
