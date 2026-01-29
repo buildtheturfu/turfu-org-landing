@@ -22,9 +22,9 @@ Requirements for mobile UX fixes. Each maps to roadmap phases.
 
 ### Back to Top
 
-- [ ] **BTT-01**: Button appears after scrolling down (4+ viewport heights)
-- [ ] **BTT-02**: Clicking button smooth-scrolls to top of page
-- [ ] **BTT-03**: Button has accessible label for screen readers
+- [x] **BTT-01**: Button appears after scrolling down (4+ viewport heights)
+- [x] **BTT-02**: Clicking button smooth-scrolls to top of page
+- [x] **BTT-03**: Button has accessible label for screen readers
 
 ## v2 Requirements
 
@@ -59,9 +59,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NAV-02 | Phase 2 | Complete |
 | NAV-03 | Phase 2 | Complete |
 | NAV-04 | Phase 2 | Complete |
-| BTT-01 | Phase 3 | Pending |
-| BTT-02 | Phase 3 | Pending |
-| BTT-03 | Phase 3 | Pending |
+| BTT-01 | Phase 3 | Complete |
+| BTT-02 | Phase 3 | Complete |
+| BTT-03 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 10 total
@@ -70,4 +70,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after Phase 2 completion*
+*Last updated: 2026-01-29 after Phase 3 completion*

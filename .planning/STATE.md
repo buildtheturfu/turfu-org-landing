@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** Phase 2 - Mobile Sidebar (complete)
+**Current focus:** All phases complete - Mobile UX improvements delivered
 
 ## Current Position
 
-Phase: 2 of 3 (Mobile Sidebar)
+Phase: 3 of 3 (Back to Top)
 Plan: 1 of 1 in current phase
-Status: Phase 2 complete
-Last activity: 2026-01-29 - Completed 02-01-PLAN.md
+Status: PROJECT COMPLETE
+Last activity: 2026-01-29 - Completed 03-01-PLAN.md
 
-Progress: [######----] 67% (2/3 phases complete)
+Progress: [##########] 100% (3/3 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~18min
-- Total execution time: ~35min
+- Total plans completed: 3
+- Average duration: ~13min
+- Total execution time: ~40min
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [######----] 67% (2/3 phases complete)
 |-------|-------|-------|----------|
 | 01-horizontal-overflow | 1/1 | ~15min | ~15min |
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
+| 03-back-to-top | 1/1 | ~5min | ~5min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~15min), 02-01 (~20min)
-- Trend: Consistent execution times
+- Last 5 plans: 01-01 (~15min), 02-01 (~20min), 03-01 (~5min)
+- Trend: Execution time improved as patterns were established
 
 *Updated after each plan completion*
 
@@ -51,6 +52,9 @@ Recent decisions affecting current work:
 - [02-01]: PanelLeftOpen icon instead of Menu hamburger for clearer sidebar affordance
 - [02-01]: Button positioned top-right to avoid overlap with "Retour" link
 - [02-01]: Replicated sidebar content in drawer rather than wrapping existing component
+- [03-01]: z-30 for BackToTop button (consistent with sidebar toggle)
+- [03-01]: 400px scroll threshold before button appears
+- [03-01]: ArrowUp icon for clearer "go up" semantics
 
 ### Patterns Established
 
@@ -59,6 +63,8 @@ Recent decisions affecting current work:
 - `AnimatePresence + motion.div`: Enter/exit animations with opacity and transform
 - `RemoveScroll`: Wrapper for preventing body scroll during modal/drawer open
 - `z-30 < z-40 < z-50`: Button < backdrop < drawer layering
+- `addEventListener('scroll', handler, { passive: true })`: Scroll detection with cleanup
+- `window.scrollTo({ behavior: 'smooth' })`: Native smooth scrolling
 
 ### Pending Todos
 
@@ -66,17 +72,17 @@ None.
 
 ### Blockers/Concerns
 
-- [Research]: iOS Safari testing recommended for Phase 3 - position:fixed elements may have scroll behavior quirks
+- [Recommendation]: iOS Safari testing before production deployment - position:fixed elements may have scroll behavior quirks
 
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: Completed 02-01-PLAN.md (Phase 2 complete)
+Stopped at: Completed 03-01-PLAN.md (PROJECT COMPLETE)
 Resume file: None
 
 ## Next Steps
 
-Phase 2 is complete. Ready to plan Phase 3 (Back to Top):
-- Floating button appears after scrolling
-- Smooth scroll to top on tap
-- Accessible labels for screen readers
+All phases complete. Recommended actions:
+- Manual testing on physical iOS/Android devices
+- Deploy to staging environment
+- User acceptance testing
