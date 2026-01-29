@@ -68,7 +68,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-1. **Add loading state indicators for content pages** (ui) - 2026-01-30
+None.
 
 ### Blockers/Concerns
 
