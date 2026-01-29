@@ -24,10 +24,10 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
   1. User can view /content pages on mobile without horizontal scrollbar appearing
   2. User can horizontally scroll within code blocks to see long lines
   3. User sees images constrained to screen width without breaking layout
-**Plans**: TBD (1-2 plans expected)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md — Fix layout overflow, hide sidebar on mobile, apply responsive padding
 
 ### Phase 2: Mobile Sidebar
 **Goal**: Mobile users can access sidebar navigation via hamburger menu
@@ -63,6 +63,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Horizontal Overflow | 0/TBD | Not started | - |
+| 1. Horizontal Overflow | 0/1 | Ready to execute | - |
 | 2. Mobile Sidebar | 0/TBD | Not started | - |
 | 3. Back to Top | 0/TBD | Not started | - |
