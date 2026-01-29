@@ -10,7 +10,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Horizontal Overflow** - Eliminate horizontal scroll on mobile by constraining content width
+- [x] **Phase 1: Horizontal Overflow** - Eliminate horizontal scroll on mobile by constraining content width
 - [ ] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
 - [ ] **Phase 3: Back to Top** - Add floating button for long-page navigation
 
@@ -27,7 +27,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Fix layout overflow, hide sidebar on mobile, apply responsive padding
+- [x] 01-01-PLAN.md — Fix layout overflow, hide sidebar on mobile, apply responsive padding
 
 ### Phase 2: Mobile Sidebar
 **Goal**: Mobile users can access sidebar navigation via hamburger menu
@@ -63,6 +63,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Horizontal Overflow | 0/1 | Ready to execute | - |
+| 1. Horizontal Overflow | 1/1 | Complete | 2026-01-29 |
 | 2. Mobile Sidebar | 0/TBD | Not started | - |
 | 3. Back to Top | 0/TBD | Not started | - |
