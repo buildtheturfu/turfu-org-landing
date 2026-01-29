@@ -11,7 +11,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Horizontal Overflow** - Eliminate horizontal scroll on mobile by constraining content width
-- [ ] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
+- [x] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
 - [ ] **Phase 3: Back to Top** - Add floating button for long-page navigation
 
 ## Phase Details
@@ -38,10 +38,10 @@ Plans:
   2. User can tap hamburger to reveal sidebar as off-canvas drawer
   3. User can tap backdrop or X button to close drawer
   4. User cannot scroll page content while drawer is open
-**Plans**: TBD (1-3 plans expected)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: TBD
+- [x] 02-01-PLAN.md — Install react-remove-scroll, create MobileSidebarDrawer component, integrate into layout
 
 ### Phase 3: Back to Top
 **Goal**: Users can quickly return to page top on long documentation pages
@@ -64,5 +64,5 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Horizontal Overflow | 1/1 | Complete | 2026-01-29 |
-| 2. Mobile Sidebar | 0/TBD | Not started | - |
+| 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
 | 3. Back to Top | 0/TBD | Not started | - |
