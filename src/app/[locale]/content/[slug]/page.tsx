@@ -37,7 +37,7 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
   return (
     <div className="flex">
       {/* Main content */}
-      <article className="flex-1 p-8 max-w-3xl">
+      <article className="flex-1 p-4 md:p-8 max-w-3xl">
         {/* Back */}
         <Link
           href={`/${locale}/content`}

@@ -57,7 +57,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
     : t.documentation;
 
   return (
-    <main className="flex-1 p-8 max-w-4xl">
+    <main className="flex-1 p-4 md:p-8 max-w-4xl">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">{title}</h1>
