@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
+import BackToTop from '@/components/BackToTop';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -88,6 +89,7 @@ export default async function LocaleLayout({
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <BackToTop />
         </NextIntlClientProvider>
       </body>
     </html>
