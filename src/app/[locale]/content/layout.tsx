@@ -16,7 +16,7 @@ export default async function ContentLayout({ children, params: { locale } }: La
   return (
     <>
       <Navbar />
-      <div className="flex min-h-screen pt-16 bg-turfu-dark">
+      <div className="flex min-h-screen pt-16 bg-turfu-dark overflow-x-hidden">
         <ContentSidebar
           articles={articles}
           categories={categories}
