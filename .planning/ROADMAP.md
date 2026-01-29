@@ -12,7 +12,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 
 - [x] **Phase 1: Horizontal Overflow** - Eliminate horizontal scroll on mobile by constraining content width
 - [x] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
-- [ ] **Phase 3: Back to Top** - Add floating button for long-page navigation
+- [x] **Phase 3: Back to Top** - Add floating button for long-page navigation
 
 ## Phase Details
 
@@ -54,7 +54,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md — Create BackToTop component and integrate into global layout
+- [x] 03-01-PLAN.md — Create BackToTop component and integrate into global layout
 
 ## Progress
 
@@ -65,4 +65,4 @@ Phases execute in numeric order: 1 -> 2 -> 3
 |-------|----------------|--------|-----------|
 | 1. Horizontal Overflow | 1/1 | Complete | 2026-01-29 |
 | 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
-| 3. Back to Top | 0/1 | Not started | - |
+| 3. Back to Top | 1/1 | Complete | 2026-01-29 |
