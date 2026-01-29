@@ -9,9 +9,9 @@ Requirements for mobile UX fixes. Each maps to roadmap phases.
 
 ### Horizontal Overflow Fix
 
-- [ ] **OVER-01**: Content wrapper prevents horizontal scroll on mobile
-- [ ] **OVER-02**: Code blocks have horizontal scroll when content exceeds width
-- [ ] **OVER-03**: Images constrained to container width (max-width: 100%)
+- [x] **OVER-01**: Content wrapper prevents horizontal scroll on mobile
+- [x] **OVER-02**: Code blocks have horizontal scroll when content exceeds width
+- [x] **OVER-03**: Images constrained to container width (max-width: 100%)
 
 ### Mobile Navigation
 
@@ -52,9 +52,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OVER-01 | Phase 1 | Pending |
-| OVER-02 | Phase 1 | Pending |
-| OVER-03 | Phase 1 | Pending |
+| OVER-01 | Phase 1 | Complete |
+| OVER-02 | Phase 1 | Complete |
+| OVER-03 | Phase 1 | Complete |
 | NAV-01 | Phase 2 | Pending |
 | NAV-02 | Phase 2 | Pending |
 | NAV-03 | Phase 2 | Pending |
@@ -70,4 +70,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after roadmap creation*
+*Last updated: 2026-01-29 after Phase 1 completion*
