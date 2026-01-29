@@ -15,10 +15,10 @@ Requirements for mobile UX fixes. Each maps to roadmap phases.
 
 ### Mobile Navigation
 
-- [ ] **NAV-01**: Sidebar hidden on mobile (below md breakpoint)
-- [ ] **NAV-02**: Hamburger button toggles sidebar visibility (44x44px touch target)
-- [ ] **NAV-03**: Sidebar slides in as off-canvas drawer with backdrop overlay
-- [ ] **NAV-04**: Body scroll locked when drawer is open
+- [x] **NAV-01**: Sidebar hidden on mobile (below md breakpoint)
+- [x] **NAV-02**: Hamburger button toggles sidebar visibility (44x44px touch target)
+- [x] **NAV-03**: Sidebar slides in as off-canvas drawer with backdrop overlay
+- [x] **NAV-04**: Body scroll locked when drawer is open
 
 ### Back to Top
 
@@ -55,10 +55,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OVER-01 | Phase 1 | Complete |
 | OVER-02 | Phase 1 | Complete |
 | OVER-03 | Phase 1 | Complete |
-| NAV-01 | Phase 2 | Pending |
-| NAV-02 | Phase 2 | Pending |
-| NAV-03 | Phase 2 | Pending |
-| NAV-04 | Phase 2 | Pending |
+| NAV-01 | Phase 2 | Complete |
+| NAV-02 | Phase 2 | Complete |
+| NAV-03 | Phase 2 | Complete |
+| NAV-04 | Phase 2 | Complete |
 | BTT-01 | Phase 3 | Pending |
 | BTT-02 | Phase 3 | Pending |
 | BTT-03 | Phase 3 | Pending |
@@ -70,4 +70,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after Phase 1 completion*
+*Last updated: 2026-01-29 after Phase 2 completion*
