@@ -50,10 +50,15 @@ export async function getArticle(locale: string, slug: string): Promise<Article 
     .eq('locale', locale)
     .eq('slug', slug)
     .eq('published', true)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching article:', error);
+    return null;
+  }
+
+  // Article not found for this locale/slug combination
+  if (!data) {
     return null;
   }
 
