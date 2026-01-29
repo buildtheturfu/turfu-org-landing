@@ -13,6 +13,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '#problem', label: t('vision') },
     { href: '#ecosystem', label: t('ecosystem') },
+    { href: '#architecture', label: t('architecture') },
     { href: '#principles', label: t('principles') },
   ];
 
