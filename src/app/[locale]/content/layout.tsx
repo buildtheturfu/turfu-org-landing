@@ -24,8 +24,8 @@ export default async function ContentLayout({ children, params: { locale } }: La
           locale={locale}
         />
 
-        {/* Mobile hamburger button - fixed position below navbar */}
-        <div className="md:hidden fixed top-20 left-4 z-30">
+        {/* Mobile hamburger - fixed top-right */}
+        <div className="md:hidden fixed top-20 right-4 z-30">
           <MobileSidebarDrawer
             articles={articles}
             categories={categories}

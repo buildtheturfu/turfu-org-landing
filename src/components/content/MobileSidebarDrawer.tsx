@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RemoveScroll } from 'react-remove-scroll';
 import {
-  Menu, X, Search, FileText, Folder, ChevronDown, ChevronRight,
+  PanelLeftOpen, X, Search, FileText, Folder, ChevronDown, ChevronRight,
   BookOpen, Home
 } from 'lucide-react';
 import type { ArticleMeta } from '@/lib/types';
@@ -101,15 +101,15 @@ export default function MobileSidebarDrawer({ articles, categories, locale }: Mo
 
   return (
     <>
-      {/* Hamburger button - mobile only */}
+      {/* Sidebar toggle button - mobile only */}
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden flex items-center justify-center w-11 h-11 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-        aria-label="Open navigation menu"
+        aria-label="Open documentation sidebar"
         aria-expanded={isOpen}
         aria-controls="mobile-sidebar"
       >
-        <Menu size={24} className="text-white" />
+        <PanelLeftOpen size={24} className="text-white" />
       </button>
 
       {/* Drawer - mobile only */}
