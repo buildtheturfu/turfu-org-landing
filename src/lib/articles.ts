@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import { supabase, createAdminClient } from './supabase';
 import type { Article, ArticleMeta } from './types';
 import readingTime from 'reading-time';
@@ -7,6 +8,7 @@ import matter from 'gray-matter';
  * Get all published articles for a locale
  */
 export async function getArticles(locale: string): Promise<ArticleMeta[]> {
+  noStore(); // Disable Next.js cache for fresh data
   const adminClient = createAdminClient();
 
   const { data, error } = await adminClient
@@ -39,6 +41,7 @@ export async function getArticles(locale: string): Promise<ArticleMeta[]> {
  * Get a single article by slug
  */
 export async function getArticle(locale: string, slug: string): Promise<Article | null> {
+  noStore(); // Disable Next.js cache for fresh data
   const adminClient = createAdminClient();
 
   const { data, error } = await adminClient
@@ -61,6 +64,7 @@ export async function getArticle(locale: string, slug: string): Promise<Article 
  * Get all categories for a locale
  */
 export async function getCategories(locale: string): Promise<string[]> {
+  noStore(); // Disable Next.js cache for fresh data
   const adminClient = createAdminClient();
 
   const { data, error } = await adminClient
@@ -80,6 +84,7 @@ export async function getCategories(locale: string): Promise<string[]> {
  * Get all tags for a locale
  */
 export async function getAllTags(locale: string): Promise<string[]> {
+  noStore(); // Disable Next.js cache for fresh data
   const adminClient = createAdminClient();
 
   const { data, error } = await adminClient
