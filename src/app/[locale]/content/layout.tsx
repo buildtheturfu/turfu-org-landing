@@ -17,7 +17,7 @@ export default async function ContentLayout({ children, params: { locale } }: La
   return (
     <>
       <Navbar />
-      <div className="flex items-start min-h-screen pt-16 bg-surface overflow-x-hidden">
+      <div className="min-h-screen pt-16 bg-surface overflow-x-hidden md:grid md:grid-cols-[288px_1fr] md:items-start">
         <ContentSidebar
           articles={articles}
           categories={categories}
@@ -33,7 +33,7 @@ export default async function ContentLayout({ children, params: { locale } }: La
           />
         </div>
 
-        <div className="flex-1 min-w-0">{children}</div>
+        <div className="min-w-0">{children}</div>
       </div>
     </>
   );
