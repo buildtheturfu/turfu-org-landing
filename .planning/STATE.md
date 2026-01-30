@@ -63,6 +63,8 @@ Recent decisions affecting current work:
 - [04-01]: Toggle positioned at right-20, left of BackToTop at right-5
 - [04.1-01]: Added --border-hover and --ring variables for Tailwind opacity modifier compatibility
 - [04.1-01]: Used rgba values instead of hex+opacity for pre-computed semantic colors
+- [04.1-03]: Preserve text-white on gradient icon backgrounds for proper contrast
+- [04.1-03]: Use bg-surface-muted for alternating section backgrounds
 - [04.1-05]: Used bg-overlay-hover for active language button (better visibility)
 
 ### Patterns Established
@@ -80,6 +82,9 @@ Recent decisions affecting current work:
 - `Semantic CSS variables`: --surface, --text-*, --border-*, --overlay-*, --ring
 - `Tailwind arbitrary values`: bg-[var(--surface)], text-[var(--foreground)]
 - `Pre-computed opacity`: rgba in CSS variables instead of Tailwind /opacity modifiers
+- `Section bg pattern`: bg-surface-muted for alternating sections
+- `Card pattern`: bg-overlay border border-border for cards on any background
+- `Gradient exceptions`: keep text-white for icons/text on colored gradients
 
 ### Pending Todos
 
@@ -91,6 +96,7 @@ None.
 - Phase 4 completed: Dark/Light Mode Toggle (2026-01-30)
 - Phase 4.1 inserted: Light Mode Color Fixes (2026-01-30) - fix hardcoded dark colors
 - Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
+- Phase 4.1 plan 03 complete: Landing Page Sections (2026-01-30)
 - Phase 4.1 plan 05 complete: Admin & LanguageSwitcher (2026-01-30)
 
 ### Blockers/Concerns
