@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 4.1 (Light Mode Color Fixes)
-Plan: 1 of 6 in current phase
+Plan: 5 of 6 in current phase
 Status: In progress
-Last activity: 2026-01-30 - Completed 04.1-01-PLAN.md
+Last activity: 2026-01-30 - Completed 04.1-05-PLAN.md
 
-Progress: [########--] 80% (4/5 phases complete, plan 1/6 in phase 4.1)
+Progress: [#########-] 90% (4/5 phases complete, plan 5/6 in phase 4.1)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~9.4min
-- Total execution time: ~47min
+- Total plans completed: 9
+- Average duration: ~6.6min
+- Total execution time: ~59min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [########--] 80% (4/5 phases complete, plan 1/6 in phase 4.1)
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
 | 03-back-to-top | 1/1 | ~5min | ~5min |
 | 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
-| 04.1-light-mode-color-fixes | 1/6 | ~4min | ~4min |
+| 04.1-light-mode-color-fixes | 5/6 | ~12min | ~2.4min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (~20min), 03-01 (~5min), 04-01 (~2min), 04.1-01 (~4min)
-- Trend: Execution time stable for straightforward tasks
+- Last 5 plans: 04-01 (~2min), 04.1-01 (~4min), 04.1-02 (~2min), 04.1-03 (~2min), 04.1-05 (~2min)
+- Trend: Fast execution for color token replacement tasks (~2min each)
 
 *Updated after each plan completion*
 
@@ -63,6 +63,7 @@ Recent decisions affecting current work:
 - [04-01]: Toggle positioned at right-20, left of BackToTop at right-5
 - [04.1-01]: Added --border-hover and --ring variables for Tailwind opacity modifier compatibility
 - [04.1-01]: Used rgba values instead of hex+opacity for pre-computed semantic colors
+- [04.1-05]: Used bg-overlay-hover for active language button (better visibility)
 
 ### Patterns Established
 
@@ -90,6 +91,7 @@ None.
 - Phase 4 completed: Dark/Light Mode Toggle (2026-01-30)
 - Phase 4.1 inserted: Light Mode Color Fixes (2026-01-30) - fix hardcoded dark colors
 - Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
+- Phase 4.1 plan 05 complete: Admin & LanguageSwitcher (2026-01-30)
 
 ### Blockers/Concerns
 
@@ -97,15 +99,11 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T01:07:00Z
-Stopped at: Completed 04.1-01-PLAN.md
+Last session: 2026-01-30T01:11:37Z
+Stopped at: Completed 04.1-05-PLAN.md
 Resume file: None
 
 ## Next Steps
 
 Continue Phase 4.1 (Light Mode Color Fixes):
-- Plan 02: Layout/Container Components - bg-white/5, bg-white/10 surfaces
-- Plan 03: Navigation Components - header, footer, sidebar text colors
-- Plan 04: Interactive Components - buttons, links, inputs
-- Plan 05: Cards and Sections - feature cards, testimonials
 - Plan 06: Final Verification - WCAG AA contrast validation
