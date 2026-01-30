@@ -120,7 +120,7 @@ export default function Architecture() {
   ];
 
   return (
-    <section id="architecture" className="section relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1B3A4B 50%, #2D5A6B 100%)' }}>
+    <section id="architecture" className="dark section relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1B3A4B 50%, #2D5A6B 100%)' }}>
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-amber-500/[0.08] rounded-full blur-3xl" />
