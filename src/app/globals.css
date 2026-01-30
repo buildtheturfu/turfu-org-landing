@@ -28,6 +28,12 @@
 
     /* Focus ring */
     --ring: rgba(10, 10, 10, 0.5);
+
+    /* Accent color - darker purple for light mode contrast */
+    --turfu-accent: 124 58 237;
+    --turfu-accent2: 8 145 178;
+    --turfu-accent-hover: 109 40 217;
+    --turfu-accent2-hover: 14 116 144;
   }
 
   .dark {
@@ -55,6 +61,12 @@
 
     /* Focus ring */
     --ring: rgba(250, 250, 250, 0.5);
+
+    /* Accent color - brighter violet for dark mode */
+    --turfu-accent: 139 92 246;
+    --turfu-accent2: 6 182 212;
+    --turfu-accent-hover: 124 58 237;
+    --turfu-accent2-hover: 8 145 178;
   }
 
   html {
@@ -67,7 +79,7 @@
   }
 
   ::selection {
-    @apply bg-turfu-accent/30;
+    background-color: rgb(var(--turfu-accent) / 0.3);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -107,5 +119,15 @@
 
   .container-narrow {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-turfu {
+    background-image: linear-gradient(135deg, rgb(var(--turfu-accent)) 0%, rgb(var(--turfu-accent2)) 100%);
+  }
+
+  .bg-gradient-turfu-hover {
+    background-image: linear-gradient(135deg, rgb(var(--turfu-accent-hover)) 0%, rgb(var(--turfu-accent2-hover)) 100%);
   }
 }

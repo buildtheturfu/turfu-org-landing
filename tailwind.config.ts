@@ -13,8 +13,8 @@ const config: Config = {
         turfu: {
           dark: '#0a0a0a',
           darker: '#050505',
-          accent: '#8b5cf6',
-          accent2: '#06b6d4',
+          accent: 'rgb(var(--turfu-accent) / <alpha-value>)',
+          accent2: 'rgb(var(--turfu-accent2) / <alpha-value>)',
           muted: '#a1a1aa',
         },
         surface: {
@@ -38,10 +38,6 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      backgroundImage: {
-        'gradient-turfu': 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)',
-        'gradient-turfu-hover': 'linear-gradient(135deg, #7c3aed 0%, #0891b2 100%)',
       },
     },
   },
