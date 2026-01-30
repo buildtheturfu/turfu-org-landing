@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import ThemeToggle from '@/components/ThemeToggle';
 import BackToTop from '@/components/BackToTop';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -85,12 +87,15 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className="dark">
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-          <BackToTop />
-        </NextIntlClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+            <ThemeToggle />
+            <BackToTop />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
