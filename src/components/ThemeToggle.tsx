@@ -38,7 +38,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-5 right-20 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+      className="fixed bottom-5 right-20 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-[var(--overlay-hover)] hover:bg-[var(--overlay)] text-[var(--foreground)] shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       <AnimatePresence mode="wait" initial={false}>

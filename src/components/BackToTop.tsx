@@ -43,7 +43,7 @@ export default function BackToTop() {
           animate="animate"
           exit="exit"
           onClick={scrollToTop}
-          className="fixed bottom-5 right-5 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-turfu-accent hover:bg-turfu-accent/90 text-white shadow-lg shadow-turfu-accent/25 transition-colors focus:outline-none focus:ring-2 focus:ring-turfu-accent focus:ring-offset-2 focus:ring-offset-turfu-dark"
+          className="fixed bottom-5 right-5 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-turfu-accent hover:bg-turfu-accent/90 text-white shadow-lg shadow-turfu-accent/25 transition-colors focus:outline-none focus:ring-2 focus:ring-turfu-accent focus:ring-offset-2 focus:ring-offset-[var(--background)]"
           aria-label="Back to top"
         >
           <ArrowUp size={20} aria-hidden="true" />
