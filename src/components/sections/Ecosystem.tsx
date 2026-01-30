@@ -14,7 +14,7 @@ export default function Ecosystem() {
   ];
 
   return (
-    <section id="ecosystem" className="section bg-turfu-darker">
+    <section id="ecosystem" className="section bg-surface-muted">
       <div className="container-narrow">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-16"
@@ -29,7 +29,7 @@ export default function Ecosystem() {
           {layers.map((layer, index) => (
             <motion.div
               key={layer.key}
-              className="relative p-8 rounded-2xl bg-white/5 border border-white/10 overflow-hidden group"
+              className="relative p-8 rounded-2xl bg-overlay border border-border overflow-hidden group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -52,12 +52,12 @@ export default function Ecosystem() {
                   {t(`${layer.key}_role`)}
                 </p>
 
-                <p className="text-turfu-muted leading-relaxed">
+                <p className="text-foreground-muted leading-relaxed">
                   {t(`${layer.key}_desc`)}
                 </p>
               </div>
 
-              <div className="absolute top-4 right-4 text-6xl font-bold text-white/5">
+              <div className="absolute top-4 right-4 text-6xl font-bold text-foreground/5">
                 {index}
               </div>
             </motion.div>
@@ -65,7 +65,7 @@ export default function Ecosystem() {
         </div>
 
         <div className="hidden md:flex justify-center mt-8">
-          <div className="flex items-center gap-4 text-turfu-muted text-sm">
+          <div className="flex items-center gap-4 text-foreground-muted text-sm">
             <span>Layer 0</span>
             <div className="w-16 h-px bg-gradient-turfu" />
             <span>Layer 1</span>
