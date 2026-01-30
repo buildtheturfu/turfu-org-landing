@@ -14,7 +14,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 - [x] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
 - [x] **Phase 3: Back to Top** - Add floating button for long-page navigation
 - [x] **Phase 4: Dark/Light Mode Toggle** - Add theme switcher for user preference
-- [ ] **Phase 4.1: Light Mode Color Fixes** - INSERTED: Fix hardcoded dark colors for proper light mode support
+- [x] **Phase 4.1: Light Mode Color Fixes** - INSERTED: Fix hardcoded dark colors for proper light mode support
 
 ## Phase Details
 
@@ -83,12 +83,12 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 04.1-01-PLAN.md — Extend CSS variables and Tailwind config with semantic color tokens
-- [ ] 04.1-02-PLAN.md — Update layout components (Navbar, Footer, ThemeToggle, BackToTop)
-- [ ] 04.1-03-PLAN.md — Update landing page sections (Hero, Problem, CTA, Ecosystem, Vision, Architecture)
-- [ ] 04.1-04-PLAN.md — Update content module (Sidebar, Drawer, Cards, TOC, MarkdownRenderer, pages)
-- [ ] 04.1-05-PLAN.md — Update admin components and LanguageSwitcher
-- [ ] 04.1-06-PLAN.md — Final verification of light mode across entire application
+- [x] 04.1-01-PLAN.md — Extend CSS variables and Tailwind config with semantic color tokens
+- [x] 04.1-02-PLAN.md — Update layout components (Navbar, Footer, ThemeToggle, BackToTop)
+- [x] 04.1-03-PLAN.md — Update landing page sections (Hero, Problem, CTA, Ecosystem, Vision, Architecture)
+- [x] 04.1-04-PLAN.md — Update content module (Sidebar, Drawer, Cards, TOC, MarkdownRenderer, pages)
+- [x] 04.1-05-PLAN.md — Update admin components and LanguageSwitcher
+- [x] 04.1-06-PLAN.md — Final verification of light mode across entire application
 
 ## Progress
 
@@ -101,4 +101,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 4.1
 | 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
 | 3. Back to Top | 1/1 | Complete | 2026-01-29 |
 | 4. Dark/Light Mode Toggle | 1/1 | Complete | 2026-01-30 |
-| 4.1 Light Mode Color Fixes | 0/6 | Not started | - |
+| 4.1 Light Mode Color Fixes | 6/6 | Complete | 2026-01-30 |
