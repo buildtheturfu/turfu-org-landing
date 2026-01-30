@@ -30,7 +30,7 @@ export default function Principles() {
           {principles.map((principle, index) => (
             <motion.div
               key={principle.key}
-              className="p-6 rounded-xl border border-white/10 hover:border-turfu-accent/50 transition-all hover:-translate-y-1"
+              className="p-6 rounded-xl border border-border hover:border-turfu-accent/50 transition-all hover:-translate-y-1"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -40,7 +40,7 @@ export default function Principles() {
               <h3 className="text-lg font-semibold mb-2">
                 {t(`${principle.key}_name`)}
               </h3>
-              <p className="text-sm text-turfu-muted leading-relaxed">
+              <p className="text-sm text-foreground-muted leading-relaxed">
                 {t(`${principle.key}_desc`)}
               </p>
             </motion.div>
