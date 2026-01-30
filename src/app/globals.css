@@ -29,11 +29,11 @@
     /* Focus ring */
     --ring: rgba(10, 10, 10, 0.5);
 
-    /* Accent color - darker purple for light mode contrast */
-    --turfu-accent: 124 58 237;
-    --turfu-accent2: 8 145 178;
-    --turfu-accent-hover: 109 40 217;
-    --turfu-accent2-hover: 14 116 144;
+    /* Accent color - very dark purple for light mode (violet-900/800) */
+    --turfu-accent: 76 29 149;
+    --turfu-accent2: 21 94 117;
+    --turfu-accent-hover: 91 33 182;
+    --turfu-accent2-hover: 22 78 99;
   }
 
   .dark {
