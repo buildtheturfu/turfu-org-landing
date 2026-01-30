@@ -12,7 +12,7 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
   return (
     <Link
       href={`/${article.locale}/content/${article.slug}`}
-      className="group block p-6 rounded-xl bg-white/5 border border-white/10 hover:border-turfu-accent/50 transition-all hover:-translate-y-0.5"
+      className="group block p-6 rounded-xl bg-overlay border border-border hover:border-turfu-accent/50 transition-all hover:-translate-y-0.5"
     >
       {/* Category */}
       {article.category && (
@@ -22,19 +22,19 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
       )}
 
       {/* Title */}
-      <h2 className="text-lg font-semibold text-white mb-2 group-hover:text-turfu-accent transition-colors">
+      <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-turfu-accent transition-colors">
         {article.title}
       </h2>
 
       {/* Description */}
       {article.description && (
-        <p className="text-sm text-turfu-muted mb-4 line-clamp-2">
+        <p className="text-sm text-foreground-muted mb-4 line-clamp-2">
           {article.description}
         </p>
       )}
 
       {/* Meta */}
-      <div className="flex flex-wrap items-center gap-3 text-xs text-turfu-muted">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-foreground-muted">
         <span className="flex items-center gap-1">
           <Calendar size={12} />
           {date}
@@ -57,14 +57,14 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
           {article.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="flex items-center gap-1 px-2 py-0.5 text-xs bg-white/5 text-turfu-muted rounded"
+              className="flex items-center gap-1 px-2 py-0.5 text-xs bg-overlay text-foreground-muted rounded"
             >
               <Tag size={10} />
               {tag}
             </span>
           ))}
           {article.tags.length > 3 && (
-            <span className="text-xs text-turfu-muted">
+            <span className="text-xs text-foreground-muted">
               +{article.tags.length - 3}
             </span>
           )}

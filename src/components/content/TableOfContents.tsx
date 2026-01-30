@@ -65,7 +65,7 @@ export default function TableOfContents({ content, locale = 'fr' }: { content: s
   return (
     <aside className="hidden xl:block w-56 flex-shrink-0 h-[calc(100vh-64px)] sticky top-16">
       <div className="p-4">
-        <div className="flex items-center gap-2 text-sm font-medium text-turfu-muted mb-4">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground-muted mb-4">
           <List size={16} />
           <span>{translations[locale] || translations.fr}</span>
         </div>
@@ -79,7 +79,7 @@ export default function TableOfContents({ content, locale = 'fr' }: { content: s
               } ${
                 activeId === h.id
                   ? 'text-turfu-accent border-turfu-accent'
-                  : 'text-turfu-muted hover:text-white border-transparent hover:border-white/20'
+                  : 'text-foreground-muted hover:text-foreground border-transparent hover:border-border'
               }`}
             >
               {h.text}
