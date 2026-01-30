@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 4.1 (Light Mode Color Fixes)
-Plan: 5 of 6 in current phase
+Plan: 4 of 6 in current phase
 Status: In progress
-Last activity: 2026-01-30 - Completed 04.1-05-PLAN.md
+Last activity: 2026-01-30 - Completed 04.1-04-PLAN.md
 
-Progress: [#########-] 90% (4/5 phases complete, plan 5/6 in phase 4.1)
+Progress: [#########-] 90% (4/5 phases complete, plan 4/6 in phase 4.1)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 8
 - Average duration: ~6.6min
-- Total execution time: ~59min
+- Total execution time: ~53min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [#########-] 90% (4/5 phases complete, plan 5/6 in phase 4.1)
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
 | 03-back-to-top | 1/1 | ~5min | ~5min |
 | 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
-| 04.1-light-mode-color-fixes | 5/6 | ~12min | ~2.4min |
+| 04.1-light-mode-color-fixes | 4/6 | ~13min | ~3.3min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (~2min), 04.1-01 (~4min), 04.1-02 (~2min), 04.1-03 (~2min), 04.1-05 (~2min)
-- Trend: Fast execution for color token replacement tasks (~2min each)
+- Last 5 plans: 04-01 (~2min), 04.1-01 (~4min), 04.1-02 (~2min), 04.1-03 (~2min), 04.1-04 (~5min)
+- Trend: Fast execution for color token replacement tasks
 
 *Updated after each plan completion*
 
@@ -65,7 +65,8 @@ Recent decisions affecting current work:
 - [04.1-01]: Used rgba values instead of hex+opacity for pre-computed semantic colors
 - [04.1-03]: Preserve text-white on gradient icon backgrounds for proper contrast
 - [04.1-03]: Use bg-surface-muted for alternating section backgrounds
-- [04.1-05]: Used bg-overlay-hover for active language button (better visibility)
+- [04.1-04]: Keep backdrop-blur dark (bg-black/60) for mobile drawer - intentional dimming
+- [04.1-04]: Keep turfu-accent colors unchanged - good contrast in both modes
 
 ### Patterns Established
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - `Section bg pattern`: bg-surface-muted for alternating sections
 - `Card pattern`: bg-overlay border border-border for cards on any background
 - `Gradient exceptions`: keep text-white for icons/text on colored gradients
+- `Content components`: text-foreground for headings, text-foreground-muted for prose
+- `Loading skeletons`: bg-overlay for visible animation in both modes
 
 ### Pending Todos
 
@@ -97,7 +100,7 @@ None.
 - Phase 4.1 inserted: Light Mode Color Fixes (2026-01-30) - fix hardcoded dark colors
 - Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
 - Phase 4.1 plan 03 complete: Landing Page Sections (2026-01-30)
-- Phase 4.1 plan 05 complete: Admin & LanguageSwitcher (2026-01-30)
+- Phase 4.1 plan 04 complete: Content Components (2026-01-30)
 
 ### Blockers/Concerns
 
@@ -105,11 +108,12 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T01:11:37Z
-Stopped at: Completed 04.1-05-PLAN.md
+Last session: 2026-01-30T01:14:00Z
+Stopped at: Completed 04.1-04-PLAN.md
 Resume file: None
 
 ## Next Steps
 
 Continue Phase 4.1 (Light Mode Color Fixes):
+- Plan 05: Interactive Components - buttons, links, inputs
 - Plan 06: Final Verification - WCAG AA contrast validation
