@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** All phases complete - Mobile UX improvements delivered
+**Current focus:** PROJECT COMPLETE
 
 ## Current Position
 
-Phase: 3 of 3 (Back to Top)
+Phase: 4 of 4 (Dark/Light Mode Toggle)
 Plan: 1 of 1 in current phase
-Status: PROJECT COMPLETE
-Last activity: 2026-01-29 - Completed 03-01-PLAN.md
+Status: Phase complete - PROJECT COMPLETE
+Last activity: 2026-01-30 - Completed 04-01-PLAN.md
 
-Progress: [##########] 100% (3/3 phases complete)
+Progress: [##########] 100% (4/4 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: ~13min
-- Total execution time: ~40min
+- Total plans completed: 4
+- Average duration: ~10.5min
+- Total execution time: ~42min
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [##########] 100% (3/3 phases complete)
 | 01-horizontal-overflow | 1/1 | ~15min | ~15min |
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
 | 03-back-to-top | 1/1 | ~5min | ~5min |
+| 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~15min), 02-01 (~20min), 03-01 (~5min)
-- Trend: Execution time improved as patterns were established
+- Last 5 plans: 01-01 (~15min), 02-01 (~20min), 03-01 (~5min), 04-01 (~2min)
+- Trend: Execution time continued improving as patterns were reused
 
 *Updated after each plan completion*
 
@@ -55,6 +56,10 @@ Recent decisions affecting current work:
 - [03-01]: z-30 for BackToTop button (consistent with sidebar toggle)
 - [03-01]: 400px scroll threshold before button appears
 - [03-01]: ArrowUp icon for clearer "go up" semantics
+- [04-01]: next-themes library for theme management
+- [04-01]: mounted-state pattern to prevent hydration mismatch
+- [04-01]: CSS variables for theme colors (--background, --foreground)
+- [04-01]: Toggle positioned at right-20, left of BackToTop at right-5
 
 ### Patterns Established
 
@@ -65,10 +70,18 @@ Recent decisions affecting current work:
 - `z-30 < z-40 < z-50`: Button < backdrop < drawer layering
 - `addEventListener('scroll', handler, { passive: true })`: Scroll detection with cleanup
 - `window.scrollTo({ behavior: 'smooth' })`: Native smooth scrolling
+- `mounted-state pattern`: useState(false) + useEffect for client-only rendering
+- `resolvedTheme vs theme`: Use resolvedTheme for actual rendered theme
+- `CSS variable theming`: :root for light, .dark for dark mode
 
 ### Pending Todos
 
 None.
+
+### Roadmap Evolution
+
+- Phase 4 added: Dark/Light Mode Toggle (2026-01-30)
+- Phase 4 completed: Dark/Light Mode Toggle (2026-01-30)
 
 ### Blockers/Concerns
 
@@ -76,13 +89,14 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-29
-Stopped at: Completed 03-01-PLAN.md (PROJECT COMPLETE)
+Last session: 2026-01-30T00:35:57Z
+Stopped at: Completed 04-01-PLAN.md (PROJECT COMPLETE)
 Resume file: None
 
 ## Next Steps
 
-All phases complete. Recommended actions:
-- Manual testing on physical iOS/Android devices
-- Deploy to staging environment
-- User acceptance testing
+Project complete. All four phases finished:
+1. Horizontal overflow fixes
+2. Mobile sidebar navigation
+3. Back to top button
+4. Dark/light mode toggle
