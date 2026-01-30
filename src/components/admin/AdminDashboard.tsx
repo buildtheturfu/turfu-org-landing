@@ -153,38 +153,38 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-turfu-dark p-8">
+    <div className="min-h-screen bg-surface p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold text-white">Admin - Articles</h1>
+            <h1 className="text-3xl font-bold text-foreground">Admin - Articles</h1>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href={`/${locale}`}
-              className="flex items-center gap-2 px-3 py-2 text-turfu-muted hover:text-white transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-foreground-muted hover:text-foreground transition-colors"
               title="Retour au site"
             >
               <Home size={18} />
             </Link>
             <Link
               href={`/${locale}/content`}
-              className="flex items-center gap-2 px-3 py-2 text-turfu-muted hover:text-white transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-foreground-muted hover:text-foreground transition-colors"
               title="Voir le contenu"
             >
               <BookOpen size={18} />
             </Link>
             <button
               onClick={fetchArticles}
-              className="p-2 text-turfu-muted hover:text-white transition-colors"
+              className="p-2 text-foreground-muted hover:text-foreground transition-colors"
               title="Actualiser"
             >
               <RefreshCw size={20} />
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-turfu-muted hover:text-white transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-foreground-muted hover:text-foreground transition-colors"
             >
               <LogOut size={18} />
             </button>
@@ -192,13 +192,13 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-6 p-4 bg-white/5 rounded-lg">
+        <div className="flex items-center justify-between mb-6 p-4 bg-overlay rounded-lg">
           <div className="flex items-center gap-4">
-            <label className="text-sm text-turfu-muted">Filtrer par langue:</label>
+            <label className="text-sm text-foreground-muted">Filtrer par langue:</label>
             <select
               value={filterLocale}
               onChange={(e) => setFilterLocale(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-turfu-accent"
+              className="bg-overlay border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-turfu-accent"
             >
               <option value="all">Toutes</option>
               <option value="fr">Francais</option>
@@ -225,42 +225,42 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
 
         {/* Loading */}
         {loading ? (
-          <div className="text-center py-12 text-turfu-muted">
+          <div className="text-center py-12 text-foreground-muted">
             Chargement...
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-12 text-turfu-muted">
+          <div className="text-center py-12 text-foreground-muted">
             Aucun article trouve. Creez votre premier article !
           </div>
         ) : (
           /* Articles table */
-          <div className="bg-white/5 rounded-lg overflow-hidden">
+          <div className="bg-overlay rounded-lg overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left p-4 text-sm font-medium text-turfu-muted">Titre</th>
-                  <th className="text-left p-4 text-sm font-medium text-turfu-muted">Langue</th>
-                  <th className="text-left p-4 text-sm font-medium text-turfu-muted">Categorie</th>
-                  <th className="text-left p-4 text-sm font-medium text-turfu-muted">Statut</th>
-                  <th className="text-left p-4 text-sm font-medium text-turfu-muted">Date</th>
-                  <th className="text-right p-4 text-sm font-medium text-turfu-muted">Actions</th>
+                <tr className="border-b border-border">
+                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Titre</th>
+                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Langue</th>
+                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Categorie</th>
+                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Statut</th>
+                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Date</th>
+                  <th className="text-right p-4 text-sm font-medium text-foreground-muted">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-white/5 hover:bg-white/5">
+                  <tr key={article.id} className="border-b border-border-muted hover:bg-overlay">
                     <td className="p-4">
                       <div>
-                        <div className="text-white font-medium">{article.title}</div>
-                        <div className="text-xs text-turfu-muted">{article.slug}</div>
+                        <div className="text-foreground font-medium">{article.title}</div>
+                        <div className="text-xs text-foreground-muted">{article.slug}</div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="px-2 py-1 text-xs bg-white/10 rounded">
+                      <span className="px-2 py-1 text-xs bg-overlay-hover rounded">
                         {article.locale.toUpperCase()}
                       </span>
                     </td>
-                    <td className="p-4 text-sm text-turfu-muted">
+                    <td className="p-4 text-sm text-foreground-muted">
                       {article.category || '-'}
                     </td>
                     <td className="p-4">
@@ -269,26 +269,26 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
                           <Eye size={14} /> Public
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-turfu-muted text-sm">
+                        <span className="flex items-center gap-1 text-foreground-muted text-sm">
                           <EyeOff size={14} /> Brouillon
                         </span>
                       )}
                     </td>
-                    <td className="p-4 text-sm text-turfu-muted">
+                    <td className="p-4 text-sm text-foreground-muted">
                       {new Date(article.created_at).toLocaleDateString()}
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEdit(article)}
-                          className="p-2 text-turfu-muted hover:text-turfu-accent transition-colors"
+                          className="p-2 text-foreground-muted hover:text-turfu-accent transition-colors"
                           title="Modifier"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(article.id)}
-                          className="p-2 text-turfu-muted hover:text-red-400 transition-colors"
+                          className="p-2 text-foreground-muted hover:text-red-400 transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 size={16} />

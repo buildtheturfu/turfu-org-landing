@@ -35,14 +35,14 @@ export default function AdminLoginPage({ params: { locale } }: { params: { local
   };
 
   return (
-    <div className="min-h-screen bg-turfu-dark flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-turfu-accent/20 rounded-full mb-4">
             <Lock className="text-turfu-accent" size={32} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Admin TURFu</h1>
-          <p className="text-turfu-muted mt-2">Connectez-vous pour gerer le contenu</p>
+          <h1 className="text-2xl font-bold text-foreground">Admin TURFu</h1>
+          <p className="text-foreground-muted mt-2">Connectez-vous pour gerer le contenu</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,7 +52,7 @@ export default function AdminLoginPage({ params: { locale } }: { params: { local
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Mot de passe"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-turfu-muted focus:outline-none focus:border-turfu-accent transition-colors"
+              className="w-full px-4 py-3 bg-overlay border border-border rounded-lg text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-turfu-accent transition-colors"
               autoFocus
             />
           </div>
