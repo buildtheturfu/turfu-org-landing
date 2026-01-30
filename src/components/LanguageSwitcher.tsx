@@ -29,8 +29,8 @@ export default function LanguageSwitcher() {
           onClick={() => switchLocale(loc)}
           className={`px-2 py-1 text-sm rounded transition-colors ${
             locale === loc
-              ? 'text-white bg-white/10'
-              : 'text-turfu-muted hover:text-white'
+              ? 'text-foreground bg-overlay-hover'
+              : 'text-foreground-muted hover:text-foreground'
           }`}
           aria-label={`Switch to ${localeNames[loc]}`}
         >
