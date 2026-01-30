@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** Phase 4.1 - Light Mode Color Fixes
+**Current focus:** Phase 4.1 COMPLETE - Light Mode Color Fixes
 
 ## Current Position
 
-Phase: 4.1 (Light Mode Color Fixes)
-Plan: 4 of 6 in current phase
-Status: In progress
-Last activity: 2026-01-30 - Completed 04.1-04-PLAN.md
+Phase: 4.1 (Light Mode Color Fixes) COMPLETE
+Plan: 6 of 6 in current phase
+Status: Phase complete
+Last activity: 2026-01-30 - Completed 04.1-06-PLAN.md (Final Verification)
 
-Progress: [#########-] 90% (4/5 phases complete, plan 4/6 in phase 4.1)
+Progress: [##########] 100% (5/5 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: ~6.6min
-- Total execution time: ~53min
+- Total plans completed: 10
+- Average duration: ~7.3min
+- Total execution time: ~73min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [#########-] 90% (4/5 phases complete, plan 4/6 in phase 4.1)
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
 | 03-back-to-top | 1/1 | ~5min | ~5min |
 | 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
-| 04.1-light-mode-color-fixes | 4/6 | ~13min | ~3.3min |
+| 04.1-light-mode-color-fixes | 6/6 | ~31min | ~5.2min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (~2min), 04.1-01 (~4min), 04.1-02 (~2min), 04.1-03 (~2min), 04.1-04 (~5min)
-- Trend: Fast execution for color token replacement tasks
+- Last 5 plans: 04.1-02 (~2min), 04.1-03 (~2min), 04.1-04 (~5min), 04.1-05 (~2min), 04.1-06 (~15min)
+- Trend: Verification plan took longer due to iterative fixes during user review
 
 *Updated after each plan completion*
 
@@ -66,7 +66,9 @@ Recent decisions affecting current work:
 - [04.1-03]: Preserve text-white on gradient icon backgrounds for proper contrast
 - [04.1-03]: Use bg-surface-muted for alternating section backgrounds
 - [04.1-04]: Keep backdrop-blur dark (bg-black/60) for mobile drawer - intentional dimming
-- [04.1-04]: Keep turfu-accent colors unchanged - good contrast in both modes
+- [04.1-06]: Switch light mode accent to blue (#2563eb) for better harmony
+- [04.1-06]: Force Architecture section to dark mode for gradient visibility
+- [04.1-06]: Use fixed positioning for content sidebar alignment
 
 ### Patterns Established
 
@@ -88,6 +90,9 @@ Recent decisions affecting current work:
 - `Gradient exceptions`: keep text-white for icons/text on colored gradients
 - `Content components`: text-foreground for headings, text-foreground-muted for prose
 - `Loading skeletons`: bg-overlay for visible animation in both modes
+- `Theme-aware accents`: different hues for light (blue) vs dark (orange) mode
+- `Force dark class`: wrap gradient-heavy sections with `dark` class for visibility
+- `Fixed sidebar positioning`: use fixed instead of sticky for multi-section layouts
 
 ### Pending Todos
 
@@ -101,6 +106,7 @@ None.
 - Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
 - Phase 4.1 plan 03 complete: Landing Page Sections (2026-01-30)
 - Phase 4.1 plan 04 complete: Content Components (2026-01-30)
+- Phase 4.1 plan 06 complete: Final Verification (2026-01-30) - USER APPROVED
 
 ### Blockers/Concerns
 
@@ -108,12 +114,13 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T01:14:00Z
-Stopped at: Completed 04.1-04-PLAN.md
+Last session: 2026-01-30T02:20:00Z
+Stopped at: Completed 04.1-06-PLAN.md (Phase 4.1 COMPLETE)
 Resume file: None
 
 ## Next Steps
 
-Continue Phase 4.1 (Light Mode Color Fixes):
-- Plan 05: Interactive Components - buttons, links, inputs
-- Plan 06: Final Verification - WCAG AA contrast validation
+All planned phases complete. Potential future work:
+- Phase 5: Additional features (TBD)
+- Production deployment
+- iOS Safari testing for position:fixed elements
