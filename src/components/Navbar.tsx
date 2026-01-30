@@ -20,7 +20,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-turfu-dark/80 backdrop-blur-lg border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--surface)]/80 backdrop-blur-lg border-b border-[var(--border-muted)]">
       <div className="container-narrow">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
@@ -35,7 +35,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-turfu-muted hover:text-white transition-colors"
+                  className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -43,7 +43,7 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-turfu-muted hover:text-white transition-colors"
+                  className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
                 >
                   {link.label}
                 </a>
@@ -59,7 +59,7 @@ export default function Navbar() {
           </div>
 
           <button
-            className="md:hidden p-2 text-white"
+            className="md:hidden p-2 text-[var(--foreground)]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
@@ -69,14 +69,14 @@ export default function Navbar() {
         </div>
 
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-white/5">
+          <div className="md:hidden py-4 border-t border-[var(--border-muted)]">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 link.isLink ? (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-turfu-muted hover:text-white transition-colors"
+                    className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -85,14 +85,14 @@ export default function Navbar() {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="text-turfu-muted hover:text-white transition-colors"
+                    className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
                   </a>
                 )
               ))}
-              <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-4 border-t border-[var(--border-muted)] flex items-center justify-between">
                 <LanguageSwitcher />
                 <a href={`/${locale}#cta`} className="btn-primary text-sm" onClick={() => setIsOpen(false)}>
                   {t('join')}
