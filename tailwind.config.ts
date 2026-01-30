@@ -17,6 +17,24 @@ const config: Config = {
           accent2: '#06b6d4',
           muted: '#a1a1aa',
         },
+        surface: {
+          DEFAULT: 'var(--surface)',
+          elevated: 'var(--surface-elevated)',
+          muted: 'var(--surface-muted)',
+        },
+        foreground: {
+          DEFAULT: 'var(--foreground)',
+          secondary: 'var(--text-secondary)',
+          muted: 'var(--text-muted)',
+        },
+        border: {
+          DEFAULT: 'var(--border)',
+          muted: 'var(--border-muted)',
+        },
+        overlay: {
+          DEFAULT: 'var(--overlay)',
+          hover: 'var(--overlay-hover)',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
