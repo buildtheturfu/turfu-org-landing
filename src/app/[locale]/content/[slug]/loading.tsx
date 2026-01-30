@@ -1,6 +1,6 @@
 function Skeleton({ className }: { className?: string }) {
   return (
-    <div className={`animate-pulse bg-white/10 rounded ${className || ''}`} />
+    <div className={`animate-pulse bg-overlay rounded ${className || ''}`} />
   );
 }
 
@@ -19,7 +19,7 @@ export default function ArticleLoading() {
           <Skeleton className="h-10 w-3/4 mb-4" />
           <Skeleton className="h-5 w-full mb-6" />
 
-          <div className="flex flex-wrap items-center gap-4 pb-6 border-b border-white/10">
+          <div className="flex flex-wrap items-center gap-4 pb-6 border-b border-border">
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-24" />
@@ -40,7 +40,7 @@ export default function ArticleLoading() {
         </div>
 
         {/* Tags skeleton */}
-        <div className="mt-8 pt-6 border-t border-white/10">
+        <div className="mt-8 pt-6 border-t border-border">
           <div className="flex flex-wrap gap-2">
             {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-7 w-20 rounded-full" />

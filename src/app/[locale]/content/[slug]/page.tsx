@@ -41,7 +41,7 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
         {/* Back */}
         <Link
           href={`/${locale}/content`}
-          className="inline-flex items-center gap-1 text-sm text-turfu-muted hover:text-turfu-accent mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-foreground-muted hover:text-turfu-accent mb-6 transition-colors"
         >
           <ArrowLeft size={14} />
           {t.back}
@@ -58,13 +58,13 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
             </Link>
           )}
 
-          <h1 className="text-4xl font-bold text-white mb-4">{article.title}</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4">{article.title}</h1>
 
           {article.description && (
-            <p className="text-lg text-turfu-muted mb-6">{article.description}</p>
+            <p className="text-lg text-foreground-muted mb-6">{article.description}</p>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-turfu-muted pb-6 border-b border-white/10">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-foreground-muted pb-6 border-b border-border">
             <span className="flex items-center gap-1">
               <Calendar size={14} />
               {date}
@@ -89,13 +89,13 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
 
         {/* Tags */}
         {article.tags && article.tags.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-white/10">
+          <div className="mt-8 pt-6 border-t border-border">
             <div className="flex flex-wrap gap-2">
               {article.tags.map((tag) => (
                 <Link
                   key={tag}
                   href={`/${locale}/content?tag=${tag}`}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-white/5 text-turfu-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
+                  className="flex items-center gap-1 px-3 py-1 text-sm bg-overlay text-foreground-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
                 >
                   <Tag size={12} />
                   {tag}

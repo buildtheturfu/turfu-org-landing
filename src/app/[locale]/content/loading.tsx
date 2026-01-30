@@ -1,12 +1,12 @@
 function Skeleton({ className }: { className?: string }) {
   return (
-    <div className={`animate-pulse bg-white/10 rounded ${className || ''}`} />
+    <div className={`animate-pulse bg-overlay rounded ${className || ''}`} />
   );
 }
 
 function ArticleCardSkeleton() {
   return (
-    <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+    <div className="p-4 bg-overlay rounded-lg border border-border">
       <Skeleton className="h-4 w-20 mb-3" />
       <Skeleton className="h-6 w-3/4 mb-2" />
       <Skeleton className="h-4 w-full mb-4" />

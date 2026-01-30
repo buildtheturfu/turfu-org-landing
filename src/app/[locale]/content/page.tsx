@@ -17,7 +17,7 @@ const translations: Record<string, Record<string, string>> = {
     article: 'article',
     articles_plural: 'articles',
     viewAll: 'Voir tous les articles',
-    noArticles: 'Aucun article publié.',
+    noArticles: 'Aucun article publie.',
   },
   en: {
     documentation: 'Documentation',
@@ -28,12 +28,12 @@ const translations: Record<string, Record<string, string>> = {
     noArticles: 'No published articles.',
   },
   tr: {
-    documentation: 'Dokümantasyon',
+    documentation: 'Dokumantasyon',
     articles: 'Makaleler',
     article: 'makale',
     articles_plural: 'makale',
-    viewAll: 'Tüm makaleleri gör',
-    noArticles: 'Yayınlanmış makale yok.',
+    viewAll: 'Tum makaleleri gor',
+    noArticles: 'Yayinlanmis makale yok.',
   },
 };
 
@@ -60,8 +60,8 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
     <main className="flex-1 p-4 md:p-8 max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">{title}</h1>
-        <p className="text-turfu-muted">
+        <h1 className="text-3xl font-bold text-foreground mb-2">{title}</h1>
+        <p className="text-foreground-muted">
           {articles.length} {articles.length !== 1 ? t.articles_plural : t.article}
         </p>
       </div>
@@ -83,7 +83,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
             <Link
               key={tag}
               href={`/${locale}/content?tag=${tag}`}
-              className="flex items-center gap-1 px-3 py-1 text-sm bg-white/5 text-turfu-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
+              className="flex items-center gap-1 px-3 py-1 text-sm bg-overlay text-foreground-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
             >
               <Tag size={12} />
               {tag}
@@ -100,7 +100,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 text-turfu-muted">
+        <div className="text-center py-16 text-foreground-muted">
           <FileText size={48} className="mx-auto mb-4 opacity-50" />
           <p>{t.noArticles}</p>
         </div>
@@ -113,7 +113,7 @@ export async function generateMetadata({ params: { locale } }: Props) {
   const titles: Record<string, string> = {
     fr: 'Documentation',
     en: 'Documentation',
-    tr: 'Dokümantasyon',
+    tr: 'Dokumantasyon',
   };
   return {
     title: titles[locale] || 'Documentation',
