@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** PROJECT COMPLETE
+**Current focus:** Phase 4.1 - Light Mode Color Fixes
 
 ## Current Position
 
-Phase: 4 of 4 (Dark/Light Mode Toggle)
-Plan: 1 of 1 in current phase
-Status: Phase complete - PROJECT COMPLETE
-Last activity: 2026-01-30 - Completed 04-01-PLAN.md
+Phase: 4.1 (Light Mode Color Fixes)
+Plan: 1 of 6 in current phase
+Status: In progress
+Last activity: 2026-01-30 - Completed 04.1-01-PLAN.md
 
-Progress: [##########] 100% (4/4 phases complete)
+Progress: [########--] 80% (4/5 phases complete, plan 1/6 in phase 4.1)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~10.5min
-- Total execution time: ~42min
+- Total plans completed: 5
+- Average duration: ~9.4min
+- Total execution time: ~47min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [##########] 100% (4/4 phases complete)
 | 02-mobile-sidebar | 1/1 | ~20min | ~20min |
 | 03-back-to-top | 1/1 | ~5min | ~5min |
 | 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
+| 04.1-light-mode-color-fixes | 1/6 | ~4min | ~4min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~15min), 02-01 (~20min), 03-01 (~5min), 04-01 (~2min)
-- Trend: Execution time continued improving as patterns were reused
+- Last 5 plans: 02-01 (~20min), 03-01 (~5min), 04-01 (~2min), 04.1-01 (~4min)
+- Trend: Execution time stable for straightforward tasks
 
 *Updated after each plan completion*
 
@@ -60,6 +61,8 @@ Recent decisions affecting current work:
 - [04-01]: mounted-state pattern to prevent hydration mismatch
 - [04-01]: CSS variables for theme colors (--background, --foreground)
 - [04-01]: Toggle positioned at right-20, left of BackToTop at right-5
+- [04.1-01]: Added --border-hover and --ring variables for Tailwind opacity modifier compatibility
+- [04.1-01]: Used rgba values instead of hex+opacity for pre-computed semantic colors
 
 ### Patterns Established
 
@@ -73,6 +76,9 @@ Recent decisions affecting current work:
 - `mounted-state pattern`: useState(false) + useEffect for client-only rendering
 - `resolvedTheme vs theme`: Use resolvedTheme for actual rendered theme
 - `CSS variable theming`: :root for light, .dark for dark mode
+- `Semantic CSS variables`: --surface, --text-*, --border-*, --overlay-*, --ring
+- `Tailwind arbitrary values`: bg-[var(--surface)], text-[var(--foreground)]
+- `Pre-computed opacity`: rgba in CSS variables instead of Tailwind /opacity modifiers
 
 ### Pending Todos
 
@@ -82,6 +88,8 @@ None.
 
 - Phase 4 added: Dark/Light Mode Toggle (2026-01-30)
 - Phase 4 completed: Dark/Light Mode Toggle (2026-01-30)
+- Phase 4.1 inserted: Light Mode Color Fixes (2026-01-30) - fix hardcoded dark colors
+- Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
 
 ### Blockers/Concerns
 
@@ -89,14 +97,15 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T00:35:57Z
-Stopped at: Completed 04-01-PLAN.md (PROJECT COMPLETE)
+Last session: 2026-01-30T01:07:00Z
+Stopped at: Completed 04.1-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Project complete. All four phases finished:
-1. Horizontal overflow fixes
-2. Mobile sidebar navigation
-3. Back to top button
-4. Dark/light mode toggle
+Continue Phase 4.1 (Light Mode Color Fixes):
+- Plan 02: Layout/Container Components - bg-white/5, bg-white/10 surfaces
+- Plan 03: Navigation Components - header, footer, sidebar text colors
+- Plan 04: Interactive Components - buttons, links, inputs
+- Plan 05: Cards and Sections - feature cards, testimonials
+- Plan 06: Final Verification - WCAG AA contrast validation
