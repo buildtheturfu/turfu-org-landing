@@ -24,11 +24,11 @@ export default function Hero() {
             </span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-turfu-muted mb-8 tracking-wide">
+          <p className="text-lg sm:text-xl text-foreground-muted mb-8 tracking-wide">
             {t('subtitle')}
           </p>
 
-          <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-base sm:text-lg text-foreground-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
             {t('description')}
           </p>
 
@@ -50,9 +50,9 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
+          <div className="w-6 h-10 rounded-full border-2 border-border flex items-start justify-center p-2">
             <motion.div
-              className="w-1.5 h-1.5 bg-white/50 rounded-full"
+              className="w-1.5 h-1.5 bg-foreground/50 rounded-full"
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             />

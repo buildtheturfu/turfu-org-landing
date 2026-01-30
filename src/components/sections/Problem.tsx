@@ -14,7 +14,7 @@ export default function Problem() {
   ];
 
   return (
-    <section id="problem" className="section bg-turfu-darker">
+    <section id="problem" className="section bg-surface-muted">
       <div className="container-narrow">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-16"
@@ -29,7 +29,7 @@ export default function Problem() {
           {points.map((point, index) => (
             <motion.div
               key={point.key}
-              className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-turfu-accent/50 transition-colors"
+              className="p-6 rounded-2xl bg-overlay border border-border hover:border-turfu-accent/50 transition-colors"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -41,7 +41,7 @@ export default function Problem() {
               <h3 className="text-xl font-semibold mb-3">
                 {t(`${point.key}_title`)}
               </h3>
-              <p className="text-turfu-muted leading-relaxed">
+              <p className="text-foreground-muted leading-relaxed">
                 {t(`${point.key}_desc`)}
               </p>
             </motion.div>

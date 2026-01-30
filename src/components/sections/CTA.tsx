@@ -14,7 +14,7 @@ export default function CTA() {
   ];
 
   return (
-    <section id="cta" className="section bg-turfu-darker">
+    <section id="cta" className="section bg-surface-muted">
       <div className="container-narrow">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-16"
@@ -29,7 +29,7 @@ export default function CTA() {
           {profiles.map((profile, index) => (
             <motion.div
               key={profile.key}
-              className="p-8 rounded-2xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 text-center"
+              className="p-8 rounded-2xl bg-gradient-to-b from-overlay to-transparent border border-border text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -41,7 +41,7 @@ export default function CTA() {
 
               <h3 className="text-xl font-bold mb-3">{t(profile.key)}</h3>
 
-              <p className="text-turfu-muted mb-6">{t(`${profile.key}_desc`)}</p>
+              <p className="text-foreground-muted mb-6">{t(`${profile.key}_desc`)}</p>
 
               <a
                 href={profile.href}
