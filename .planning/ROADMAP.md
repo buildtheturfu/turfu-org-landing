@@ -14,6 +14,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 - [x] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
 - [x] **Phase 3: Back to Top** - Add floating button for long-page navigation
 - [x] **Phase 4: Dark/Light Mode Toggle** - Add theme switcher for user preference
+- [ ] **Phase 4.1: Light Mode Color Fixes** - INSERTED: Fix hardcoded dark colors for proper light mode support
 
 ## Phase Details
 
@@ -70,10 +71,29 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Install next-themes, create ThemeProvider and ThemeToggle, add light mode CSS
 
+### Phase 4.1: Light Mode Color Fixes (INSERTED)
+**Goal**: All UI elements have proper contrast and visibility in light mode
+**Depends on**: Phase 4 (theme toggle must exist)
+**Requirements**: THEME-04
+**Success Criteria** (what must be TRUE):
+  1. All text is readable in light mode (no white-on-white)
+  2. All surfaces have appropriate contrast in both modes
+  3. Icons and borders are visible in light mode
+  4. Color palette follows accessibility guidelines (WCAG AA)
+**Plans**: 6 plans
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Extend CSS variables and Tailwind config with semantic color tokens
+- [ ] 04.1-02-PLAN.md — Update layout components (Navbar, Footer, ThemeToggle, BackToTop)
+- [ ] 04.1-03-PLAN.md — Update landing page sections (Hero, Problem, CTA, Ecosystem, Vision, Architecture)
+- [ ] 04.1-04-PLAN.md — Update content module (Sidebar, Drawer, Cards, TOC, MarkdownRenderer, pages)
+- [ ] 04.1-05-PLAN.md — Update admin components and LanguageSwitcher
+- [ ] 04.1-06-PLAN.md — Final verification of light mode across entire application
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 4.1
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -81,3 +101,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
 | 3. Back to Top | 1/1 | Complete | 2026-01-29 |
 | 4. Dark/Light Mode Toggle | 1/1 | Complete | 2026-01-30 |
+| 4.1 Light Mode Color Fixes | 0/6 | Not started | - |
