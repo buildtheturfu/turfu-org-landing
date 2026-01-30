@@ -17,13 +17,12 @@ export default async function ContentLayout({ children, params: { locale } }: La
   return (
     <>
       <Navbar />
-      <div className="min-h-screen pt-16 bg-surface overflow-x-hidden md:grid md:grid-cols-[288px_1fr] md:items-start">
+      <div className="min-h-screen pt-16 bg-surface overflow-x-hidden">
         <ContentSidebar
           articles={articles}
           categories={categories}
           locale={locale}
         />
-
         {/* Mobile hamburger - fixed top-right */}
         <div className="md:hidden fixed top-20 right-4 z-30">
           <MobileSidebarDrawer
@@ -33,7 +32,7 @@ export default async function ContentLayout({ children, params: { locale } }: La
           />
         </div>
 
-        <div className="min-w-0">{children}</div>
+        <div className="md:ml-72 min-w-0">{children}</div>
       </div>
     </>
   );

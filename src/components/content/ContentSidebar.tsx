@@ -85,7 +85,7 @@ export default function ContentSidebar({ articles, categories, locale }: Content
   const isContentHome = pathname === `/${locale}/content`;
 
   return (
-    <aside className="hidden md:flex md:flex-col border-r border-border bg-surface-muted sticky top-16 self-start">
+    <aside className="hidden md:flex md:flex-col w-72 border-r border-border bg-surface-muted h-[calc(100vh-64px)] fixed top-16 left-0">
       {/* Header */}
       <div className="p-4 border-b border-border">
         <Link
@@ -120,7 +120,7 @@ export default function ContentSidebar({ articles, categories, locale }: Content
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto max-h-[calc(100vh-200px)] p-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto p-3 space-y-1">
         {/* Home link */}
         <Link
           href={`/${locale}/content`}
