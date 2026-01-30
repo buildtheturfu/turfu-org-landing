@@ -13,7 +13,7 @@ This roadmap delivers three mobile UX fixes for the /content documentation modul
 - [x] **Phase 1: Horizontal Overflow** - Eliminate horizontal scroll on mobile by constraining content width
 - [x] **Phase 2: Mobile Sidebar** - Enable navigation access via hamburger menu and off-canvas drawer
 - [x] **Phase 3: Back to Top** - Add floating button for long-page navigation
-- [ ] **Phase 4: Dark/Light Mode Toggle** - Add theme switcher for user preference
+- [x] **Phase 4: Dark/Light Mode Toggle** - Add theme switcher for user preference
 
 ## Phase Details
 
@@ -68,7 +68,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md — Install next-themes, create ThemeProvider and ThemeToggle, add light mode CSS
+- [x] 04-01-PLAN.md — Install next-themes, create ThemeProvider and ThemeToggle, add light mode CSS
 
 ## Progress
 
@@ -80,4 +80,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Horizontal Overflow | 1/1 | Complete | 2026-01-29 |
 | 2. Mobile Sidebar | 1/1 | Complete | 2026-01-29 |
 | 3. Back to Top | 1/1 | Complete | 2026-01-29 |
-| 4. Dark/Light Mode Toggle | 0/1 | Ready | - |
+| 4. Dark/Light Mode Toggle | 1/1 | Complete | 2026-01-30 |
