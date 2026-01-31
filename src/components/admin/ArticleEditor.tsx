@@ -110,7 +110,7 @@ export default function ArticleEditor({
   const frontmatter = parseFrontmatter();
 
   return (
-    <div className="h-full flex flex-col bg-surface">
+    <div className="h-screen flex flex-col bg-surface">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-4">
