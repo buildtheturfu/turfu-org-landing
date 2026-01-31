@@ -18,7 +18,8 @@ export default function LanguageSwitcher() {
   const switchLocale = (newLocale: Locale) => {
     const segments = pathname.split('/');
     segments[1] = newLocale;
-    router.push(segments.join('/'));
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    router.push(segments.join('/') + hash);
   };
 
   return (
