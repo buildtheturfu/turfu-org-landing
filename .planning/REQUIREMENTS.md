@@ -73,32 +73,32 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PREV-01 | — | Pending |
-| PREV-02 | — | Pending |
-| PREV-03 | — | Pending |
-| THEME-01 | — | Pending |
-| THEME-02 | — | Pending |
-| SAVE-01 | — | Pending |
-| META-01 | — | Pending |
-| META-02 | — | Pending |
-| META-03 | — | Pending |
-| META-04 | — | Pending |
-| META-05 | — | Pending |
-| META-06 | — | Pending |
-| META-07 | — | Pending |
-| META-08 | — | Pending |
-| FORM-01 | — | Pending |
-| FORM-02 | — | Pending |
-| FORM-03 | — | Pending |
-| FORM-04 | — | Pending |
-| FORM-05 | — | Pending |
-| FORM-06 | — | Pending |
+| PREV-01 | Phase 5 | Pending |
+| PREV-02 | Phase 5 | Pending |
+| PREV-03 | Phase 5 | Pending |
+| THEME-01 | Phase 5 | Pending |
+| THEME-02 | Phase 5 | Pending |
+| SAVE-01 | Phase 5 | Pending |
+| META-01 | Phase 6 | Pending |
+| META-02 | Phase 6 | Pending |
+| META-03 | Phase 6 | Pending |
+| META-04 | Phase 6 | Pending |
+| META-05 | Phase 6 | Pending |
+| META-06 | Phase 6 | Pending |
+| META-07 | Phase 6 | Pending |
+| META-08 | Phase 6 | Pending |
+| FORM-01 | Phase 7 | Pending |
+| FORM-02 | Phase 7 | Pending |
+| FORM-03 | Phase 7 | Pending |
+| FORM-04 | Phase 7 | Pending |
+| FORM-05 | Phase 7 | Pending |
+| FORM-06 | Phase 7 | Pending |
 
 **Coverage:**
 - v2 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20 (pending roadmap creation)
+- Mapped to phases: 20
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-31*
-*Last updated: 2026-01-31 after initial definition*
+*Last updated: 2026-01-31 after roadmap creation*
