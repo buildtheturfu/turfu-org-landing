@@ -1,3 +1,13 @@
+# Requirements Archive: v1 Mobile UX
+
+**Archived:** 2026-01-31
+**Status:** SHIPPED
+
+This is the archived requirements specification for v1.
+For current requirements, see `.planning/REQUIREMENTS.md` (created for next milestone).
+
+---
+
 # Requirements: Turfu.org Content Module Mobile UX
 
 **Defined:** 2026-01-29
@@ -25,6 +35,13 @@ Requirements for mobile UX fixes. Each maps to roadmap phases.
 - [x] **BTT-01**: Button appears after scrolling down (4+ viewport heights)
 - [x] **BTT-02**: Clicking button smooth-scrolls to top of page
 - [x] **BTT-03**: Button has accessible label for screen readers
+
+### Theme Toggle (Added during milestone)
+
+- [x] **THEME-01**: Toggle button visible to switch between dark/light modes
+- [x] **THEME-02**: User preference persists across sessions (localStorage)
+- [x] **THEME-03**: System preference is respected by default
+- [x] **THEME-04**: All UI elements have proper contrast in light mode
 
 ## v2 Requirements
 
@@ -62,12 +79,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BTT-01 | Phase 3 | Complete |
 | BTT-02 | Phase 3 | Complete |
 | BTT-03 | Phase 3 | Complete |
+| THEME-01 | Phase 4 | Complete |
+| THEME-02 | Phase 4 | Complete |
+| THEME-03 | Phase 4 | Complete |
+| THEME-04 | Phase 4.1 | Complete |
 
 **Coverage:**
-- v1 requirements: 10 total
-- Mapped to phases: 10
+- v1 requirements: 14 total
+- Mapped to phases: 14
 - Unmapped: 0
 
 ---
-*Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after Phase 3 completion*
+
+## Milestone Summary
+
+**Shipped:** 14 of 14 v1 requirements
+
+**Adjusted:**
+- THEME-01, THEME-02, THEME-03, THEME-04 were added during milestone (not in original scope)
+
+**Dropped:** None
+
+---
+*Archived: 2026-01-31 as part of v1 milestone completion*

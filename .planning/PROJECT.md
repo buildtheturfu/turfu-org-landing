@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Mobile UX fixes for the /content documentation module of Turfu.org landing page. The module currently has layout overflow issues and broken navigation on mobile devices, making it unusable for mobile visitors.
+Mobile-friendly /content documentation module for Turfu.org landing page with responsive layout, hamburger navigation, back-to-top button, and dark/light mode toggle with complete semantic color system.
 
 ## Core Value
 
@@ -18,40 +18,39 @@ The /content documentation must be as pleasant to use on mobile as on desktop, f
 - ✓ Admin dashboard for article management — existing
 - ✓ Authentication system with bcrypt hashing — existing
 - ✓ Responsive homepage sections — existing
+- ✓ Fix horizontal scroll overflow on /content mobile view — v1
+- ✓ Fix hamburger menu functionality in /content pages — v1
+- ✓ Add "back to top" button site-wide — v1
+- ✓ Dark/light mode toggle with system preference — v1
+- ✓ Semantic color system with WCAG AA contrast — v1
 
 ### Active
 
-- [ ] Fix horizontal scroll overflow on /content mobile view
-- [ ] Fix hamburger menu functionality in /content pages
-- [ ] Add "back to top" button site-wide
+(None — ship next milestone to validate)
 
 ### Out of Scope
 
 - Backend changes — scope is frontend/CSS only
-- New features — this is a UX fix milestone
-- Homepage changes — focus is /content module
 - Admin panel mobile — not mentioned as broken
+- Swipe gesture to close drawer — deferred to v2
+- Offline mode — not requested
 
 ## Context
 
-**Technical environment:**
+**Current State (v1 shipped 2026-01-31):**
+- 4,565 lines of TypeScript/CSS
 - Next.js 14 App Router with TypeScript
-- Tailwind CSS for styling
+- Tailwind CSS with semantic color system
 - next-intl for i18n (fr, en, tr locales)
+- next-themes for dark/light mode
+- framer-motion for animations
+- react-remove-scroll for drawer scroll lock
 - Deployed on Vercel
-
-**UX references provided:**
-- Notion
-- GitBook
-- Docusaurus
-- Tailwind Docs
 
 **Live site:** https://turfu-org-landing.vercel.app/fr/content
 
-**Existing codebase analysis:**
-- Content pages: `src/app/[locale]/content/page.tsx` and `src/app/[locale]/content/[slug]/page.tsx`
-- Components likely involved: navigation/header, content layout, article list
-- Tailwind responsive utilities available (sm:, md:, lg:, xl:)
+**Known issues:**
+- iOS Safari testing recommended for position:fixed elements
 
 ## Constraints
 
@@ -63,8 +62,17 @@ The /content documentation must be as pleasant to use on mobile as on desktop, f
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Reference modern doc sites | User specified Notion, GitBook, Docusaurus, Tailwind Docs as UX targets | — Pending |
-| CSS/Tailwind only fixes | Scope is responsive UX, not structural changes | — Pending |
+| Reference modern doc sites | User specified Notion, GitBook, Docusaurus, Tailwind Docs as UX targets | ✓ Good |
+| CSS/Tailwind only fixes | Scope is responsive UX, not structural changes | ✓ Good |
+| overflow-x-hidden on layout | Prevent any child content from causing horizontal scroll | ✓ Good |
+| PanelLeftOpen icon for hamburger | Clearer visual indication of sidebar panel | ✓ Good |
+| Replicate sidebar in drawer | Proper scroll behavior within drawer context | ✓ Good |
+| next-themes for theming | Handles localStorage, system preference, SSR gracefully | ✓ Good |
+| mounted-state pattern | Prevents hydration mismatch in Next.js | ✓ Good |
+| Semantic CSS variables | 10 variable groups for consistent theming | ✓ Good |
+| Blue accent for light mode | Better visual harmony with light backgrounds | ✓ Good |
+| Force dark on Architecture | Gradient backgrounds require dark for visibility | ✓ Good |
+| Fixed sidebar positioning | Align with sticky header on long pages | ✓ Good |
 
 ---
-*Last updated: 2026-01-29 after initialization*
+*Last updated: 2026-01-31 after v1 milestone*

@@ -2,125 +2,35 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-29)
+See: .planning/PROJECT.md (updated 2026-01-31)
 
 **Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** Phase 4.1 COMPLETE - Light Mode Color Fixes
+**Current focus:** v1 milestone COMPLETE — ready for next milestone or deployment
 
 ## Current Position
 
-Phase: 4.1 (Light Mode Color Fixes) COMPLETE
-Plan: 6 of 6 in current phase
-Status: Phase complete
-Last activity: 2026-01-30 - Completed 04.1-06-PLAN.md (Final Verification)
+Phase: v1 complete
+Plan: All plans complete
+Status: Milestone shipped
+Last activity: 2026-01-31 — v1 milestone complete
 
-Progress: [##########] 100% (5/5 phases complete)
+Progress: [##########] 100% (v1 shipped)
 
-## Performance Metrics
+## Milestones
 
-**Velocity:**
-- Total plans completed: 10
-- Average duration: ~7.3min
-- Total execution time: ~73min
+- ✅ **v1 Mobile UX** — Phases 1-4.1 (shipped 2026-01-31)
 
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01-horizontal-overflow | 1/1 | ~15min | ~15min |
-| 02-mobile-sidebar | 1/1 | ~20min | ~20min |
-| 03-back-to-top | 1/1 | ~5min | ~5min |
-| 04-dark-light-mode-toggle | 1/1 | ~2min | ~2min |
-| 04.1-light-mode-color-fixes | 6/6 | ~31min | ~5.2min |
-
-**Recent Trend:**
-- Last 5 plans: 04.1-02 (~2min), 04.1-03 (~2min), 04.1-04 (~5min), 04.1-05 (~2min), 04.1-06 (~15min)
-- Trend: Verification plan took longer due to iterative fixes during user review
-
-*Updated after each plan completion*
-
-## Accumulated Context
-
-### Decisions
-
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [Roadmap]: Three-phase structure derived from requirement categories (OVER, NAV, BTT)
-- [Roadmap]: Overflow first to establish baseline before adding interactive components
-- [01-01]: Used overflow-x-hidden at flex container level in layout.tsx
-- [01-01]: Sidebar completely hidden on mobile - hamburger menu deferred to Phase 2
-- [01-01]: Responsive padding pattern: p-4 md:p-8 for mobile-first approach
-- [02-01]: PanelLeftOpen icon instead of Menu hamburger for clearer sidebar affordance
-- [02-01]: Button positioned top-right to avoid overlap with "Retour" link
-- [02-01]: Replicated sidebar content in drawer rather than wrapping existing component
-- [03-01]: z-30 for BackToTop button (consistent with sidebar toggle)
-- [03-01]: 400px scroll threshold before button appears
-- [03-01]: ArrowUp icon for clearer "go up" semantics
-- [04-01]: next-themes library for theme management
-- [04-01]: mounted-state pattern to prevent hydration mismatch
-- [04-01]: CSS variables for theme colors (--background, --foreground)
-- [04-01]: Toggle positioned at right-20, left of BackToTop at right-5
-- [04.1-01]: Added --border-hover and --ring variables for Tailwind opacity modifier compatibility
-- [04.1-01]: Used rgba values instead of hex+opacity for pre-computed semantic colors
-- [04.1-03]: Preserve text-white on gradient icon backgrounds for proper contrast
-- [04.1-03]: Use bg-surface-muted for alternating section backgrounds
-- [04.1-04]: Keep backdrop-blur dark (bg-black/60) for mobile drawer - intentional dimming
-- [04.1-06]: Switch light mode accent to blue (#2563eb) for better harmony
-- [04.1-06]: Force Architecture section to dark mode for gradient visibility
-- [04.1-06]: Use fixed positioning for content sidebar alignment
-
-### Patterns Established
-
-- `hidden md:flex`: Hide elements on mobile, show with flexbox on desktop
-- `p-4 md:p-8`: Reduced padding on mobile, full padding on desktop
-- `AnimatePresence + motion.div`: Enter/exit animations with opacity and transform
-- `RemoveScroll`: Wrapper for preventing body scroll during modal/drawer open
-- `z-30 < z-40 < z-50`: Button < backdrop < drawer layering
-- `addEventListener('scroll', handler, { passive: true })`: Scroll detection with cleanup
-- `window.scrollTo({ behavior: 'smooth' })`: Native smooth scrolling
-- `mounted-state pattern`: useState(false) + useEffect for client-only rendering
-- `resolvedTheme vs theme`: Use resolvedTheme for actual rendered theme
-- `CSS variable theming`: :root for light, .dark for dark mode
-- `Semantic CSS variables`: --surface, --text-*, --border-*, --overlay-*, --ring
-- `Tailwind arbitrary values`: bg-[var(--surface)], text-[var(--foreground)]
-- `Pre-computed opacity`: rgba in CSS variables instead of Tailwind /opacity modifiers
-- `Section bg pattern`: bg-surface-muted for alternating sections
-- `Card pattern`: bg-overlay border border-border for cards on any background
-- `Gradient exceptions`: keep text-white for icons/text on colored gradients
-- `Content components`: text-foreground for headings, text-foreground-muted for prose
-- `Loading skeletons`: bg-overlay for visible animation in both modes
-- `Theme-aware accents`: different hues for light (blue) vs dark (orange) mode
-- `Force dark class`: wrap gradient-heavy sections with `dark` class for visibility
-- `Fixed sidebar positioning`: use fixed instead of sticky for multi-section layouts
-
-### Pending Todos
-
-None.
-
-### Roadmap Evolution
-
-- Phase 4 added: Dark/Light Mode Toggle (2026-01-30)
-- Phase 4 completed: Dark/Light Mode Toggle (2026-01-30)
-- Phase 4.1 inserted: Light Mode Color Fixes (2026-01-30) - fix hardcoded dark colors
-- Phase 4.1 plan 01 complete: Semantic Color Tokens (2026-01-30)
-- Phase 4.1 plan 03 complete: Landing Page Sections (2026-01-30)
-- Phase 4.1 plan 04 complete: Content Components (2026-01-30)
-- Phase 4.1 plan 06 complete: Final Verification (2026-01-30) - USER APPROVED
-
-### Blockers/Concerns
-
-- [Recommendation]: iOS Safari testing before production deployment - position:fixed elements may have scroll behavior quirks
+See: .planning/MILESTONES.md for full history
 
 ## Session Continuity
 
-Last session: 2026-01-30T02:20:00Z
-Stopped at: Completed 04.1-06-PLAN.md (Phase 4.1 COMPLETE)
+Last session: 2026-01-31
+Stopped at: v1 milestone completion
 Resume file: None
 
 ## Next Steps
 
-All planned phases complete. Potential future work:
-- Phase 5: Additional features (TBD)
+Options for next work:
+- `/gsd:new-milestone` — start v2 with new requirements
 - Production deployment
 - iOS Safari testing for position:fixed elements
