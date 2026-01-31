@@ -47,10 +47,11 @@ Plans:
   3. User can enter a new category not in the existing list
   4. Tags field suggests existing tags as user types
   5. Selected tags display as removable chips below the input
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: TBD
+- [ ] 06-01-PLAN.md — API endpoints + ComboboxInput component
+- [ ] 06-02-PLAN.md — TagInput component + ArticleEditor integration
 
 ### Phase 7: Form Validation & Polish
 **Goal**: Content creators get immediate feedback on form errors and can save efficiently with keyboard shortcuts
@@ -75,7 +76,7 @@ Phases execute in numeric order: 5 -> 6 -> 7
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 5. Live Preview & Theme | v2 | 1/1 | Complete | 2026-01-31 |
-| 6. Metadata Inputs | v2 | 0/? | Not started | - |
+| 6. Metadata Inputs | v2 | 0/2 | Not started | - |
 | 7. Form Validation & Polish | v2 | 0/? | Not started | - |
 
 ---
