@@ -16,7 +16,7 @@ Transform the admin article editor from functional-but-minimal to a polished CMS
 - Integer phases (5, 6, 7): Planned v2 work
 - Decimal phases (5.1, 5.2): Urgent insertions if needed
 
-- [ ] **Phase 5: Live Preview & Theme** - Real-time markdown preview with theme-aware admin panel
+- [x] **Phase 5: Live Preview & Theme** - Real-time markdown preview with theme-aware admin panel
 - [ ] **Phase 6: Metadata Inputs** - Category dropdown and tag autocomplete with API endpoints
 - [ ] **Phase 7: Form Validation & Polish** - Inline validation, save states, and keyboard shortcuts
 
@@ -35,7 +35,7 @@ Transform the admin article editor from functional-but-minimal to a polished CMS
 **Plans**: 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md - Live preview with useDeferredValue + SaveIndicator
+- [x] 05-01-PLAN.md — Live preview, SaveIndicator, theme compliance audit
 
 ### Phase 6: Metadata Inputs
 **Goal**: Content creators can select categories and tags through smart dropdowns instead of typing raw values
@@ -74,7 +74,7 @@ Phases execute in numeric order: 5 -> 6 -> 7
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 5. Live Preview & Theme | v2 | 0/1 | Planned | - |
+| 5. Live Preview & Theme | v2 | 1/1 | Complete | 2026-01-31 |
 | 6. Metadata Inputs | v2 | 0/? | Not started | - |
 | 7. Form Validation & Polish | v2 | 0/? | Not started | - |
 
