@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Scale, Wallet, Unlock, Building2, Rocket, Wrench, Gem, Brain, FlaskConical, StickyNote, MessageSquare, Eye, RotateCcw, Handshake, RefreshCw } from 'lucide-react';
+import { Scale, Wallet, Unlock, Building2, Rocket, Wrench, Gem, Brain, FlaskConical, StickyNote, MessageSquare, Eye, Handshake, RefreshCw } from 'lucide-react';
 
 const iconMap: Record<string, React.ReactNode> = {
   ethics: <Scale size={22} />,

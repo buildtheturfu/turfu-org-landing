@@ -1,17 +1,9 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
+import { env } from './env';
+import { logger } from './logger';
 
 const ADMIN_COOKIE = 'turfu_admin_auth';
-
-// Password hash stored as base64 in environment variable to avoid $ interpretation
-// Generate: echo -n 'YOUR_BCRYPT_HASH' | base64
-// Then decode in code before comparing
-const ADMIN_PASSWORD_HASH_B64 = process.env.ADMIN_PASSWORD_HASH_B64 || '';
-
-function getPasswordHash(): string {
-  if (!ADMIN_PASSWORD_HASH_B64) return '';
-  return Buffer.from(ADMIN_PASSWORD_HASH_B64, 'base64').toString('utf-8');
-}
 
 export function isAuthenticated(): boolean {
   const cookieStore = cookies();
@@ -20,9 +12,9 @@ export function isAuthenticated(): boolean {
 }
 
 export async function validatePassword(password: string): Promise<boolean> {
-  const hash = getPasswordHash();
+  const hash = env.admin.passwordHash;
   if (!hash) {
-    console.error('ADMIN_PASSWORD_HASH_B64 environment variable is not set');
+    logger.error('Admin password hash not configured');
     return false;
   }
   return bcrypt.compare(password, hash);

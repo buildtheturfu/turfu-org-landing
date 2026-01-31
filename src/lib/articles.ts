@@ -1,8 +1,9 @@
 import { unstable_noStore as noStore } from 'next/cache';
-import { supabase, createAdminClient } from './supabase';
+import { createAdminClient } from './supabase';
 import type { Article, ArticleMeta } from './types';
 import readingTime from 'reading-time';
 import matter from 'gray-matter';
+import { logger } from './logger';
 
 /**
  * Get all published articles for a locale
@@ -19,7 +20,7 @@ export async function getArticles(locale: string): Promise<ArticleMeta[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching articles:', error);
+    logger.error('Failed to fetch articles', error);
     return [];
   }
 
@@ -53,7 +54,7 @@ export async function getArticle(locale: string, slug: string): Promise<Article 
     .maybeSingle();
 
   if (error) {
-    console.error('Error fetching article:', error);
+    logger.error('Failed to fetch article', error, { locale, slug });
     return null;
   }
 
@@ -120,7 +121,7 @@ export async function searchArticles(locale: string, query: string): Promise<Art
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error searching articles:', error);
+    logger.error('Failed to search articles', error, { locale, query });
     return [];
   }
 
@@ -142,6 +143,7 @@ export async function searchArticles(locale: string, query: string): Promise<Art
  * Parse markdown with frontmatter
  */
 export function parseMarkdownWithFrontmatter(raw: string): {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   frontmatter: Record<string, any>;
   content: string;
 } {

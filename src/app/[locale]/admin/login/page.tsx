@@ -27,7 +27,7 @@ export default function AdminLoginPage({ params: { locale } }: { params: { local
       } else {
         setError('Mot de passe incorrect');
       }
-    } catch (err) {
+    } catch {
       setError('Erreur de connexion');
     } finally {
       setLoading(false);

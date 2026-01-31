@@ -49,9 +49,8 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
       }
       const data = await res.json();
       setArticles(data);
-    } catch (err) {
+    } catch {
       setError('Erreur lors du chargement des articles');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -73,7 +72,7 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
       const res = await fetch(`/api/admin/articles/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete');
       fetchArticles();
-    } catch (err) {
+    } catch {
       alert('Erreur lors de la suppression');
     }
   };
@@ -100,7 +99,7 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
 
       setEditingContent(frontmatter);
       setEditingArticle(fullArticle);
-    } catch (err) {
+    } catch {
       alert('Erreur lors du chargement de l\'article');
     }
   };
@@ -127,8 +126,9 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
       setIsCreating(false);
       setEditingContent('');
       fetchArticles();
-    } catch (err: any) {
-      alert(err.message || 'Erreur lors de l\'enregistrement');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erreur lors de l\'enregistrement';
+      alert(message);
     }
   };
 
