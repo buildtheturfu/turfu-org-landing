@@ -32,10 +32,10 @@ Transform the admin article editor from functional-but-minimal to a polished CMS
   3. Preview styling matches published article appearance exactly
   4. Admin panel colors change correctly when toggling dark/light mode
   5. Unsaved changes indicator shows when content differs from saved version
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 05-01: TBD
+- [ ] 05-01-PLAN.md - Live preview with useDeferredValue + SaveIndicator
 
 ### Phase 6: Metadata Inputs
 **Goal**: Content creators can select categories and tags through smart dropdowns instead of typing raw values
@@ -74,7 +74,7 @@ Phases execute in numeric order: 5 -> 6 -> 7
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 5. Live Preview & Theme | v2 | 0/? | Not started | - |
+| 5. Live Preview & Theme | v2 | 0/1 | Planned | - |
 | 6. Metadata Inputs | v2 | 0/? | Not started | - |
 | 7. Form Validation & Polish | v2 | 0/? | Not started | - |
 
