@@ -47,8 +47,8 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
         }
         throw new Error('Failed to fetch articles');
       }
-      const data = await res.json();
-      setArticles(data);
+      const response = await res.json();
+      setArticles(response.data || []);
     } catch {
       setError('Erreur lors du chargement des articles');
     } finally {
@@ -81,8 +81,8 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
     // Fetch full article content
     try {
       const res = await fetch(`/api/admin/articles?locale=${article.locale}`);
-      const articles = await res.json();
-      const fullArticle = articles.find((a: Article) => a.id === article.id);
+      const response = await res.json();
+      const fullArticle = (response.data || []).find((a: Article) => a.id === article.id);
 
       // Reconstruct raw content with frontmatter
       const frontmatter = [
