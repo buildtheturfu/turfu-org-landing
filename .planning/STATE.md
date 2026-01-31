@@ -4,33 +4,51 @@
 
 See: .planning/PROJECT.md (updated 2026-01-31)
 
-**Core value:** The /content documentation must be as pleasant to use on mobile as on desktop
-**Current focus:** v1 milestone COMPLETE — ready for next milestone or deployment
+**Core value:** Content creators can efficiently manage and preview documentation articles through a polished admin experience
+**Current focus:** Defining v2 requirements
 
 ## Current Position
 
-Phase: v1 complete
-Plan: All plans complete
-Status: Milestone shipped
-Last activity: 2026-01-31 — v1 milestone complete
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-31 — Milestone v2 started
 
-Progress: [##########] 100% (v1 shipped)
+Progress: [░░░░░░░░░░] 0% (v2 planning)
 
 ## Milestones
 
 - ✅ **v1 Mobile UX** — Phases 1-4.1 (shipped 2026-01-31)
+- 🚧 **v2 Admin UX** — Defining requirements
 
 See: .planning/MILESTONES.md for full history
+
+## Accumulated Context
+
+### Decisions
+
+Decisions from v1 still apply:
+- Semantic CSS variables for theming
+- Tailwind arbitrary values: bg-[var(--surface)]
+- Theme-aware accents: blue for light, violet for dark
+
+### Patterns Established
+
+From v1 (carry forward):
+- `mounted-state pattern`: useState(false) + useEffect for client-only rendering
+- `CSS variable theming`: :root for light, .dark for dark mode
+- `Semantic color tokens`: --surface, --text-*, --border-*, --overlay-*
+
+### Pending Todos
+
+None.
+
+### Blockers/Concerns
+
+None.
 
 ## Session Continuity
 
 Last session: 2026-01-31
-Stopped at: v1 milestone completion
+Stopped at: Milestone v2 questioning complete
 Resume file: None
-
-## Next Steps
-
-Options for next work:
-- `/gsd:new-milestone` — start v2 with new requirements
-- Production deployment
-- iOS Safari testing for position:fixed elements

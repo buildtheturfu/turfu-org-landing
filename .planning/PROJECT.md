@@ -1,12 +1,23 @@
-# Turfu.org Content Module Mobile UX Fix
+# Turfu.org Landing Page
 
 ## What This Is
 
-Mobile-friendly /content documentation module for Turfu.org landing page with responsive layout, hamburger navigation, back-to-top button, and dark/light mode toggle with complete semantic color system.
+Turfu.org landing page with mobile-friendly /content documentation module and admin panel for article management. The site supports multiple locales (fr, en, tr), dark/light mode, and provides a CMS-like experience for content creators.
 
 ## Core Value
 
-The /content documentation must be as pleasant to use on mobile as on desktop, following modern documentation site UX conventions.
+Content creators can efficiently manage and preview documentation articles through a polished admin experience.
+
+## Current Milestone: v2 Admin UX
+
+**Goal:** Transform the admin article editor from functional-but-minimal to a polished content management experience.
+
+**Target features:**
+- Live markdown preview (rendered HTML as you type)
+- Category/tag dropdowns with autocomplete
+- Cleaner form layout and visual organization
+- Inline validation (errors as you type)
+- Admin panel respects dark/light theme
 
 ## Requirements
 
@@ -26,14 +37,20 @@ The /content documentation must be as pleasant to use on mobile as on desktop, f
 
 ### Active
 
-(None — ship next milestone to validate)
+- [ ] Live markdown preview in article editor
+- [ ] Category dropdown with existing categories
+- [ ] Tag input with autocomplete from existing tags
+- [ ] Cleaner editor form layout
+- [ ] Inline validation with error messages
+- [ ] Admin panel respects dark/light theme toggle
 
 ### Out of Scope
 
-- Backend changes — scope is frontend/CSS only
-- Admin panel mobile — not mentioned as broken
-- Swipe gesture to close drawer — deferred to v2
-- Offline mode — not requested
+- Image upload to storage — use external URLs for now
+- Article versioning/history — future enhancement
+- Multi-user concurrent edit detection — single admin assumed
+- Bulk operations (batch delete/publish) — individual editing sufficient
+- Admin mobile optimization — desktop-focused workflow
 
 ## Context
 
@@ -75,4 +92,4 @@ The /content documentation must be as pleasant to use on mobile as on desktop, f
 | Fixed sidebar positioning | Align with sticky header on long pages | ✓ Good |
 
 ---
-*Last updated: 2026-01-31 after v1 milestone*
+*Last updated: 2026-01-31 after v2 milestone start*
