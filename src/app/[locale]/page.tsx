@@ -8,6 +8,7 @@ import Architecture from '@/components/sections/Architecture';
 import Principles from '@/components/sections/Principles';
 import CTA from '@/components/sections/CTA';
 import Footer from '@/components/Footer';
+import ScrollSpy from '@/components/ScrollSpy';
 
 type Props = {
   params: { locale: string };
@@ -19,6 +20,7 @@ export default function Home({ params: { locale } }: Props) {
 
   return (
     <>
+      <ScrollSpy />
       <Navbar />
       <main id="main-content">
         <Hero />
