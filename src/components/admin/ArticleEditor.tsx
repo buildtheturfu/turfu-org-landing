@@ -1,7 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useDeferredValue, memo } from 'react';
 import { Save, Eye, EyeOff, X, FileText } from 'lucide-react';
+import MarkdownRenderer from '@/components/content/MarkdownRenderer';
+import SaveIndicator from './SaveIndicator';
+import { useBeforeUnload } from '@/hooks/useBeforeUnload';
+
+// Memoized preview component - must be outside ArticleEditor function
+// WHY memo: Without memo, useDeferredValue has no effect - parent re-render forces child re-render regardless of props
+const MemoizedMarkdownRenderer = memo(MarkdownRenderer);
 
 interface ArticleEditorProps {
   initialContent?: string;
@@ -42,14 +49,27 @@ export default function ArticleEditor({
   onCancel,
 }: ArticleEditorProps) {
   const [rawContent, setRawContent] = useState(initialContent);
+  const [savedContent, setSavedContent] = useState(initialContent);
   const [locale, setLocale] = useState(initialLocale);
   const [published, setPublished] = useState(initialPublished);
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
+  // Deferred content for preview - enables instant-feel typing while preview updates adaptively
+  const deferredContent = useDeferredValue(rawContent);
+  const isPreviewStale = rawContent !== deferredContent;
+  const isDirty = rawContent !== savedContent;
+
+  // Warn user before closing tab with unsaved changes
+  useBeforeUnload(isDirty);
+
+  // Extract markdown body from deferred content (strip frontmatter)
+  const markdownBody = deferredContent.replace(/^---[\s\S]*?---\n?/, '');
+
   useEffect(() => {
     if (!initialContent && !articleId) {
       setRawContent(DEFAULT_TEMPLATE);
+      setSavedContent(DEFAULT_TEMPLATE);
     }
   }, [initialContent, articleId]);
 
@@ -57,6 +77,7 @@ export default function ArticleEditor({
     setSaving(true);
     try {
       await onSave({ rawContent, locale, published });
+      setSavedContent(rawContent);
     } finally {
       setSaving(false);
     }
@@ -64,7 +85,7 @@ export default function ArticleEditor({
 
   // Parse frontmatter for preview
   const parseFrontmatter = () => {
-    const match = rawContent.match(/^---\n([\s\S]*?)\n---/);
+    const match = deferredContent.match(/^---\n([\s\S]*?)\n---/);
     if (!match) return null;
 
     const lines = match[1].split('\n');
@@ -99,6 +120,7 @@ export default function ArticleEditor({
           >
             <X size={20} />
           </button>
+          <SaveIndicator isDirty={isDirty} />
           <h2 className="text-lg font-semibold text-foreground">
             {articleId ? 'Modifier l\'article' : 'Nouvel article'}
           </h2>
@@ -169,7 +191,10 @@ export default function ArticleEditor({
 
         {/* Preview */}
         {showPreview && (
-          <div className="w-1/2 border-l border-border overflow-auto p-6">
+          <div
+            className="w-1/2 border-l border-border overflow-auto p-6"
+            style={{ opacity: isPreviewStale ? 0.7 : 1, transition: 'opacity 0.15s' }}
+          >
             {frontmatter && (
               <div className="mb-6 p-4 bg-overlay rounded-lg">
                 <h3 className="text-xs font-medium text-foreground-muted uppercase mb-3">Frontmatter</h3>
@@ -184,12 +209,7 @@ export default function ArticleEditor({
               </div>
             )}
             <div className="prose-turfu">
-              <div className="text-foreground-muted text-sm">
-                (Apercu du contenu markdown...)
-              </div>
-              <pre className="mt-4 text-xs text-foreground/70 whitespace-pre-wrap">
-                {rawContent.replace(/^---[\s\S]*?---\n/, '')}
-              </pre>
+              <MemoizedMarkdownRenderer content={markdownBody} />
             </div>
           </div>
         )}
