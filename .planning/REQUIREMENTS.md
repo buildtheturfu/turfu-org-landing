@@ -9,23 +9,23 @@ Requirements for admin editor UX improvements. Each maps to roadmap phases.
 
 ### Live Preview & Theme
 
-- [ ] **PREV-01**: Editor shows live rendered markdown preview as user types
-- [ ] **PREV-02**: Preview updates are debounced (150-300ms) for performance
-- [ ] **PREV-03**: Preview uses same styling as published articles (MarkdownRenderer)
-- [ ] **THEME-01**: Admin panel respects dark/light mode toggle
-- [ ] **THEME-02**: All admin components use semantic color variables
-- [ ] **SAVE-01**: Autosave indicator shows "Saved" / "Unsaved changes" status
+- [x] **PREV-01**: Editor shows live rendered markdown preview as user types
+- [x] **PREV-02**: Preview updates are debounced (150-300ms) for performance
+- [x] **PREV-03**: Preview uses same styling as published articles (MarkdownRenderer)
+- [x] **THEME-01**: Admin panel respects dark/light mode toggle
+- [x] **THEME-02**: All admin components use semantic color variables
+- [x] **SAVE-01**: Autosave indicator shows "Saved" / "Unsaved changes" status
 
 ### Metadata Inputs
 
-- [ ] **META-01**: Category field is dropdown populated from existing categories
-- [ ] **META-02**: Category dropdown allows typing to filter options
-- [ ] **META-03**: Category dropdown allows entering new category not in list
-- [ ] **META-04**: Tags field is multi-select with autocomplete from existing tags
-- [ ] **META-05**: Tags display as removable chips below input
-- [ ] **META-06**: Tags can be added by typing and pressing Enter/comma
-- [ ] **META-07**: API endpoint returns list of existing categories
-- [ ] **META-08**: API endpoint returns list of existing tags
+- [x] **META-01**: Category field is dropdown populated from existing categories
+- [x] **META-02**: Category dropdown allows typing to filter options
+- [x] **META-03**: Category dropdown allows entering new category not in list
+- [x] **META-04**: Tags field is multi-select with autocomplete from existing tags
+- [x] **META-05**: Tags display as removable chips below input
+- [x] **META-06**: Tags can be added by typing and pressing Enter/comma
+- [x] **META-07**: API endpoint returns list of existing categories
+- [x] **META-08**: API endpoint returns list of existing tags
 
 ### Form UX
 
@@ -73,20 +73,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PREV-01 | Phase 5 | Pending |
-| PREV-02 | Phase 5 | Pending |
-| PREV-03 | Phase 5 | Pending |
-| THEME-01 | Phase 5 | Pending |
-| THEME-02 | Phase 5 | Pending |
-| SAVE-01 | Phase 5 | Pending |
-| META-01 | Phase 6 | Pending |
-| META-02 | Phase 6 | Pending |
-| META-03 | Phase 6 | Pending |
-| META-04 | Phase 6 | Pending |
-| META-05 | Phase 6 | Pending |
-| META-06 | Phase 6 | Pending |
-| META-07 | Phase 6 | Pending |
-| META-08 | Phase 6 | Pending |
+| PREV-01 | Phase 5 | Complete |
+| PREV-02 | Phase 5 | Complete |
+| PREV-03 | Phase 5 | Complete |
+| THEME-01 | Phase 5 | Complete |
+| THEME-02 | Phase 5 | Complete |
+| SAVE-01 | Phase 5 | Complete |
+| META-01 | Phase 6 | Complete |
+| META-02 | Phase 6 | Complete |
+| META-03 | Phase 6 | Complete |
+| META-04 | Phase 6 | Complete |
+| META-05 | Phase 6 | Complete |
+| META-06 | Phase 6 | Complete |
+| META-07 | Phase 6 | Complete |
+| META-08 | Phase 6 | Complete |
 | FORM-01 | Phase 7 | Pending |
 | FORM-02 | Phase 7 | Pending |
 | FORM-03 | Phase 7 | Pending |
