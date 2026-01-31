@@ -18,6 +18,14 @@ export default function LanguageSwitcher() {
   const switchLocale = (newLocale: Locale) => {
     const segments = pathname.split('/');
     segments[1] = newLocale;
+
+    // If on an article page (/locale/content/slug), redirect to content list
+    // since articles may not exist in all languages
+    if (segments[2] === 'content' && segments[3]) {
+      router.push(`/${newLocale}/content`);
+      return;
+    }
+
     const hash = typeof window !== 'undefined' ? window.location.hash : '';
     router.push(segments.join('/') + hash);
   };
