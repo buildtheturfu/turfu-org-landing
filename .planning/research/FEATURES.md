@@ -1,220 +1,306 @@
-# Feature Landscape: Mobile Documentation UX
+# Feature Landscape: Admin Article Editor UX
 
-**Domain:** Mobile documentation site UX
-**Researched:** 2026-01-29
-**Confidence:** HIGH (verified against official sources and multiple credible references)
+**Domain:** CMS admin editor for markdown content management
+**Researched:** 2026-01-31
+**Confidence:** MEDIUM (based on established CMS patterns from Ghost, Sanity, Strapi, Contentful, WordPress Gutenberg)
+**Focus:** Improving existing admin editor from functional-but-minimal to polished experience
 
 ## Executive Summary
 
-Modern documentation sites (Notion, GitBook, Docusaurus, Tailwind Docs) share common mobile UX patterns that users now expect. This research maps table stakes features (must-have for usable mobile docs), nice-to-have differentiators, and anti-features to avoid. The three issues identified in PROJECT.md (horizontal overflow, broken hamburger menu, missing back-to-top) are all table stakes violations.
+Modern CMS admin editors share common UX patterns that content creators now expect. This research maps table stakes features (must-have for a polished admin editor), differentiators (competitive advantages), and anti-features (things to deliberately NOT build). The current admin editor has basic functionality but lacks the polish expected from modern content management experiences.
+
+**Current State Analysis:**
+- Split-view editor with preview toggle (basic, not live)
+- Locale selector dropdown (functional)
+- Draft/published toggle (functional)
+- Raw textarea for markdown editing (no syntax highlighting)
+- Frontmatter parsed but displayed as key-value pairs (not rendered)
+- No validation feedback
+- No category/tag autocomplete
 
 ---
 
 ## Table Stakes
 
-Features users expect. Missing = documentation feels broken or unusable on mobile.
+Features users expect from a polished admin editor. Missing = editor feels incomplete or amateurish.
 
-| Feature | Why Expected | Complexity | User Benefit | Notes |
+| Feature | Why Expected | Complexity | Dependencies | Notes |
 |---------|--------------|------------|--------------|-------|
-| **No horizontal overflow** | Content breaking viewport = unusable | Low | Can read without side-scrolling | Code blocks and images are common culprits |
-| **Working hamburger menu** | Standard mobile navigation pattern | Low | Access to navigation on any page | Must toggle open/closed reliably |
-| **Responsive content width** | Text readable without zooming | Low | Natural reading on any device | Use `max-width: 100%` not `100vw` |
-| **Touch-friendly tap targets** | WCAG 2.5.8 Level AA requirement | Low | Accessible to all users | Minimum 24x24px, ideally 44x44px |
-| **Readable typography** | Mobile screens demand larger base | Low | No squinting or pinching | 16px minimum body text |
-| **Back-to-top button** | Long-form content standard | Low | Quick navigation on long pages | Appears after 4+ screens of scroll |
-| **Sticky/accessible header** | Navigation always reachable | Medium | Never trapped in content | Either sticky or hamburger access |
-| **Collapsible sidebar navigation** | Screen real estate is limited | Medium | Focus on content, navigation when needed | Slide-out pattern preferred |
-| **Responsive images** | Images must not overflow | Low | No horizontal scroll from images | `max-width: 100%; height: auto;` |
-| **Scrollable code blocks** | Code often exceeds viewport | Low | View code without breaking layout | `overflow-x: auto` on `<pre>` |
+| **Live markdown preview** | Real-time feedback while writing | Low | Existing `MarkdownRenderer` | Debounce 150-300ms for performance |
+| **Rendered HTML preview** | See final output, not raw markdown | Low | Existing `MarkdownRenderer` | Current preview shows raw markdown body |
+| **Category dropdown** | Quick selection from existing categories | Low | `getCategories()` exists | Fetch on mount, allow custom entry |
+| **Tag autocomplete** | Discover existing tags, maintain consistency | Medium | `getAllTags()` exists | Multi-select with type-ahead |
+| **Inline validation** | Immediate feedback on errors | Low | None | Title required, slug conflicts |
+| **Autosave indicator** | Know when work is saved | Low | None | "Saved" / "Unsaved changes" status |
+| **Keyboard shortcuts** | Power user efficiency | Low | None | Cmd+S to save, Cmd+P for preview |
+| **Form field organization** | Clear visual hierarchy | Low | None | Group metadata, separate from content |
+| **Theme consistency** | Admin matches site theme | Low | `next-themes` exists | Apply dark/light CSS variables |
+| **Loading states** | Feedback during operations | Low | None | Save button spinner, skeleton loaders |
 
 ### Details on Critical Table Stakes
 
-#### 1. No Horizontal Overflow
+#### 1. Live Markdown Preview
 
-**What users expect:** Content stays within viewport boundaries. No horizontal scrollbar on the body/page level.
+**What users expect:** As they type markdown, the rendered HTML updates in real-time in the adjacent panel.
 
-**Common causes:**
-- Code blocks with long lines and no `overflow-x: auto`
-- Fixed-width elements (images, tables, embeds)
-- Using `100vw` instead of `100%` (includes scrollbar width)
-- Padding/margins not adjusted for mobile
+**Current state:** Preview toggle shows parsed frontmatter + raw markdown body (not rendered).
 
-**Implementation pattern:**
-```css
-/* Prevent page-level overflow */
-body {
-  overflow-x: hidden;
-}
+**Standard pattern (Ghost, Sanity, Notion):**
+- Side-by-side layout: editor left, preview right
+- Preview updates as you type (debounced 150-300ms)
+- Preview matches final article styling
+- Scroll sync between editor and preview (optional, nice-to-have)
 
-/* Code blocks scroll internally */
-pre {
-  max-width: 100%;
-  overflow-x: auto;
-}
+**Implementation approach:**
+```typescript
+// Debounced preview update
+const [previewContent, setPreviewContent] = useState('');
 
-/* Images constrained */
-img {
-  max-width: 100%;
-  height: auto;
-}
+useEffect(() => {
+  const timer = setTimeout(() => {
+    const { content } = parseMarkdownWithFrontmatter(rawContent);
+    setPreviewContent(content);
+  }, 200);
+  return () => clearTimeout(timer);
+}, [rawContent]);
 ```
 
-**Confidence:** HIGH (MDN documentation, CSS-Tricks, multiple implementation guides)
+**Complexity:** Low - existing `MarkdownRenderer` component can be reused directly.
 
-#### 2. Working Hamburger Menu
+#### 2. Category Dropdown with Existing Categories
 
-**What users expect:** Tapping the hamburger icon reveals navigation. Tapping again (or outside) closes it. Navigation items are tappable.
+**What users expect:** Click dropdown, see categories already used in other articles, can also type new category.
 
-**Standard behavior:**
-- Icon in top-left or top-right corner (consistent placement)
-- Opens slide-out sidebar or dropdown
-- Includes all primary navigation items
-- Closes when navigating to a new page
-- Touch target at least 44x44px
+**Current state:** Category must be typed manually in frontmatter YAML.
 
-**Docusaurus pattern:**
-- Uses 996px breakpoint for mobile/desktop switch
-- Hamburger reveals left sidebar with doc navigation
-- Separate from table-of-contents (right sidebar on desktop)
+**Standard pattern (Strapi, WordPress):**
+- Dropdown populated from existing categories
+- Type-ahead filtering
+- Option to create new category inline
+- Clear visual of selected category
 
-**Confidence:** HIGH (Docusaurus documentation, Justinmind, Elementor best practices)
+**Implementation approach:**
+- Fetch categories on editor mount via API endpoint
+- Use combobox pattern (dropdown + text input)
+- Allow free-form entry for new categories
 
-#### 3. Back-to-Top Button
+**Complexity:** Low - `getCategories()` already exists, need API endpoint + UI component.
 
-**What users expect:** After scrolling several screens, a button appears to return to top. Common on all major documentation platforms.
+#### 3. Tag Input with Autocomplete
 
-**Best practices (per Nielsen Norman Group):**
-- Show only for pages longer than 4 screens
-- Position: lower-right corner (thumb-friendly zone)
-- Delay appearance until user scrolls AND shows intent to scroll up
-- Label: "Back to Top" or clear up-arrow icon
-- Stay stationary once visible (no movement)
-- Size: Large enough for touch (44x44px recommended)
-- Never auto-scroll the page
+**What users expect:** Type tag name, see suggestions from existing tags, select multiple, remove easily.
 
-**Confidence:** HIGH (NN/g, Red Hat Design System, California Design System)
+**Current state:** Tags must be typed as YAML array in frontmatter (`tags: ["tag1", "tag2"]`).
+
+**Standard pattern (Ghost, WordPress, Notion):**
+- Pills/chips showing selected tags
+- Text input with type-ahead suggestions
+- Click to add, X to remove
+- Comma or Enter to confirm new tag
+
+**Implementation approach:**
+- Fetch all tags on mount via API endpoint
+- Combobox with multi-select
+- Display as removable chips below input
+
+**Complexity:** Medium - requires multi-select combobox component.
+
+#### 4. Inline Validation
+
+**What users expect:** See errors immediately as they type, not after clicking save.
+
+**Current state:** Validation happens server-side, errors shown via alert().
+
+**Standard pattern (all modern CMS):**
+- Required field indicators (asterisk or label)
+- Error messages below problematic fields
+- Save button disabled until valid (optional)
+- Success confirmation after save
+
+**Validation rules to implement:**
+- Title required (empty check)
+- Slug uniqueness (check on blur, show conflict warning)
+- Valid frontmatter YAML syntax
+- Description recommended but not required
+
+**Complexity:** Low - straightforward form validation.
+
+#### 5. Theme Consistency (Dark/Light Mode)
+
+**What users expect:** Admin panel respects system/user theme preference, matches site design.
+
+**Current state:** Admin uses hardcoded dark theme colors (e.g., `bg-gray-900`, `text-white`).
+
+**Implementation approach:**
+- Replace hardcoded colors with semantic CSS variables
+- Use existing `next-themes` integration
+- Apply `bg-surface`, `text-foreground`, `border-border` classes
+
+**Complexity:** Low - CSS variable substitution, no logic changes.
 
 ---
 
-## Nice to Have (Differentiators)
+## Differentiators
 
-Features that improve mobile UX but aren't expected as baseline.
+Features that elevate the editor experience but are not expected as baseline.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Collapsible table of contents** | Quick section jumping on mobile | Medium | Notion and Docusaurus include this |
-| **Reading progress indicator** | Shows position in long article | Low | Subtle top bar showing scroll progress |
-| **Keyboard shortcut hints** | Power user acceleration | Low | `Cmd+K` for search modal |
-| **Search modal (not in header)** | Full-screen search on mobile | Medium | Better than cramped header search |
-| **Swipe gestures** | Native-feeling navigation | High | Swipe to open sidebar, swipe between articles |
-| **Dark mode toggle accessible** | User preference respect | Low | Must be findable on mobile too |
-| **Breadcrumbs** | Location awareness | Low | "Docs > Getting Started > Installation" |
-| **Offline support (PWA)** | Reference docs without network | High | GitBook offers this |
-| **Copy button on code blocks** | Developer convenience | Low | Standard in Docusaurus, GitBook |
-| **Section anchor links** | Share specific sections | Low | Click heading to copy link |
+| **Syntax highlighting** | Better code editing experience | Medium | Use CodeMirror or Monaco |
+| **Scroll sync** | Editor and preview scroll together | Medium | Map editor lines to preview elements |
+| **Markdown toolbar** | Insert formatting without knowing syntax | Low | Bold, italic, link, image buttons |
+| **Image URL preview** | See image before publishing | Low | Validate and thumbnail external URLs |
+| **Word/character count** | Track content length | Low | Real-time in footer |
+| **Reading time estimate** | Match front-end display | Low | `reading-time` library exists |
+| **Undo/redo history** | Recover from mistakes | Medium | Built into textarea, but limited |
+| **Draft auto-save** | Never lose work | Medium | LocalStorage + periodic save |
+| **Frontmatter visual editor** | Edit metadata without YAML | High | Parse and regenerate YAML |
+| **Split/full/preview modes** | Flexible layout options | Low | Toggle buttons for layout |
 
-### Notable Differentiators by Platform
+### Notable Differentiator Details
 
-**Notion Mobile:**
-- Bottom navigation bar (always visible)
-- Home, Search, Inbox, Create shortcuts
-- Thumb-friendly zone usage
+#### Markdown Toolbar
 
-**GitBook:**
-- AI-powered search
-- Desktop/mobile preview toggle in editor
-- Cross-platform responsive design
+**What it provides:** Insert markdown syntax without memorizing it.
 
-**Docusaurus:**
-- Three-column layout collapses intelligently
-- Sidebar + TOC both accessible on mobile (different triggers)
-- Algolia search integration
+**Standard buttons (Ghost, Notion pattern):**
+- Bold (**text**)
+- Italic (_text_)
+- Heading levels (# ## ###)
+- Link insertion
+- Image URL insertion
+- Code block
+- Blockquote
+- List (bulleted, numbered)
 
-**Tailwind Docs:**
-- Command palette search (Cmd+K)
-- Exceptional code block styling
-- Container queries for component-level responsiveness
+**Implementation complexity:** Low - wrap selection with markdown syntax.
+
+#### Frontmatter Visual Editor
+
+**What it provides:** Edit title, description, category, tags through form fields rather than YAML.
+
+**Tradeoffs:**
+- Pro: More user-friendly, prevents YAML syntax errors
+- Con: Higher complexity, need to sync form state with raw content
+- Con: Loses flexibility of arbitrary frontmatter fields
+
+**Recommendation:** For v2, implement as OPTIONAL. Keep raw editor as primary, offer visual fields as convenience that sync bidirectionally.
 
 ---
 
 ## Anti-Features
 
-Features to explicitly NOT implement. Common mistakes in mobile documentation.
+Features to explicitly NOT build. Common mistakes in admin editor development.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| **Hover-only interactions** | Touch devices have no hover | Use tap/click interactions, show tooltips on focus |
-| **Tiny tap targets** | Frustrating, accessibility violation | Minimum 24x24px (WCAG), prefer 44x44px |
-| **Fixed sidebars on mobile** | Consumes too much screen space | Collapsible hamburger-triggered sidebar |
-| **Auto-playing animations** | Distracting, performance hit | User-initiated or reduced motion preference |
-| **Desktop-only navigation** | Hiding navigation from mobile users | Full navigation accessible via hamburger |
-| **Nested hamburger menus** | Interaction cost too high | Flat navigation or expandable sections |
-| **100vw width on elements** | Causes horizontal overflow (scrollbar width) | Use `100%` or `calc(100vw - scrollbar)` |
-| **Sticky elements that cover content** | Reduces readable viewport | Small sticky headers, or hide on scroll down |
-| **Infinite scroll without pagination** | Loses position, performance issues | Paginated or "load more" pattern |
-| **Text in images for docs** | Can't zoom text, not searchable | Use actual text, styled appropriately |
-| **Tooltips for critical info** | Not accessible on touch | Show info inline or on tap |
-| **Complex gestures** | Not discoverable | Simple tap interactions, optional gestures |
-| **Breaking scroll position** | User loses place in content | Preserve scroll on navigation/filter changes |
-| **Modal overuse** | Hard to close on mobile | Use inline expansions or dedicated pages |
+| **Rich text editor (WYSIWYG)** | Scope creep, inconsistent with markdown workflow | Keep markdown as primary format |
+| **Image upload to server** | Requires storage infrastructure, out of scope | Keep external URL approach |
+| **Version history** | Database complexity, out of scope for v2 | Document as future enhancement |
+| **Concurrent edit detection** | Single admin assumed, unnecessary complexity | N/A for single-user system |
+| **Bulk operations** | Individual editing sufficient for content volume | Keep single-article operations |
+| **Mobile-optimized admin** | Desktop workflow assumed, scope control | Desktop-first, responsive optional |
+| **AI writing assistance** | Feature creep, separate concern | Out of scope |
+| **Custom block types** | Beyond markdown standard | Use markdown extensions if needed |
+| **Collaborative editing** | Single admin, no need | N/A |
+| **Content scheduling** | Simple publish/draft sufficient | Future enhancement if needed |
 
-### Critical Anti-Patterns for /content Module
+### Critical Anti-Patterns to Avoid
 
-Based on the identified issues:
+#### 1. Replacing Markdown with WYSIWYG
 
-1. **Horizontal overflow causing side-scrolling**
-   - Likely caused by code blocks, images, or fixed-width containers
-   - Fix: Audit all elements for `max-width: 100%` compliance
+**Why tempting:** "Non-technical users don't know markdown"
 
-2. **Non-functional hamburger menu**
-   - JavaScript event not firing, or menu state not toggling
-   - Fix: Ensure click handler works, verify z-index stacking
+**Why avoid:**
+- The project is already markdown-based with frontmatter
+- WYSIWYG editors have inconsistent HTML output
+- Would require significant architecture changes
+- Content creators using this admin are expected to know markdown
 
-3. **Missing back-to-top**
-   - Users must manually scroll long articles
-   - Fix: Add floating button with scroll detection
+**Instead:** Add markdown toolbar for common formatting, keep raw markdown as source of truth.
+
+#### 2. Building Image Upload
+
+**Why tempting:** "External URLs are clunky"
+
+**Why avoid:**
+- Requires storage infrastructure (S3, Cloudinary, etc.)
+- Security considerations for uploads
+- Out of explicit scope ("use external URLs for now")
+
+**Instead:** Add URL validation and thumbnail preview for external images.
+
+#### 3. Complex Form State Management
+
+**Why tempting:** "Bidirectional sync between visual fields and raw content"
+
+**Why avoid:**
+- High complexity
+- Edge cases with custom frontmatter fields
+- Parsing/regenerating YAML is error-prone
+
+**Instead:** Keep raw content as source of truth, visual fields as optional convenience that write to frontmatter section.
 
 ---
 
 ## Feature Dependencies
 
 ```
-Horizontal Overflow Fix
+Theme Consistency (Dark/Light Mode)
     |
-    +-- Responsive code blocks (overflow-x: auto)
-    +-- Constrained images (max-width: 100%)
-    +-- Flexible containers (no fixed widths)
+    +-- No dependencies, independent CSS variable change
 
-Hamburger Menu Fix
+Live Markdown Preview
     |
-    +-- Click/tap handler working
-    +-- Menu state management (open/closed)
-    +-- Proper z-index stacking
-    +-- Body scroll lock when menu open (optional)
+    +-- Reuses existing MarkdownRenderer component
+    +-- Debounce for performance
 
-Back-to-Top Button
+Category Dropdown
     |
-    +-- Scroll position detection
-    +-- Conditional visibility (show after threshold)
-    +-- Smooth scroll behavior
-    +-- Fixed positioning (lower-right)
+    +-- Requires API endpoint for categories (GET /api/admin/categories)
+    +-- getCategories() lib function exists
+
+Tag Autocomplete
+    |
+    +-- Requires API endpoint for tags (GET /api/admin/tags)
+    +-- getAllTags() lib function exists
+    +-- More complex UI component (multi-select combobox)
+
+Inline Validation
+    |
+    +-- Title validation: local only
+    +-- Slug uniqueness: requires API check (could reuse existing POST error)
+
+Form Layout Cleanup
+    |
+    +-- Depends on Category/Tag components being built first
+    +-- Theme consistency should be done first
 ```
 
 ---
 
-## MVP Recommendation (For This Milestone)
+## MVP Recommendation (For v2 Milestone)
 
-**Must fix (table stakes):**
-1. Horizontal overflow - Audit and fix all overflowing elements
-2. Hamburger menu - Ensure toggle works and navigation is accessible
-3. Back-to-top button - Add with proper positioning and scroll detection
+**Phase 1 - Foundation (do first):**
+1. **Theme consistency** - Apply semantic color variables to admin
+2. **Live markdown preview** - Replace raw display with MarkdownRenderer
 
-**Do NOT add (out of scope for this fix milestone):**
-- Search modal improvements
-- Swipe gestures
-- Offline support
-- Reading progress indicator
-- Any new features beyond the three fixes
+**Phase 2 - Metadata UX:**
+3. **Category dropdown** - Add API endpoint + dropdown component
+4. **Tag autocomplete** - Add API endpoint + multi-select component
+5. **Form layout cleanup** - Reorganize fields into logical groups
+
+**Phase 3 - Polish:**
+6. **Inline validation** - Title required, error messages below fields
+7. **Autosave indicator** - Show saved/unsaved status
+8. **Keyboard shortcuts** - Cmd+S to save
+
+**Defer to post-v2:**
+- Syntax highlighting (complexity, debatable value)
+- Markdown toolbar (nice but not essential)
+- Scroll sync (complexity outweighs benefit)
+- Visual frontmatter editor (high complexity)
+- Draft auto-save to localStorage (nice but complex)
 
 ---
 
@@ -222,56 +308,100 @@ Back-to-Top Button
 
 | Priority | Feature | Rationale |
 |----------|---------|-----------|
-| P0 | Horizontal overflow fix | Currently breaks usability completely |
-| P0 | Hamburger menu fix | Users cannot navigate without this |
-| P1 | Back-to-top button | Expected but less critical than navigation |
-| P2 | Touch target audit | Accessibility compliance |
-| P2 | Code block improvements | Developer experience |
+| P0 | Theme consistency | Foundation for all other work, quick win |
+| P0 | Live markdown preview | Highest user-visible improvement |
+| P1 | Category dropdown | Replaces manual YAML editing |
+| P1 | Tag autocomplete | Replaces manual YAML editing |
+| P1 | Form layout cleanup | Organizes the improved components |
+| P2 | Inline validation | Polish, prevents errors |
+| P2 | Autosave indicator | User confidence |
+| P3 | Keyboard shortcuts | Power user efficiency |
 
 ---
 
 ## Technical Notes for Implementation
 
-**Stack context:** Next.js 14 + Tailwind CSS
+### Stack Context
+- Next.js 14 App Router
+- Tailwind CSS with semantic color system (CSS variables)
+- `next-themes` for dark/light mode
+- `react-markdown` with `remark-gfm`, `rehype-slug` for rendering
+- `gray-matter` for frontmatter parsing
+- Existing lib functions: `getCategories()`, `getAllTags()`
 
-**Tailwind utilities to use:**
-- `overflow-x-hidden` on body/container
-- `overflow-x-auto` on code blocks
-- `max-w-full` on images
-- `fixed bottom-4 right-4` for back-to-top
-- `z-50` for menu overlay
-- `sm:hidden` / `md:block` for responsive visibility
+### New API Endpoints Needed
+```typescript
+// GET /api/admin/categories
+// Returns: string[] of existing categories
 
-**Breakpoint to consider:**
-- Tailwind default: 640px (sm), 768px (md), 1024px (lg)
-- Docusaurus uses 996px for mobile/desktop switch
-- Consider consistency with existing breakpoints in codebase
+// GET /api/admin/tags
+// Returns: string[] of existing tags
+```
+
+### Component Patterns
+
+**Combobox (Category/Tag selection):**
+- Input with dropdown
+- Filter as you type
+- Allow custom values
+- For tags: multi-select with chips
+
+**Form validation pattern:**
+```typescript
+const [errors, setErrors] = useState<Record<string, string>>({});
+
+const validateTitle = (title: string) => {
+  if (!title.trim()) {
+    setErrors(prev => ({ ...prev, title: 'Title is required' }));
+    return false;
+  }
+  setErrors(prev => ({ ...prev, title: '' }));
+  return true;
+};
+```
+
+### Tailwind Classes for Theme Consistency
+Replace hardcoded colors:
+- `bg-gray-900` -> `bg-surface`
+- `bg-gray-800` -> `bg-overlay`
+- `text-white` -> `text-foreground`
+- `text-gray-400` -> `text-foreground-muted`
+- `border-gray-700` -> `border-border`
+
+---
+
+## Confidence Assessment
+
+| Area | Confidence | Notes |
+|------|------------|-------|
+| Table stakes list | HIGH | Consistent across Ghost, Sanity, Strapi, WordPress |
+| Implementation complexity | MEDIUM | Based on existing codebase structure |
+| Differentiators | MEDIUM | Industry patterns, subjective value |
+| Anti-features | HIGH | Clear scope boundaries from PROJECT.md |
+| Dependencies | HIGH | Verified against existing codebase |
 
 ---
 
 ## Sources
 
-### HIGH Confidence (Official Documentation)
-- [NN/g Back-to-Top Guidelines](https://www.nngroup.com/articles/back-to-top/)
-- [W3C WCAG 2.5.5 Target Size](https://www.w3.org/WAI/WCAG21/Understanding/target-size.html)
-- [Docusaurus Styling and Layout](https://docusaurus.io/docs/styling-layout)
-- [Tailwind CSS Responsive Design](https://tailwindcss.com/docs/responsive-design)
-- [MDN overflow-x](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)
-- [Notion Help: Workspaces on mobile](https://www.notion.com/help/workspaces-on-mobile)
-- [GitBook UI Documentation](https://gitbook.com/docs/resources/gitbook-ui)
+### HIGH Confidence (Direct Code Analysis)
+- Current `ArticleEditor.tsx` implementation
+- Current `MarkdownRenderer.tsx` implementation
+- Existing `getCategories()` and `getAllTags()` functions in `articles.ts`
+- `next-themes` integration in codebase
+- Semantic color system CSS variables
 
-### MEDIUM Confidence (Multiple Credible Sources)
-- [Justinmind Hamburger Menu Guide](https://www.justinmind.com/ui-design/hamburger-menu)
-- [Elementor Hamburger Menu Best Practices](https://elementor.com/blog/hamburger-menus-examples-best-practices/)
-- [CSS-Tricks Horizontal Overflow Debugging](https://css-tricks.com/findingfixing-unintended-body-overflow/)
-- [Red Hat Design System Back-to-Top](https://ux.redhat.com/elements/back-to-top/guidelines/)
-- [California Design System Back-to-Top](https://designsystem.webstandards.ca.gov/components/back-to-top/readme/)
-- [Mobile Navigation UX Best Practices 2026](https://www.designstudiouiux.com/blog/mobile-navigation-ux/)
+### MEDIUM Confidence (Industry Patterns)
+- Ghost Admin editor patterns (distraction-free markdown editing, side-by-side preview)
+- Sanity Studio patterns (structured content, inline validation)
+- Strapi Content Manager patterns (dropdown fields, relationship management)
+- WordPress Gutenberg patterns (block-based but relevant for toolbar UX)
+- Contentful web app patterns (field organization, validation feedback)
 
-### LOW Confidence (Single Source / Needs Verification)
-- Mobile-specific keyboard optimization patterns (multiple sources but implementation varies)
+### Project Scope (from PROJECT.md)
+- Explicit out-of-scope: image upload, versioning, concurrent editing, bulk operations, mobile admin
 
 ---
 
-*Research complete: 2026-01-29*
-*Confidence: HIGH - Multiple authoritative sources verified*
+*Research complete: 2026-01-31*
+*Focus: Admin editor UX improvements for existing Next.js markdown CMS*

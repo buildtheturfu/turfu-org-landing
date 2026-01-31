@@ -1,474 +1,531 @@
-# Architecture Patterns: Responsive Documentation Layouts
+# Architecture Patterns: Admin Editor Improvements
 
-**Domain:** Documentation site responsive layout for Next.js/Tailwind
-**Researched:** 2026-01-29
-**Confidence:** HIGH (verified with official Tailwind docs, Flowbite, shadcn/ui patterns)
+**Domain:** Admin panel editor enhancements for Next.js/React CMS
+**Researched:** 2026-01-31
+**Confidence:** HIGH (based on existing codebase analysis)
 
 ## Executive Summary
 
-Modern documentation sites use a **three-column layout** (sidebar | content | TOC) on desktop that gracefully degrades on mobile. The key architectural pattern is:
+The existing admin panel has a clean, well-structured architecture with clear separation of concerns. New features (live markdown preview, category/tag autocomplete, form validation, theme support) can integrate with minimal architectural changes by following established patterns. The key insight is that most infrastructure already exists - the challenge is composing existing pieces correctly.
 
-1. **Desktop (lg+):** All three columns visible, sidebar and TOC are sticky
-2. **Tablet (md):** Sidebar visible, TOC hidden
-3. **Mobile (<md):** All sidebars hidden, accessible via off-canvas drawer triggered by hamburger
+## Existing Architecture Analysis
 
-Your current implementation has **two critical issues**:
-- `ContentSidebar` has no mobile responsive behavior (fixed `w-72`)
-- Layout lacks mobile toggle state management for the documentation sidebar
-
----
-
-## Current Codebase Analysis
-
-### What Exists
+### Component Hierarchy
 
 ```
-Layout Structure:
-Navbar (z-50, fixed, has hamburger menu)
-└── Content Layout
-    ├── ContentSidebar (w-72, sticky, NO mobile handling)
-    └── Main Content (flex-1)
-        └── Article Page
-            ├── Article Content (flex-1, max-w-3xl)
-            └── TableOfContents (hidden xl:block, w-56)
+AdminDashboard.tsx (308 lines)
+|- State: articles[], editingArticle, isCreating, filterLocale
+|- CRUD operations via fetch to /api/admin/articles
+|- Renders ArticleEditor when editing/creating
+
+ArticleEditor.tsx (200 lines)
+|- Props: initialContent, initialLocale, initialPublished, onSave, onCancel
+|- State: rawContent (string), locale, published, showPreview
+|- Basic frontmatter parsing (regex-based)
+|- Split-view toggle (editor | preview)
 ```
 
-### Current Issues Identified
-
-| Component | Issue | Impact |
-|-----------|-------|--------|
-| `ContentSidebar` | Fixed `w-72` with no responsive classes | Squashes content on mobile, causes overflow |
-| `ContentSidebar` | No mobile toggle state | Sidebar always visible, takes 288px |
-| Content Layout | `flex` container with no `min-w-0` on children | Can cause horizontal overflow |
-| Article page | `max-w-3xl` without `w-full` | May not fill available space correctly |
-
----
-
-## Recommended Architecture
-
-### Component Boundaries
-
-| Component | Responsibility | Mobile Behavior |
-|-----------|---------------|-----------------|
-| `Navbar` | Site-wide navigation, language switch | Existing hamburger works for nav links |
-| `ContentLayout` | Wrapper managing sidebar state | Provides sidebar toggle context |
-| `ContentSidebar` | Article navigation, search, categories | Off-canvas drawer on mobile |
-| `MobileSidebarToggle` | Button to open sidebar on mobile | Visible only on mobile (<md) |
-| `SidebarBackdrop` | Overlay when mobile sidebar open | Prevents interaction with content |
-| `TableOfContents` | In-page navigation | Hidden on smaller screens (existing) |
-| `ArticleContent` | Main content area | Full width on mobile |
-
-### Layout Structure (Recommended)
+### Data Flow
 
 ```
-<ContentLayout>                      {/* Manages sidebar state via useState or Context */}
-  <Navbar />                         {/* z-50, fixed top */}
-
-  <div className="flex min-h-screen pt-16">
-    {/* Mobile sidebar toggle - visible only on mobile */}
-    <MobileSidebarToggle />          {/* md:hidden, fixed, z-40 */}
-
-    {/* Backdrop when sidebar open */}
-    {sidebarOpen && <SidebarBackdrop />}  {/* fixed, inset-0, z-30 */}
-
-    {/* Sidebar */}
-    <ContentSidebar
-      isOpen={sidebarOpen}           {/* Controls mobile visibility */}
-      onClose={() => setSidebarOpen(false)}
-    />                               {/* Desktop: static, Mobile: fixed overlay */}
-
-    {/* Main content */}
-    <main className="flex-1 min-w-0">
-      {children}
-    </main>
-  </div>
-</ContentLayout>
+User Input -> ArticleEditor state -> onSave callback -> AdminDashboard.handleSave
+    -> API route (POST/PUT) -> parseMarkdownWithFrontmatter -> Supabase
 ```
 
----
+### Key Integration Points
 
-## Patterns to Follow
+| Location | What Exists | New Feature Impact |
+|----------|-------------|-------------------|
+| `ArticleEditor.tsx` | `rawContent` state, textarea, basic preview | Live preview: high impact, form fields: high impact |
+| `MarkdownRenderer.tsx` | Full react-markdown setup with remark/rehype | Live preview: reuse directly |
+| `ThemeProvider` | next-themes already configured | Theme support: minimal work |
+| `/lib/articles.ts` | `getCategories()`, `getAllTags()` | Autocomplete: reuse directly |
+| `globals.css` | CSS variables for dark/light | Theme support: already done |
 
-### Pattern 1: Mobile-First Responsive Sidebar
+## Recommended Architecture Changes
 
-**What:** Sidebar hidden by default on mobile, shown via translate transform
-**When:** Any documentation layout with sidebar navigation
-**Confidence:** HIGH (verified with Tailwind official docs, Flowbite)
+### 1. Live Markdown Preview
 
-```tsx
-// ContentSidebar.tsx
-export default function ContentSidebar({
-  isOpen,
-  onClose,
-  articles,
-  categories,
-  locale
-}: ContentSidebarProps) {
-  return (
-    <>
-      {/* Backdrop for mobile */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
-          onClick={onClose}
-        />
-      )}
+**Current State:** Preview shows raw frontmatter display + raw markdown text (not rendered)
 
-      <aside className={`
-        fixed md:sticky
-        top-16
-        left-0
-        z-40 md:z-0
-        w-72
-        h-[calc(100vh-64px)]
-        bg-turfu-darker/95 md:bg-turfu-darker/50
-        border-r border-white/10
-        transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-      `}>
-        {/* Existing sidebar content */}
-      </aside>
-    </>
-  );
+**Target State:** Live rendered HTML preview using existing `MarkdownRenderer`
+
+**Integration Pattern:**
+
+```
+ArticleEditor (modified)
+|- rawContent state (unchanged)
+|- parseFrontmatter() (exists, keep)
+|- NEW: extractContent() - strips frontmatter for preview
+|- showPreview panel
+    |- NEW: <MarkdownRenderer content={extractContent()} />
+```
+
+**Component Changes:**
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `ArticleEditor.tsx` | Modify | Import MarkdownRenderer, replace raw text preview |
+| `MarkdownRenderer.tsx` | None | Reuse as-is |
+
+**No new components needed.** The existing `MarkdownRenderer` component (135 lines) already handles all markdown rendering with proper styling for both themes.
+
+### 2. Category/Tag Autocomplete
+
+**Current State:** Category and tags embedded in frontmatter text, no UI assistance
+
+**Target State:** Dropdown fields with autocomplete for existing categories/tags
+
+**Integration Pattern - Option A (Recommended): Hybrid Approach**
+
+Keep frontmatter as source of truth, add structured fields that sync:
+
+```
+ArticleEditor (modified)
+|- rawContent state (source of truth)
+|- NEW: parsedFields state (derived from frontmatter)
+|   |- { title, description, category, tags }
+|- NEW: <MetadataFieldset /> component
+|   |- Title input
+|   |- Description textarea
+|   |- Category autocomplete
+|   |- Tags multi-select
+|- Two-way sync: field changes -> update frontmatter -> update rawContent
+```
+
+**Why Hybrid:**
+- Maintains compatibility with existing markdown + frontmatter format
+- Users can still edit raw frontmatter if preferred
+- Gradual enhancement, not architectural rewrite
+
+**Integration Pattern - Option B (Not Recommended): Full Structured**
+
+Replace frontmatter with separate form fields:
+- Breaking change to data flow
+- Would require API route changes
+- Loses markdown portability
+
+**New Components Needed:**
+
+| Component | Purpose | Location |
+|-----------|---------|----------|
+| `MetadataFieldset.tsx` | Form fields for title, description, category, tags | `/components/admin/` |
+| `AutocompleteInput.tsx` | Reusable autocomplete field | `/components/admin/` |
+| `TagMultiSelect.tsx` | Multi-select for tags | `/components/admin/` |
+
+**API Changes:**
+
+| Endpoint | Change | Purpose |
+|----------|--------|---------|
+| `/api/admin/categories` | NEW | Return distinct categories for autocomplete |
+| `/api/admin/tags` | NEW | Return distinct tags for autocomplete |
+
+Note: `getCategories()` and `getAllTags()` already exist in `/lib/articles.ts`. New API routes just expose them.
+
+### 3. Form Validation
+
+**Current State:** Minimal validation - only checks `frontmatter.title` exists on submit
+
+**Target State:** Real-time validation with clear error messages
+
+**Integration Pattern:**
+
+```
+ArticleEditor (modified)
+|- NEW: validation state { errors: {field: string}, touched: {field: boolean} }
+|- NEW: validateFields() function
+|   |- Title: required, min length
+|   |- Description: max length
+|   |- Category: from allowed list (optional)
+|   |- Slug: auto-generated, valid format
+|- NEW: error display in MetadataFieldset
+```
+
+**Validation Library Decision:**
+
+| Option | Pros | Cons | Recommendation |
+|--------|------|------|----------------|
+| Zod + react-hook-form | Type-safe, industry standard | New dependencies, learning curve | For complex forms |
+| Custom validation | No dependencies, simple | Manual error handling | **Recommended for this scope** |
+
+**Rationale:** The form has 5 fields. Custom validation avoids dependency bloat and is simpler to integrate with the existing `rawContent` -> frontmatter pattern.
+
+**Validation Implementation:**
+
+```typescript
+// /lib/validation.ts (NEW)
+interface ValidationResult {
+  valid: boolean;
+  errors: Record<string, string>;
+}
+
+function validateArticle(frontmatter: ParsedFrontmatter): ValidationResult {
+  const errors: Record<string, string> = {};
+
+  if (!frontmatter.title?.trim()) {
+    errors.title = 'Title is required';
+  } else if (frontmatter.title.length < 3) {
+    errors.title = 'Title must be at least 3 characters';
+  }
+
+  if (frontmatter.description && frontmatter.description.length > 200) {
+    errors.description = 'Description must be under 200 characters';
+  }
+
+  return { valid: Object.keys(errors).length === 0, errors };
 }
 ```
 
-**Key classes explained:**
-- `fixed md:sticky` - Overlay on mobile, sticky on desktop
-- `-translate-x-full md:translate-x-0` - Hidden left on mobile, visible on desktop
-- `transition-transform duration-300` - Smooth slide animation
-- `z-40` - Above content, below navbar (z-50)
+### 4. Theme Support
 
-### Pattern 2: Mobile Sidebar Toggle Button
+**Current State:** Theme already implemented via `next-themes` and CSS variables. Admin panel uses theme-aware classes (`bg-surface`, `text-foreground`, etc.)
 
-**What:** Floating button visible only on mobile to open sidebar
-**When:** Documentation pages with sidebar navigation
+**Target State:** Ensure all new components follow existing theme patterns
 
-```tsx
-// MobileSidebarToggle.tsx
-export default function MobileSidebarToggle({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="
-        fixed bottom-4 left-4 z-40
-        md:hidden
-        p-3 rounded-full
-        bg-turfu-accent text-white
-        shadow-lg
-        hover:bg-turfu-accent/80
-        transition-colors
-      "
-      aria-label="Open navigation"
-    >
-      <Menu size={24} />
-    </button>
-  );
+**No architectural changes needed.** The admin panel already inherits theme from `ThemeProvider` in the layout. New components just need to use existing CSS variable-based classes.
+
+**Theme Compliance Checklist for New Components:**
+
+| Pattern | Use | Avoid |
+|---------|-----|-------|
+| Backgrounds | `bg-surface`, `bg-overlay` | `bg-white`, `bg-gray-900` |
+| Text | `text-foreground`, `text-foreground-muted` | `text-black`, `text-white` |
+| Borders | `border-border`, `border-border-muted` | `border-gray-300` |
+| Focus rings | `focus:ring-turfu-accent` | `focus:ring-blue-500` |
+| Accent colors | `text-turfu-accent`, `bg-turfu-accent` | `text-violet-500` |
+
+## Component Architecture Diagram
+
+```
++-------------------------------------------------------------+
+|                    AdminDashboard.tsx                        |
+|  (Container - handles CRUD, list view, navigation)          |
++-------------------------------------------------------------+
+|                                                              |
+|  +-------------------------------------------------------+  |
+|  |               ArticleEditor.tsx                       |  |
+|  |  (Editor container - coordinates subcomponents)       |  |
+|  +-------------------------------------------------------+  |
+|  |                                                       |  |
+|  |  +-----------------+  +---------------------------+   |  |
+|  |  | MetadataFieldset|  |  EditorPane               |   |  |
+|  |  | (NEW)           |  |  (textarea, unchanged)    |   |  |
+|  |  | - Title         |  |                           |   |  |
+|  |  | - Description   |  +---------------------------+   |  |
+|  |  | - Category (AC) |                                  |  |
+|  |  | - Tags (Multi)  |  +---------------------------+   |  |
+|  |  | - Validation    |  |  PreviewPane              |   |  |
+|  |  +-----------------+  |  (MarkdownRenderer)       |   |  |
+|  |                       |  (MODIFIED to use it)     |   |  |
+|  |                       +---------------------------+   |  |
+|  |                                                       |  |
+|  |  +-----------------------------------------------+   |  |
+|  |  |  EditorToolbar (existing, minor changes)      |   |  |
+|  |  |  - Locale select                              |   |  |
+|  |  |  - Published toggle                           |   |  |
+|  |  |  - Preview toggle                             |   |  |
+|  |  |  - Save button                                |   |  |
+|  |  +-----------------------------------------------+   |  |
+|  |                                                       |  |
+|  +-------------------------------------------------------+  |
+|                                                              |
++-------------------------------------------------------------+
+
+New Components:
++---------------------+  +---------------------+
+| AutocompleteInput   |  | TagMultiSelect      |
+| (reusable)          |  | (reusable)          |
+| - Dropdown          |  | - Multi-select      |
+| - Filtering         |  | - Tag chips         |
+| - Keyboard nav      |  | - Remove tags       |
++---------------------+  +---------------------+
+
+Shared (from /components/content):
++---------------------------------------------+
+| MarkdownRenderer.tsx                         |
+| (REUSED - no changes, imported into editor) |
++---------------------------------------------+
+```
+
+## Data Flow Changes
+
+### Current Data Flow
+
+```
++----------------+      +-----------------+      +-----------------+
+| User types in  | ---> | rawContent      | ---> | parseFrontmatter|
+| textarea       |      | state updates   |      | (display only)  |
++----------------+      +-----------------+      +-----------------+
+                                |
+                                v
+                        +-----------------+      +-----------------+
+                        | onSave called   | ---> | API parses with |
+                        | with rawContent |      | gray-matter     |
+                        +-----------------+      +-----------------+
+```
+
+### New Data Flow (with structured fields)
+
+```
++----------------+      +-----------------+      +-----------------+
+| User edits     | ---> | Field state     | ---> | Regenerate      |
+| form field     |      | updates         |      | frontmatter     |
++----------------+      +-----------------+      +-----------------+
+        |                                                 |
+        |                       +-----------------+       |
+        |                       | rawContent      | <-----+
+        |                       | updated         |
+        |                       +-----------------+
+        |                               |
+        v                               v
++----------------+              +-----------------+
+| Validation     |              | Preview updates |
+| runs           |              | live            |
++----------------+              +-----------------+
+```
+
+### Frontmatter Sync Strategy
+
+The key challenge: keeping structured fields and raw frontmatter in sync.
+
+**Approach: Field-to-Frontmatter (one-way with merge)**
+
+```typescript
+// When field changes, regenerate frontmatter section
+function updateFrontmatterField(
+  rawContent: string,
+  field: string,
+  value: string | string[]
+): string {
+  const { frontmatter, content } = parseMarkdownWithFrontmatter(rawContent);
+  frontmatter[field] = value;
+  return serializeFrontmatter(frontmatter) + '\n' + content;
 }
+
+// Parse once on load, sync back on field change
+const [fields, setFields] = useState(() => parseFrontmatter(rawContent));
+
+const handleFieldChange = (field: string, value: any) => {
+  setFields(prev => ({ ...prev, [field]: value }));
+  setRawContent(prev => updateFrontmatterField(prev, field, value));
+};
 ```
 
-**Alternative:** Use a header bar with hamburger instead of floating button:
+**Edge Case Handling:**
 
-```tsx
-// Mobile header bar at top of content area
-<div className="md:hidden sticky top-16 z-30 bg-turfu-dark border-b border-white/10 px-4 py-3 flex items-center gap-3">
-  <button onClick={() => setSidebarOpen(true)} className="text-white">
-    <Menu size={20} />
-  </button>
-  <span className="text-sm text-turfu-muted">Documentation</span>
-</div>
-```
+| Scenario | Behavior |
+|----------|----------|
+| User edits raw textarea | Re-parse frontmatter on blur, update fields |
+| User edits both simultaneously | Field changes take precedence |
+| Invalid YAML in raw | Show validation error, disable save |
+| Field validation fails | Show error, allow save (backend validates) |
 
-### Pattern 3: State Management for Sidebar Toggle
+## Build Order Recommendation
 
-**What:** React state at layout level controlling sidebar visibility
-**When:** Multi-page documentation with persistent sidebar
+Based on dependencies and integration complexity:
 
-```tsx
-// content/layout.tsx
-'use client';
+### Phase 1: Live Markdown Preview (Foundation)
 
-import { useState, useEffect } from 'react';
+**Why first:**
+- Simplest integration (reuse existing component)
+- Immediate value
+- No new dependencies
+- Sets up preview infrastructure for testing other features
 
-export default function ContentLayout({ children, articles, categories, locale }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+**Files to modify:**
+1. `ArticleEditor.tsx` - Import MarkdownRenderer, replace preview section
 
-  // Close sidebar on route change (optional)
-  const pathname = usePathname();
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
+**Estimated effort:** 1-2 hours
 
-  // Prevent body scroll when sidebar open
-  useEffect(() => {
-    if (sidebarOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [sidebarOpen]);
+### Phase 2: Theme Compliance Audit
 
-  return (
-    <>
-      <Navbar />
-      <div className="flex min-h-screen pt-16 bg-turfu-dark">
-        <ContentSidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          articles={articles}
-          categories={categories}
-          locale={locale}
-        />
-        <div className="flex-1 min-w-0">
-          {/* Mobile toggle */}
-          <div className="md:hidden sticky top-16 z-30 bg-turfu-dark/95 backdrop-blur border-b border-white/10 px-4 py-3">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="flex items-center gap-2 text-turfu-muted hover:text-white"
-            >
-              <Menu size={18} />
-              <span className="text-sm">Menu</span>
-            </button>
-          </div>
-          {children}
-        </div>
-      </div>
-    </>
-  );
-}
-```
+**Why second:**
+- Ensures all existing admin components use theme variables
+- Prevents visual inconsistencies when adding new components
 
-### Pattern 4: Preventing Horizontal Overflow
+**Files to audit:**
+1. `AdminDashboard.tsx` - Check all hardcoded colors
+2. `ArticleEditor.tsx` - Check all hardcoded colors
 
-**What:** Constrain content width to prevent mobile horizontal scroll
-**When:** Any flexible layout with potentially wide content
-**Confidence:** HIGH (verified with Tailwind docs)
+**Estimated effort:** 1 hour
 
-```tsx
-// Apply to main content wrapper
-<main className="flex-1 min-w-0 overflow-x-hidden">
-  {children}
-</main>
+### Phase 3: Form Validation
 
-// Apply to article content
-<article className="w-full max-w-3xl p-4 md:p-8">
-  {/* Content */}
-</article>
+**Why third:**
+- Prepares for structured fields
+- Improves UX immediately
+- No new components needed initially
 
-// For code blocks or tables that might overflow
-<div className="overflow-x-auto">
-  <pre className="...">...</pre>
-</div>
-```
+**Files to add:**
+1. `/lib/validation.ts` - Validation functions
 
-**Key classes:**
-- `min-w-0` on flex children prevents flex items from exceeding container
-- `overflow-x-hidden` on wrapper prevents horizontal scroll
-- `overflow-x-auto` on specific wide content allows localized scrolling
-- `w-full` ensures content fills available space
+**Files to modify:**
+1. `ArticleEditor.tsx` - Add validation state, error display
 
-### Pattern 5: Three-Column Article Layout
+**Estimated effort:** 2-3 hours
 
-**What:** Content + TOC layout within main area
-**When:** Long-form articles with table of contents
+### Phase 4: Category/Tag Autocomplete
 
-```tsx
-// [slug]/page.tsx
-<div className="flex">
-  {/* Main content - takes full width on mobile, constrains on desktop */}
-  <article className="flex-1 min-w-0 p-4 md:p-8 max-w-3xl">
-    {/* Article content */}
-  </article>
+**Why fourth:**
+- Depends on understanding validation patterns
+- Introduces new components
+- Requires API additions
 
-  {/* TOC - hidden until xl breakpoint */}
-  <TableOfContents content={article.content} locale={locale} />
-</div>
-```
+**Files to add:**
+1. `/components/admin/AutocompleteInput.tsx`
+2. `/components/admin/TagMultiSelect.tsx`
+3. `/components/admin/MetadataFieldset.tsx`
+4. `/app/api/admin/categories/route.ts`
+5. `/app/api/admin/tags/route.ts`
 
-The existing `TableOfContents` correctly uses `hidden xl:block` - this is the right pattern.
+**Files to modify:**
+1. `ArticleEditor.tsx` - Integrate MetadataFieldset, add sync logic
 
----
+**Estimated effort:** 4-6 hours
 
 ## Anti-Patterns to Avoid
 
-### Anti-Pattern 1: Fixed Width Without Responsive Classes
+### Anti-Pattern 1: Separate State Sources
 
-**What:** Using `w-72` or similar without breakpoint variants
-**Why bad:** Causes content squeeze and overflow on mobile
-**Instead:** Use `w-72 md:w-72` with mobile handling, or transform-based hide/show
+**What:** Creating separate state for form fields AND keeping rawContent, without sync
+**Why bad:** Data gets out of sync, save fails or corrupts content
+**Instead:** Single source of truth (rawContent), derive fields from it
 
-```tsx
-// BAD
-<aside className="w-72 sticky top-16">
+### Anti-Pattern 2: Full Page Re-render on Keystroke
 
-// GOOD
-<aside className="
-  fixed md:sticky
-  w-72
-  -translate-x-full md:translate-x-0
-  transition-transform
-">
+**What:** Not memoizing preview component, re-rendering markdown on every character
+**Why bad:** Lag, poor UX, especially for long articles
+**Instead:** Debounce preview updates (300-500ms), memo preview component
+
+### Anti-Pattern 3: Client-Side Only Validation
+
+**What:** Removing backend validation since frontend handles it
+**Why bad:** Bypassing frontend is trivial (curl, browser devtools)
+**Instead:** Keep backend validation, frontend is UX enhancement only
+
+### Anti-Pattern 4: Hardcoded Colors in New Components
+
+**What:** Using `bg-gray-900` instead of `bg-surface` in new components
+**Why bad:** Breaks theme support, visual inconsistency
+**Instead:** Always use CSS variable-based Tailwind classes
+
+### Anti-Pattern 5: Over-Engineering Autocomplete
+
+**What:** Building full combobox with keyboard nav, ARIA, virtualization immediately
+**Why bad:** Scope creep, delayed delivery
+**Instead:** Start simple (filtered dropdown), enhance later if needed
+
+## Performance Considerations
+
+### Live Preview Optimization
+
+```typescript
+// Debounce preview updates
+const debouncedContent = useDebouncedValue(rawContent, 300);
+
+// Memoize markdown renderer
+const PreviewPane = memo(({ content }: { content: string }) => (
+  <MarkdownRenderer content={content} />
+));
 ```
 
-### Anti-Pattern 2: Missing min-w-0 on Flex Children
+### Autocomplete Data Fetching
 
-**What:** Flex children without `min-w-0` when content can be wide
-**Why bad:** Flex items have `min-width: auto` by default, causing overflow
-**Instead:** Add `min-w-0` to flex children that contain potentially wide content
-
-```tsx
-// BAD
-<div className="flex">
-  <aside className="w-72">...</aside>
-  <main className="flex-1">...</main>  {/* Can overflow */}
-</div>
-
-// GOOD
-<div className="flex">
-  <aside className="w-72 flex-shrink-0">...</aside>
-  <main className="flex-1 min-w-0">...</main>
-</div>
+```typescript
+// Fetch once on component mount, not on every keystroke
+const { data: categories } = useSWR('/api/admin/categories', fetcher, {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+});
 ```
 
-### Anti-Pattern 3: Z-Index Wars
+### Large Article Handling
 
-**What:** Arbitrary z-index values without consistent scale
-**Why bad:** Elements overlap unpredictably, mobile menu hidden behind content
-**Instead:** Use Tailwind's z-index scale consistently
+| Article Size | Concern | Mitigation |
+|--------------|---------|------------|
+| < 10KB | None | Default behavior |
+| 10-50KB | Preview lag | Debounce, memo |
+| > 50KB | Textarea performance | Consider CodeMirror (future) |
 
-| Layer | Z-Index | Use |
-|-------|---------|-----|
-| Backdrop | `z-30` | Modal/sidebar overlay backdrop |
-| Sidebar | `z-40` | Off-canvas navigation |
-| Navbar | `z-50` | Fixed top navigation |
+## Testing Strategy
 
-### Anti-Pattern 4: Duplicate Navigation Structures
+### Unit Tests (New)
 
-**What:** Separate desktop and mobile navigation HTML
-**Why bad:** Maintenance burden, accessibility issues
-**Instead:** Single structure with responsive classes
+| Test | Location | What to Test |
+|------|----------|--------------|
+| Validation | `/lib/__tests__/validation.test.ts` | Each validation rule |
+| Frontmatter sync | `/lib/__tests__/articles.test.ts` | Round-trip parsing |
 
-```tsx
-// BAD: Two separate structures
-<nav className="hidden md:flex">...</nav>
-<nav className="md:hidden">...</nav>
+### Component Tests (New)
 
-// GOOD: Single structure, responsive classes
-<nav className="transform transition-transform -translate-x-full md:translate-x-0">
-  {/* Same content for both */}
-</nav>
+| Component | What to Test |
+|-----------|--------------|
+| AutocompleteInput | Filtering, selection, keyboard |
+| TagMultiSelect | Add, remove, display |
+| MetadataFieldset | Field changes trigger parent callback |
+
+### Integration Tests (Manual)
+
+| Scenario | Steps |
+|----------|-------|
+| Create article with autocomplete | New article -> select category -> add tags -> save |
+| Edit existing article | Edit -> verify fields populated -> change -> save |
+| Theme switching | Toggle theme -> verify all components adapt |
+| Validation feedback | Leave title empty -> see error -> fill -> error clears |
+
+## File Organization Summary
+
 ```
-
----
-
-## Specific Fixes for Current Issues
-
-### Fix 1: ContentSidebar Responsive Behavior
-
-Current `ContentSidebar.tsx` line 88:
-```tsx
-// CURRENT (broken)
-<aside className="w-72 border-r border-white/10 bg-turfu-darker/50 h-[calc(100vh-64px)] sticky top-16 flex flex-col">
+src/
+|- components/
+|   |- admin/
+|   |   |- AdminDashboard.tsx      (existing, no changes)
+|   |   |- ArticleEditor.tsx       (existing, MODIFY)
+|   |   |- MetadataFieldset.tsx    (NEW)
+|   |   |- AutocompleteInput.tsx   (NEW)
+|   |   |- TagMultiSelect.tsx      (NEW)
+|   |- content/
+|       |- MarkdownRenderer.tsx    (existing, REUSE)
+|- lib/
+|   |- articles.ts                 (existing, no changes)
+|   |- validation.ts               (NEW)
+|   |- types.ts                    (existing, may extend)
+|- app/
+    |- api/
+        |- admin/
+            |- articles/           (existing, no changes)
+            |- categories/
+            |   |- route.ts        (NEW)
+            |- tags/
+                |- route.ts        (NEW)
 ```
-
-Should become:
-```tsx
-<aside className={`
-  fixed md:sticky
-  top-16 left-0
-  z-40 md:z-0
-  w-72
-  h-[calc(100vh-64px)]
-  bg-turfu-darker/95 md:bg-turfu-darker/50
-  border-r border-white/10
-  flex flex-col
-  transform transition-transform duration-300 ease-in-out
-  ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-`}>
-```
-
-### Fix 2: Content Layout Mobile Toggle
-
-Current `content/layout.tsx`:
-```tsx
-// Add state management and mobile toggle
-// Convert to client component with 'use client'
-// Add sidebarOpen state
-// Pass isOpen and onClose to ContentSidebar
-// Add mobile toggle button in content area
-```
-
-### Fix 3: Main Content Overflow Prevention
-
-Current `content/layout.tsx` line 24:
-```tsx
-// CURRENT
-<div className="flex-1 min-w-0">{children}</div>
-
-// SHOULD ADD overflow handling
-<div className="flex-1 min-w-0 overflow-x-hidden">{children}</div>
-```
-
-### Fix 4: Article Page Responsive Padding
-
-Current `[slug]/page.tsx` line 40:
-```tsx
-// CURRENT
-<article className="flex-1 p-8 max-w-3xl">
-
-// SHOULD BE (responsive padding)
-<article className="flex-1 min-w-0 p-4 md:p-8 max-w-3xl w-full">
-```
-
----
-
-## Responsive Breakpoint Strategy
-
-Use Tailwind's mobile-first approach consistently:
-
-| Breakpoint | Width | Documentation Layout |
-|------------|-------|---------------------|
-| Default | < 768px | Sidebar hidden (off-canvas), TOC hidden, single column |
-| `md` | >= 768px | Sidebar visible (sticky), TOC hidden, two columns |
-| `xl` | >= 1280px | Sidebar visible, TOC visible, three columns |
-
-**Key principle:** Unprefixed classes = mobile. Add `md:` and `xl:` for larger screens.
-
-```tsx
-// Correct mobile-first thinking
-className="
-  hidden          // Mobile: hidden
-  md:flex         // Tablet+: flex
-  xl:flex-col     // Desktop: flex-col
-"
-```
-
----
-
-## Implementation Priority
-
-1. **Phase 1: Fix Horizontal Overflow** (Quick win)
-   - Add `min-w-0` and `overflow-x-hidden` to content wrapper
-   - Add responsive padding to article page
-
-2. **Phase 2: Mobile Sidebar Toggle** (Core fix)
-   - Convert layout to client component
-   - Add state management for sidebar
-   - Update ContentSidebar with responsive classes
-
-3. **Phase 3: Polish**
-   - Add backdrop overlay
-   - Add close-on-navigation behavior
-   - Add body scroll lock when sidebar open
-
----
 
 ## Sources
 
-- [Tailwind CSS Responsive Design](https://tailwindcss.com/docs/responsive-design) - Official breakpoint documentation (HIGH confidence)
-- [Flowbite Drawer Component](https://flowbite.com/docs/components/drawer/) - Off-canvas pattern reference (HIGH confidence)
-- [shadcn/ui Sidebar](https://ui.shadcn.com/docs/components/sidebar) - Modern React sidebar architecture (HIGH confidence)
-- [Every Layout: Sidebar](https://every-layout.dev/layouts/sidebar/) - Intrinsic layout patterns (MEDIUM confidence)
-- [Tailwind CSS Sidebar - Flowbite](https://flowbite.com/docs/components/sidebar/) - Sidebar component patterns (HIGH confidence)
-- [DEV Community: Fixing Responsive Layouts](https://dev.to/rowsanali/how-to-fix-common-issues-with-responsive-layouts-using-tailwind-css-30gi) - Overflow fixes (MEDIUM confidence)
+| Source | Type | Confidence |
+|--------|------|------------|
+| Codebase analysis | Direct file reading | HIGH |
+| `/src/components/admin/AdminDashboard.tsx` | Existing code (308 lines) | HIGH |
+| `/src/components/admin/ArticleEditor.tsx` | Existing code (200 lines) | HIGH |
+| `/src/components/content/MarkdownRenderer.tsx` | Existing code (135 lines) | HIGH |
+| `/src/lib/articles.ts` | Existing code (241 lines) | HIGH |
+| `/src/lib/types.ts` | Type definitions | HIGH |
+| `tailwind.config.ts` + `globals.css` | Theme system | HIGH |
+| `package.json` | Dependencies (react-markdown, gray-matter, next-themes) | HIGH |
+
+## Summary for Roadmap
+
+**Key insight:** The existing architecture is well-suited for these improvements. Most infrastructure exists. Success depends on:
+
+1. **Reusing MarkdownRenderer** - Do not rebuild markdown rendering
+2. **Maintaining rawContent as source of truth** - Do not create parallel state
+3. **Following theme patterns** - Use CSS variables, not hardcoded colors
+4. **Building incrementally** - Live preview first, then validation, then autocomplete
+
+**Suggested phase structure:**
+1. Live Preview (reuse MarkdownRenderer)
+2. Theme Audit (ensure consistency)
+3. Form Validation (custom, no new deps)
+4. Category/Tag Autocomplete (new components, new API routes)
+
+**Research flags:** None. This is a well-understood domain with existing patterns to follow.

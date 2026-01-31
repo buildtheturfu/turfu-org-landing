@@ -1,231 +1,247 @@
 # Project Research Summary
 
-**Project:** TURFu Landing - Mobile UX Fixes for /content Module
-**Domain:** Mobile-responsive documentation site
-**Researched:** 2026-01-29
+**Project:** Turfu.org Admin Editor v2
+**Domain:** CMS admin panel enhancement (markdown content management)
+**Researched:** 2026-01-31
 **Confidence:** HIGH
 
 ## Executive Summary
 
-This project fixes three critical mobile UX issues in an existing Next.js 14 + Tailwind CSS documentation module: horizontal overflow causing page-wide scrolling, a broken hamburger menu preventing navigation access, and a missing back-to-top button on long documentation pages. All three issues are table stakes violations that modern documentation users expect to work flawlessly.
+The admin article editor transformation from functional-but-minimal to polished CMS experience is well-supported by the existing architecture. Research shows that most required infrastructure already exists (React 18, Next.js 14, Tailwind with semantic colors, react-markdown, next-themes). Only two new dependencies are needed: react-hook-form and zod for form validation (15kB total). All other features (live preview, dropdowns, autocomplete) should be built in-house using existing components and Tailwind CSS to avoid dependency bloat.
 
-The recommended approach uses pure Tailwind utilities with a mobile-first responsive strategy. No additional libraries are needed. The core pattern is an off-canvas drawer sidebar (hidden by default on mobile, slides in on toggle) combined with overflow containment for code blocks and proper content width constraints. This follows industry-standard patterns used by Docusaurus, GitBook, and Tailwind's own documentation.
+The recommended approach follows a four-phase structure: start with foundational improvements (live preview, theme compliance), then layer in metadata UX enhancements (category/tag dropdowns), followed by validation polish. This order respects architectural dependencies while delivering incremental value. The key insight from architecture research is that the existing codebase has clean separation of concerns and reusable components - success depends on composing existing pieces correctly rather than rebuilding.
 
-The key risk is iOS Safari-specific behavior with fixed positioning and z-index stacking contexts that can cause the hamburger menu to fail silently. Mitigation requires testing on actual iOS devices, using fixed positioning at root level (not nested), and implementing body scroll locking when the mobile menu is open. Implementation complexity is low, with fixes deliverable in under 2 hours total.
+Critical risks center on performance (markdown re-rendering on every keystroke), data integrity (syncing form fields with frontmatter text), and UX consistency (theme flash, validation feedback). All are preventable through established patterns: debouncing preview updates, maintaining frontmatter as single source of truth, using CSS variables for theming, and implementing field-level validation with immediate feedback.
 
 ## Key Findings
 
 ### Recommended Stack
 
-The existing stack already handles all requirements. No new dependencies should be added.
+The existing stack handles most requirements. Only form validation libraries are needed as additions. Dropdown and autocomplete components should be custom-built with Tailwind to avoid introducing heavy UI component libraries (headlessui/react, radix, react-select) that would add 14-25kB for features used only in one small admin panel.
 
-**Core technologies:**
-- **Tailwind CSS** - All responsive utilities, transitions, and positioning patterns needed for mobile-first layouts
-- **Lucide React** - Already in use for icons (Menu, X, ChevronUp) needed for navigation components
-- **React hooks (useState, useEffect)** - State management for sidebar toggle and scroll detection
+**New dependencies (form validation only):**
+- react-hook-form (^7.71.1): Form state management, validation triggers — industry standard, 8.5kB, excellent TypeScript support
+- zod (^4.3.6): Schema validation, type inference — best DX for TypeScript, smaller than yup, 5kB
+- @hookform/resolvers (^5.2.2): Bridge between react-hook-form and zod — official integration, 1.5kB
 
-**Critical version requirement:** None - current versions sufficient.
+**Existing stack to reuse:**
+- MarkdownRenderer component: Already configured with react-markdown, remark-gfm, rehype-slug — reuse directly for live preview
+- next-themes: Already integrated for dark/light mode toggle — admin just needs to use CSS variables
+- gray-matter: Already parsing frontmatter server-side — use client-side for validation consistency
+- Tailwind CSS: Semantic color system already in place (CSS variables) — just use existing classes
 
-**Do not add:** Headless UI (unnecessary for simple drawer), Framer Motion (Tailwind transitions sufficient), custom CSS (use Tailwind utilities).
+**What NOT to add:**
+- Headless UI or Radix UI for dropdowns (overkill for 2 simple components)
+- react-select for autocomplete (25kB+ bundle, wrong styling system)
+- Monaco or CodeMirror for markdown editing (2MB+, excessive for basic textarea)
+- Formik instead of react-hook-form (heavier, more re-renders)
 
 ### Expected Features
 
-Research identified three feature types: table stakes (must-have for usable mobile docs), nice-to-have differentiators, and anti-features to avoid.
+Research identified clear table stakes vs differentiators based on patterns from Ghost, Sanity, Strapi, WordPress CMS admin editors.
 
 **Must have (table stakes):**
-- No horizontal overflow - content stays within viewport boundaries
-- Working hamburger menu - reliable toggle for navigation access
-- Responsive content width - text readable without zooming
-- Touch-friendly tap targets - minimum 44x44px (WCAG 2.5.8 Level AA)
-- Back-to-top button - appears after 4+ screens of scroll
-- Collapsible sidebar navigation - screen real estate optimization
-- Scrollable code blocks - `overflow-x: auto` prevents layout breaking
-- Responsive images - `max-width: 100%; height: auto;`
+- Live markdown preview with rendered HTML (debounced 150-300ms)
+- Category dropdown populated from existing categories
+- Tag autocomplete with multi-select and existing tag suggestions
+- Inline validation with error messages below fields
+- Theme consistency (admin respects dark/light toggle)
+- Form layout cleanup with logical field grouping
+- Autosave indicator showing saved/unsaved status
+- Loading states for async operations
 
-**Should have (competitive):**
-- Reading progress indicator - shows position in long articles
-- Copy button on code blocks - developer convenience (Docusaurus standard)
-- Section anchor links - share specific sections
+**Should have (competitive advantages):**
+- Keyboard shortcuts (Cmd+S to save, Cmd+P for preview toggle)
+- Markdown toolbar for common formatting (bold, italic, links)
+- Word/character count matching front-end display
+- Split/full/preview mode toggles for flexible layout
 
-**Defer (v2+):**
-- Search modal improvements
-- Swipe gestures for navigation
-- Offline support (PWA)
-- Collapsible table of contents on mobile
+**Defer to v2+ (out of scope):**
+- Syntax highlighting in textarea (complexity, debatable value for markdown)
+- Scroll sync between editor and preview (complexity outweighs benefit)
+- Visual frontmatter editor replacing raw YAML (high complexity, loses power-user flexibility)
+- Draft auto-save to localStorage (nice but complex)
+- Image upload infrastructure (requires S3/Cloudinary setup)
+- Version history (database schema changes)
+- WYSIWYG rich text editor (architectural change, not markdown)
 
 ### Architecture Approach
 
-Modern documentation sites use a three-column layout (sidebar | content | TOC) on desktop that degrades gracefully on mobile. The pattern: desktop shows all columns with sticky positioning; tablet shows sidebar only; mobile hides all sidebars behind off-canvas drawers triggered by hamburger menu.
+The existing architecture supports these improvements with minimal changes. Current ArticleEditor (200 lines) maintains rawContent as single source of truth, uses callbacks (onSave/onCancel) to communicate with AdminDashboard, and already has split-view toggle structure. New features integrate by enhancing existing patterns rather than replacing them.
+
+**Key architectural decisions:**
+1. Maintain rawContent (markdown + frontmatter) as authoritative state — form fields derive from it and write back to it
+2. Reuse existing MarkdownRenderer component for live preview — no new markdown rendering logic
+3. Build custom Combobox and TagInput components with Tailwind — ~60 lines each, better bundle impact than libraries
+4. Use react-hook-form to manage validation state but keep rawContent sync pattern
+5. Frontend validation mirrors backend (gray-matter) parsing to catch errors early
 
 **Major components:**
-1. **ContentLayout** - Wrapper managing sidebar state via React useState, provides context for toggle button and backdrop
-2. **ContentSidebar** - Article navigation rendered as off-canvas drawer on mobile (fixed, translateX), static sidebar on desktop (sticky)
-3. **MobileSidebarToggle** - Floating button or header bar button visible only on mobile (<md breakpoint)
-4. **SidebarBackdrop** - Fixed overlay when sidebar open, closes menu on tap, prevents interaction with content
-5. **BackToTop** - Fixed position button in lower-right, appears after 400px scroll, smooth scroll behavior
-6. **ArticleContent** - Main content area with constrained width (max-w-3xl), full width on mobile with responsive padding
+1. ArticleEditor (existing, modify) — coordinates all subcomponents, manages rawContent state
+2. MetadataFieldset (new) — form fields for title, description, category, tags with validation
+3. AutocompleteInput (new, reusable) — dropdown with filtering and keyboard navigation
+4. TagMultiSelect (new) — multi-select combobox with tag chips and removal
+5. MarkdownRenderer (existing, reuse) — imported into preview pane, no changes needed
 
-**Key patterns:**
-- Mobile-first responsive sidebar: `fixed md:sticky` with `transform -translate-x-full md:translate-x-0`
-- Overflow prevention: `min-w-0` on flex children, `overflow-x-hidden` on wrapper, `overflow-x-auto` on code blocks
-- Z-index layering: backdrop z-30, sidebar z-40, navbar z-50
-- Body scroll lock: `overflow-hidden` on body when mobile menu open
+**Data flow pattern:**
+User edits field → Field state updates → Regenerate frontmatter → Update rawContent → Preview updates (debounced) → Save sends rawContent to API
+
+**New API endpoints needed:**
+- GET /api/admin/categories — returns existing categories for dropdown (uses existing getCategories() lib function)
+- GET /api/admin/tags — returns existing tags for autocomplete (uses existing getAllTags() lib function)
 
 ### Critical Pitfalls
 
-1. **Using `100vw` for full-width elements** - Causes horizontal scrollbar on systems with visible scrollbars. The viewport width unit includes scrollbar width. Fix: Use `w-full` (100%) instead of `w-screen` (100vw).
+1. **Re-rendering markdown on every keystroke** — Live preview directly bound to textarea causes lag, cursor jumping, poor UX. PREVENTION: Use useDeferredValue or manual debounce (300ms) for preview updates. Must be baked into Phase 1 implementation, not retrofitted.
 
-2. **Fixed-width sidebar without mobile handling** - Current `ContentSidebar` has `w-72` (288px) with no responsive classes. On 375px mobile, leaves only 87px for content. Fix: Use `fixed md:sticky` with transform-based hide/show pattern.
+2. **Losing unsaved changes on navigation** — No dirty state tracking means users lose work without warning when clicking away. PREVENTION: Track isDirty (rawContent !== initialContent), add beforeunload handler, show asterisk indicator on unsaved changes.
 
-3. **Hamburger menu exists but doesn't slide out** - Common causes: z-index stacking context issues (parent creates stacking context trapping menu), iOS Safari position:fixed bugs, click handler not attached. Fix: Put mobile menu at root level, not nested inside positioned/transformed elements. Test on actual iOS Safari.
+3. **Sync issues between form fields and frontmatter text** — Dual sources of truth (dropdown selection vs raw YAML) conflict, causing data inconsistency. PREVENTION: Frontmatter text is authoritative. Form fields parse from it on load, write back to it on change. User can still manually edit frontmatter.
 
-4. **Code blocks causing horizontal page overflow** - `<pre>` elements preserve whitespace and don't wrap. Without `overflow-x: auto` on container, long lines push entire page width. Fix: Wrap code blocks in `overflow-x-auto` container or apply directly to `<pre>`.
+4. **Dropdown loading states not handled** — Category/tag dropdowns show empty while fetching, indistinguishable from "no categories exist." PREVENTION: Explicit loading/error states, disable dropdowns during fetch, show loading indicator.
 
-5. **Touch targets too small** - Links and buttons below 44x44px cause tap frustration and WCAG failures. Fix: Use `p-3` padding (48px total with 24px icon) or explicit `min-h-[44px] min-w-[44px]`.
+5. **Client/server validation mismatch** — Client validates fields but not frontmatter YAML syntax. Save fails server-side despite client showing "valid." PREVENTION: Use gray-matter on client to parse frontmatter, matching server behavior exactly.
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure prioritizes quick wins and dependency order:
+Based on research, suggested four-phase structure prioritizing foundational infrastructure before layering in UX enhancements.
 
-### Phase 1: Fix Horizontal Overflow
-**Rationale:** Quick win that immediately improves usability. Takes 10-15 minutes. No complex state management required. Must be fixed before other changes to establish correct baseline.
+### Phase 1: Live Markdown Preview & Theme Foundation
+**Rationale:** Simplest integration with highest immediate value. Sets up preview infrastructure for testing later features. Theme compliance must come first to ensure all new components follow existing patterns.
 
-**Delivers:** All content stays within viewport boundaries on mobile devices.
+**Delivers:**
+- Live rendered HTML preview using existing MarkdownRenderer component
+- Debounced updates (300ms) preventing keystroke lag
+- Theme audit replacing hardcoded colors with CSS variables
+- Responsive split-view (side-by-side desktop, toggle mobile)
 
-**Addresses features:**
-- No horizontal overflow (table stakes)
-- Responsive content width (table stakes)
-- Scrollable code blocks (table stakes)
-- Responsive images (table stakes)
+**Addresses:** Table stakes features — live preview and theme consistency
 
-**Implementation:**
-- Add `min-w-0 overflow-x-hidden` to main content wrapper in `content/layout.tsx`
-- Add responsive padding `p-4 md:p-8` to article page
-- Verify `MarkdownRenderer.tsx` code blocks have `overflow-x-auto` (already present)
-- Add `max-w-full h-auto` to images if not using Tailwind Typography defaults
+**Avoids:** Pitfall 1 (keystroke re-render), Pitfall 7 (style mismatch), Pitfall 10 (split view responsiveness)
 
-**Avoids pitfalls:**
-- Pitfall 1 (100vw usage)
-- Pitfall 4 (code block overflow)
-- Pitfall 12 (image overflow)
+**Estimated effort:** 2-3 hours
 
-**Research needed:** No - standard Tailwind utility patterns.
+### Phase 2: Category & Tag Autocomplete
+**Rationale:** Requires new components and API endpoints. Builds on theme foundation. More complex than validation due to multi-select pattern for tags.
 
-### Phase 2: Mobile Sidebar Toggle
-**Rationale:** Core functionality fix. Enables navigation access on mobile. Requires state management and component coordination. Depends on overflow fix being in place to ensure drawer doesn't cause additional scroll issues.
+**Delivers:**
+- GET /api/admin/categories and /api/admin/tags endpoints
+- Custom Combobox component (~60 lines) for category selection
+- Custom TagMultiSelect component (~80 lines) with chips and filtering
+- Loading states and error handling for async data
+- Frontmatter sync logic (field changes update YAML)
 
-**Delivers:** Working hamburger menu that reveals sidebar navigation on mobile.
+**Addresses:** Table stakes features — category dropdown, tag autocomplete
 
-**Addresses features:**
-- Working hamburger menu (table stakes)
-- Collapsible sidebar navigation (table stakes)
-- Touch-friendly tap targets (table stakes)
+**Uses:** Tailwind CSS for styling, Lucide icons (ChevronDown, X, Check)
 
-**Implementation:**
-- Convert `content/layout.tsx` to client component ('use client')
-- Add useState for sidebar open/closed state
-- Update `ContentSidebar` with `isOpen` and `onClose` props
-- Apply responsive classes: `fixed md:sticky`, `transform -translate-x-full md:translate-x-0`
-- Add mobile toggle button (floating or header bar) with 44x44px touch target
-- Add backdrop overlay with `fixed inset-0 bg-black/50 z-30 md:hidden`
-- Implement body scroll lock with useEffect
-- Add close-on-navigation behavior
+**Avoids:** Pitfall 4 (loading states), Pitfall 6 (sync issues), Pitfall 9 (tag UX)
 
-**Avoids pitfalls:**
-- Pitfall 2 (fixed sidebar without mobile handling)
-- Pitfall 3 (menu doesn't slide out)
-- Pitfall 6 (misusing sm: prefix)
-- Pitfall 7 (small touch targets)
-- Pitfall 8 (body scroll not locked)
+**Estimated effort:** 4-6 hours
 
-**Research needed:** No - well-documented pattern from Flowbite, shadcn/ui, Tailwind docs.
+### Phase 3: Form Validation & Polish
+**Rationale:** Prepares for structured metadata fields. Validation layer that works with both form fields and frontmatter text.
 
-**Critical test:** Must verify on iOS Safari with actual device, not just DevTools.
+**Delivers:**
+- react-hook-form + zod integration with schema validation
+- Inline error messages (field-level on blur, revalidate on change)
+- Client-side frontmatter parsing matching server behavior
+- Unsaved changes warning (beforeunload, isDirty tracking)
+- Save button state management (disabled when invalid/unchanged)
+- Visual indicators (asterisk for unsaved, border colors for errors)
 
-### Phase 3: Back-to-Top Button
-**Rationale:** Expected feature, easy to implement after layout is stable. Independent component, no dependencies on other phases. Improves long-page navigation significantly.
+**Addresses:** Table stakes features — inline validation, autosave indicator
 
-**Delivers:** Floating button in lower-right that appears after scrolling 400px, returns user to top with smooth scroll.
+**Implements:** Validation architecture pattern from ARCHITECTURE.md
 
-**Addresses features:**
-- Back-to-top button (table stakes)
-- Touch-friendly tap target (44x44px)
+**Avoids:** Pitfall 2 (unsaved changes), Pitfall 5 (validation mismatch), Pitfall 8 (submit-only validation), Pitfall 11 (save button state)
 
-**Implementation:**
-- Create `BackToTop.tsx` component with useState for visibility
-- Add useEffect with scroll listener (passive: true for performance)
-- Show when `window.scrollY > 400`
-- Position `fixed bottom-4 right-4 z-50`
-- Size `p-3` (48px with 24px icon) for touch target
-- Smooth scroll via `window.scrollTo({ top: 0, behavior: 'smooth' })`
-- Include in main layout or individual article pages
+**Estimated effort:** 3-4 hours
 
-**Avoids pitfalls:**
-- Pitfall 9 (missing back-to-top on long pages)
+### Phase 4: Keyboard Shortcuts & UX Enhancements
+**Rationale:** Final polish layer. Keyboard shortcuts and optional toolbar add power-user efficiency without blocking core functionality.
 
-**Research needed:** No - standard pattern documented by Nielsen Norman Group, Red Hat Design System.
+**Delivers:**
+- Cmd/Ctrl+S to save (with preventDefault)
+- Cmd/Ctrl+P to toggle preview
+- Optional markdown toolbar (bold, italic, link, heading buttons)
+- Word count and reading time display
+- Loading skeleton when opening editor
+
+**Addresses:** Competitive features — keyboard shortcuts, markdown toolbar
+
+**Avoids:** Pitfall 12 (keyboard conflicts)
+
+**Estimated effort:** 2-3 hours
 
 ### Phase Ordering Rationale
 
-- **Overflow first** - Establishes correct baseline, prevents new issues when adding drawer
-- **Sidebar second** - Core navigation functionality, more complex than back-to-top
-- **Back-to-top last** - Independent feature, no dependencies, can be added/tested separately
+- **Phase 1 first** because live preview requires no new dependencies, reuses existing MarkdownRenderer, and establishes performance patterns (debouncing) that later phases depend on. Theme audit here prevents rework in Phase 2 components.
 
-This order follows dependency chain (overflow -> sidebar -> enhancement) and prioritizes impact (unusable navigation > convenience feature). Each phase is independently testable and deployable.
+- **Phase 2 before Phase 3** because category/tag components introduce the metadata form structure that validation then enhances. Building validation first would mean restructuring it when dropdowns arrive.
+
+- **Phase 3 before Phase 4** because keyboard shortcuts reference validation state (canSave) and save handlers. Validation establishes the form state patterns shortcuts interact with.
+
+- **Phase 4 last** because shortcuts and toolbar are pure enhancements that don't block other work and can be shipped incrementally.
 
 ### Research Flags
 
-**Phases with standard patterns (skip research-phase):**
-- **Phase 1** - Pure Tailwind utilities, well-documented in official docs
-- **Phase 2** - Off-canvas drawer is standard pattern with multiple implementation guides (Flowbite, shadcn/ui)
-- **Phase 3** - Back-to-top button has established UX guidelines from NN/g
+Phases with well-documented patterns (skip /gsd:research-phase):
+- **Phase 1:** Standard React patterns (useDeferredValue, component reuse) — no additional research needed
+- **Phase 2:** Custom dropdown implementation, well-understood combobox pattern — no additional research needed
+- **Phase 3:** Form validation with react-hook-form, standard library integration — no additional research needed
+- **Phase 4:** Keyboard event handling, standard UX patterns — no additional research needed
 
-**All phases use verified patterns. No deeper research needed during planning.**
+Phases needing validation during implementation:
+- **Phase 2:** Verify gray-matter YAML regeneration doesn't corrupt complex frontmatter edge cases (nested objects, multiline strings)
+- **Phase 3:** Test beforeunload behavior across browsers, Next.js App Router navigation interception
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Official Tailwind CSS documentation, existing stack sufficient |
-| Features | HIGH | Multiple authoritative sources (NN/g, W3C WCAG, Docusaurus, GitBook) |
-| Architecture | HIGH | Verified with Tailwind docs, Flowbite, shadcn/ui patterns |
-| Pitfalls | HIGH | Official docs (MDN, Tailwind), established UX research (NN/g) |
+| Stack | HIGH | Versions verified via npm registry, existing dependencies analyzed from package.json |
+| Features | HIGH | Consistent patterns across Ghost, Sanity, Strapi, WordPress admin editors |
+| Architecture | HIGH | Based on direct codebase analysis (ArticleEditor 200 lines, MarkdownRenderer 135 lines) |
+| Pitfalls | HIGH | Verified against existing code patterns, React 18 best practices, Next.js documentation |
 
 **Overall confidence:** HIGH
 
-All findings verified against official documentation and multiple credible sources. Patterns are industry-standard with proven implementations in major documentation platforms.
+Research is comprehensive and actionable. All recommended technologies verified, architecture patterns derived from actual codebase, pitfalls mapped to specific code locations. Ready for roadmap creation.
 
 ### Gaps to Address
 
-**iOS Safari testing:** Research identified iOS-specific issues with position:fixed and hamburger menus. Must test Phase 2 implementation on actual iOS Safari (iPhone 12+), not just DevTools or desktop Safari. If issues arise, fallback pattern is to use absolute positioning with body scroll lock instead of fixed positioning.
+**Bundle size verification:** Bundle impact estimates for react-hook-form (8.5kB) and zod (5kB) based on bundlephobia patterns, not live build analysis. Verify actual impact post-installation with `npm run build` and bundle analyzer.
 
-**Accessibility validation:** While research covered WCAG 2.5.8 target size requirements and screen reader best practices, final implementation should be tested with:
-- Keyboard-only navigation (Tab through all interactive elements)
-- Screen reader (VoiceOver on iOS, TalkBack on Android)
-- Focus indicators visible on all interactive elements
+**Mobile admin UX:** Research assumes desktop-first admin workflow. Phase 1 includes responsive split-view, but no deep mobile testing planned. If mobile admin becomes priority, may need Phase 1.5 focusing on touch interactions.
 
-These are validation tasks during implementation, not gaps in research.
+**Frontmatter edge cases:** Custom frontmatter fields beyond title/description/category/tags not extensively tested. If articles use complex frontmatter (nested objects, custom arrays), sync logic in Phase 2 may need enhancement. Validate with real article corpus during implementation.
+
+**Locale-specific validation messages:** Current error messages in French hardcoded in research examples. If i18n for admin panel becomes requirement, validation messages need translation infrastructure. Not blocking for v2 if admin is French-only.
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- [Tailwind CSS Responsive Design](https://tailwindcss.com/docs/responsive-design) - Breakpoints, mobile-first approach, responsive variants
-- [Tailwind CSS Overflow](https://tailwindcss.com/docs/overflow) - overflow-x-auto, overflow-hidden utilities
-- [W3C WCAG 2.5.8 Target Size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) - 24x24px minimum, 44x44px recommended
-- [NN/g Back-to-Top Guidelines](https://www.nngroup.com/articles/back-to-top/) - Position, timing, accessibility
-- [Flowbite Drawer Component](https://flowbite.com/docs/components/drawer/) - Off-canvas pattern
-- [Docusaurus Styling and Layout](https://docusaurus.io/docs/styling-layout) - Documentation site patterns
+- `/src/components/admin/ArticleEditor.tsx` — Existing editor structure (200 lines)
+- `/src/components/admin/AdminDashboard.tsx` — Container CRUD operations (308 lines)
+- `/src/components/content/MarkdownRenderer.tsx` — Reusable markdown renderer (135 lines)
+- `/src/lib/articles.ts` — getCategories(), getAllTags() functions (241 lines)
+- `package.json` — Existing dependencies (react-markdown 10.1.0, gray-matter 4.0.3, next-themes 0.4.6)
+- `tailwind.config.ts` + `globals.css` — Semantic color system with CSS variables
+- npm registry verification — react-hook-form 7.71.1, zod 4.3.6, @hookform/resolvers 5.2.2
 
 ### Secondary (MEDIUM confidence)
-- [shadcn/ui Sidebar](https://ui.shadcn.com/docs/components/sidebar) - Modern React sidebar architecture
-- [Red Hat Design System Back-to-Top](https://ux.redhat.com/elements/back-to-top/guidelines/) - UX guidelines
-- [CSS-Tricks Horizontal Overflow Debugging](https://css-tricks.com/findingfixing-unintended-body-overflow/) - Debugging strategies
-- [iOS Safari Hamburger Menu Issues](https://medium.com/@jaredt_28429/why-do-hamburger-menus-break-in-ios-safari-e076083bda5c) - iOS-specific pitfalls
-- [Z-Index and Stacking Contexts](https://www.joshwcomeau.com/css/stacking-contexts/) - Technical deep-dive
+- Ghost Admin editor UX patterns — Distraction-free markdown editing, side-by-side preview
+- Sanity Studio patterns — Structured content, inline validation
+- Strapi Content Manager patterns — Dropdown fields, relationship management
+- WordPress Gutenberg patterns — Toolbar UX (adapted for markdown context)
+- React 18 documentation — useDeferredValue for concurrent rendering
+- next-themes documentation — Mounted pattern for hydration mismatch prevention
 
-### Tertiary (LOW confidence)
-- None - all research verified with multiple authoritative sources
+### Tertiary (LOW confidence, needs validation)
+- Debounce timing recommendation (300ms) — General web performance guidance, should test with actual article lengths
+- Bundle size estimates — From bundlephobia.com patterns, not live build verification
 
 ---
-*Research completed: 2026-01-29*
+*Research completed: 2026-01-31*
 *Ready for roadmap: yes*

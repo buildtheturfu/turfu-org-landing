@@ -1,298 +1,372 @@
-# Technology Stack: Mobile Documentation UX
+# Technology Stack: Admin Editor Improvements
 
-**Project:** TURFu Landing - Mobile UX Fixes for /content Module
-**Researched:** 2026-01-29
-**Overall Confidence:** HIGH (Tailwind patterns verified via official docs)
+**Project:** TURFu Landing - v2 Admin UX
+**Researched:** 2026-01-31
+**Overall Confidence:** HIGH (versions verified via npm registry)
 
 ## Executive Summary
 
-This research focuses on fixing mobile responsive issues in the existing /content documentation module. The site already uses Next.js 14 + Tailwind CSS. No new libraries are required. All fixes use native Tailwind utilities following mobile-first patterns established by industry leaders (Docusaurus, GitBook, Tailwind Docs).
+This research identifies stack additions for transforming the admin article editor from minimal to polished. The existing stack (React 18, Next.js 14, Tailwind, react-markdown) handles most requirements. Only TWO new dependencies are recommended: react-hook-form for form state/validation and zod for schema validation. Dropdown and autocomplete components should be built in-house using Tailwind CSS to avoid dependency bloat.
 
-## Recommended Approach
+## Recommended Stack Additions
 
-### Mobile-First, Not Desktop-First
+### Form Validation
 
-**Why:** Tailwind is built mobile-first. Unprefixed utilities apply to ALL screen sizes; breakpoint prefixes (`md:`, `lg:`) apply at that size AND ABOVE.
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| react-hook-form | ^7.71.1 | Form state management, validation triggers, error handling | Industry standard for React forms. Uncontrolled components = performant. Excellent TypeScript support. Zero dependencies. |
+| zod | ^4.3.6 | Schema validation, type inference | Best DX for TypeScript. Infers types from schemas. Smaller bundle than yup. Composable schemas. |
+| @hookform/resolvers | ^5.2.2 | Bridge between react-hook-form and zod | Official integration. One-liner to connect zod schema to form. |
 
-**Current Problem:** The ContentSidebar has fixed `w-72` with no responsive behavior. The layout uses `flex` without mobile breakpoints.
+**Integration pattern:**
 
-**Pattern to follow:**
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-```tsx
-// WRONG: Desktop-first thinking
-<aside className="w-72 hidden md:block">  // Hides on mobile, no alternative
+const articleSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(100, 'Title too long'),
+  description: z.string().max(200, 'Description too long').optional(),
+  category: z.string().min(1, 'Category is required'),
+  tags: z.array(z.string()).min(1, 'At least one tag required'),
+  content: z.string().min(10, 'Content too short'),
+});
 
-// CORRECT: Mobile-first with drawer pattern
-<aside className="fixed inset-y-0 left-0 z-40 w-72 transform -translate-x-full md:translate-x-0 md:static transition-transform">
+type ArticleFormData = z.infer<typeof articleSchema>;
+
+const { register, handleSubmit, formState: { errors } } = useForm<ArticleFormData>({
+  resolver: zodResolver(articleSchema),
+});
 ```
 
-### Breakpoint Strategy
+**Why react-hook-form over alternatives:**
 
-Use Tailwind's default breakpoints. No custom breakpoints needed.
+| Library | Bundle Size | Re-renders | TypeScript | Why Not |
+|---------|-------------|------------|------------|---------|
+| react-hook-form | 8.5kB | Minimal (uncontrolled) | Excellent | RECOMMENDED |
+| formik | 13kB | On every keystroke | Good | Heavier, more re-renders |
+| react-final-form | 5kB | Configurable | Fair | Less ecosystem, dying |
+| useState manually | 0kB | On every keystroke | Manual | Boilerplate hell for complex forms |
 
-| Breakpoint | Width | Use Case |
-|------------|-------|----------|
-| (none) | 0px+ | Mobile base styles |
-| `md:` | 768px+ | Tablet - show sidebar |
-| `lg:` | 1024px+ | Desktop - full layout |
+### Live Markdown Preview
 
-**Rationale:** Docusaurus uses 996px as mobile/desktop cutoff. GitBook uses 768px. Tailwind's `md:` (768px) aligns with GitBook and is the industry standard for documentation sites.
+**No new dependencies needed.** Reuse existing stack:
 
-## Patterns for Each Issue
+| Existing | Version | Use For |
+|----------|---------|---------|
+| react-markdown | ^10.1.0 | Render markdown to HTML |
+| remark-gfm | ^4.0.1 | GitHub Flavored Markdown (tables, strikethrough) |
+| rehype-slug | ^6.0.0 | Add IDs to headings |
+| gray-matter | ^4.0.3 | Parse frontmatter from raw content |
 
-### 1. Sidebar: Mobile Hamburger/Drawer Pattern
+**Implementation approach:** Import existing `MarkdownRenderer` component into `ArticleEditor`. Split editor into two panes: textarea (left) + live preview (right). Use `useDeferredValue` or debounce for performance on long documents.
 
-**Problem:** ContentSidebar is always 288px wide, no mobile behavior.
+```typescript
+// ArticleEditor.tsx
+import MarkdownRenderer from '@/components/content/MarkdownRenderer';
+import matter from 'gray-matter';
 
-**Pattern:** Off-canvas drawer that slides in from left on mobile.
-
-```tsx
-// Mobile: Hidden off-screen, slides in when open
-// Desktop: Static, always visible
-<aside className={`
-  fixed inset-y-0 left-0 z-40 w-72
-  bg-turfu-darker/95 backdrop-blur-lg
-  transform transition-transform duration-300 ease-in-out
-  ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-  md:translate-x-0 md:static md:bg-transparent md:backdrop-blur-none
-`}>
+const { content } = matter(rawContent); // Strip frontmatter
+// Render preview using existing component
+<MarkdownRenderer content={content} />
 ```
 
-**Key classes:**
-- `fixed inset-y-0 left-0` - Position off-canvas on mobile
-- `-translate-x-full` - Hide off-screen by default
-- `translate-x-0` - Slide in when open
-- `md:translate-x-0 md:static` - Always visible and in-flow on desktop
-- `transition-transform duration-300` - Smooth animation
-- `backdrop-blur-lg` - Frosted glass effect on mobile overlay
+### Dropdown and Autocomplete
 
-**Toggle button (hamburger):**
+**Recommendation: Build in-house with Tailwind CSS.**
 
-```tsx
-<button
-  className="md:hidden fixed bottom-4 left-4 z-50 p-3 bg-turfu-accent rounded-full shadow-lg"
-  onClick={() => setIsOpen(!isOpen)}
-  aria-label="Toggle sidebar"
-  aria-expanded={isOpen}
->
-  {isOpen ? <X size={24} /> : <Menu size={24} />}
-</button>
+**Why NOT add a library:**
+
+| Library | Bundle Size | Why Not |
+|---------|-------------|---------|
+| @headlessui/react | 14kB | Overkill for 2 simple dropdowns. Would add dependency for 1% of app. |
+| downshift | 11kB | Flexible but complex API. More setup than value for simple use case. |
+| cmdk | 8kB | Command palette focused. Wrong abstraction for form dropdowns. |
+| react-select | 25kB+ | Massive bundle. Styled-components dependency. Overkill. |
+
+**Custom implementation approach:**
+
+```typescript
+// components/ui/Combobox.tsx - ~60 lines
+interface ComboboxProps {
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+// Core pattern:
+// 1. Input for filtering
+// 2. Dropdown list with keyboard nav (ArrowUp/Down, Enter, Escape)
+// 3. Tailwind for styling
+// 4. useState for open state, filter text
+// 5. useRef + onBlur for click-outside
 ```
 
-**Overlay (click to close):**
+**Key Tailwind classes for dropdowns:**
 
-```tsx
-{isOpen && (
-  <div
-    className="fixed inset-0 bg-black/50 z-30 md:hidden"
-    onClick={() => setIsOpen(false)}
-  />
-)}
-```
+```css
+/* Dropdown container */
+.dropdown-menu {
+  @apply absolute top-full left-0 right-0 mt-1
+         bg-overlay border border-border rounded-lg shadow-lg
+         max-h-60 overflow-y-auto z-50;
+}
 
-### 2. Horizontal Overflow: Code Blocks and Tables
+/* Option */
+.dropdown-option {
+  @apply px-3 py-2 cursor-pointer text-foreground
+         hover:bg-overlay-hover
+         focus:bg-overlay-hover focus:outline-none;
+}
 
-**Problem:** Content with long lines causes horizontal page scroll on mobile.
-
-**Pattern:** Constrain content width, allow horizontal scroll within containers.
-
-**For code blocks (already correct in MarkdownRenderer):**
-
-```tsx
-<pre className="overflow-x-auto">
-  {children}
-</pre>
-```
-
-**For the main content container (add constraint):**
-
-```tsx
-// In content layout
-<div className="flex-1 min-w-0 overflow-x-hidden">
-  {children}
-</div>
-```
-
-**Key classes:**
-- `min-w-0` - Allow flex child to shrink below content size
-- `overflow-x-hidden` - Prevent horizontal scroll at page level
-- `overflow-x-auto` - Allow scroll within specific containers
-
-**For tables (already correct):**
-
-```tsx
-<div className="overflow-x-auto">
-  <table className="min-w-full">
-```
-
-**Additional safeguard for images:**
-
-```tsx
-<img className="max-w-full h-auto" />
-```
-
-### 3. Back to Top Button
-
-**Pattern:** Fixed position button, appears after scrolling, smooth scroll behavior.
-
-**Implementation:**
-
-```tsx
-'use client';
-
-import { useState, useEffect } from 'react';
-import { ChevronUp } from 'lucide-react';
-
-export default function BackToTop() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const toggleVisibility = () => {
-      setIsVisible(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  return (
-    <button
-      onClick={scrollToTop}
-      className={`
-        fixed bottom-4 right-4 z-50
-        p-3 rounded-full
-        bg-turfu-accent text-white
-        shadow-lg
-        transition-all duration-300
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
-      `}
-      aria-label="Scroll to top"
-    >
-      <ChevronUp size={24} />
-    </button>
-  );
+/* Selected */
+.dropdown-option-selected {
+  @apply bg-turfu-accent/10 text-turfu-accent;
 }
 ```
 
-**Key classes:**
-- `fixed bottom-4 right-4 z-50` - Fixed position, bottom-right corner
-- `transition-all duration-300` - Smooth show/hide animation
-- `opacity-0 translate-y-4 pointer-events-none` - Hidden state (fade + slide down)
-- `opacity-100 translate-y-0` - Visible state
+**Tag input (multi-select):**
 
-**Alternative: CSS-only approach (simpler but less control):**
+Build a `TagInput` component that:
+1. Shows selected tags as pills
+2. Has input for typing/filtering
+3. Dropdown shows filtered suggestions from existing tags
+4. Enter or click adds tag
+5. Backspace removes last tag when input empty
 
-```css
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
+## Existing Stack (No Changes Needed)
+
+### Core Framework
+| Technology | Version | Status |
+|------------|---------|--------|
+| Next.js | 14.2.15 | Keep - App Router works well |
+| React | 18.3.1 | Keep - Concurrent features available |
+| TypeScript | 5.6.0 | Keep - Type safety |
+
+### Styling
+| Technology | Version | Status |
+|------------|---------|--------|
+| Tailwind CSS | 3.4.14 | Keep - Semantic color system in place |
+| next-themes | 0.4.6 | Keep - Already handles dark/light toggle |
+
+### Content
+| Technology | Version | Status |
+|------------|---------|--------|
+| react-markdown | 10.1.0 | Keep - Reuse for live preview |
+| gray-matter | 4.0.3 | Keep - Frontmatter parsing |
+| remark-gfm | 4.0.1 | Keep - GFM support |
+| rehype-slug | 6.0.0 | Keep - Heading anchors |
+
+### Icons
+| Technology | Version | Status |
+|------------|---------|--------|
+| lucide-react | 0.460.0 | Keep - Add ChevronDown, Check icons for dropdowns |
+
+## What NOT to Add
+
+| Library | Reason |
+|---------|--------|
+| @headlessui/react | Overkill. Custom combobox is ~60 lines with better bundle impact. |
+| Radix UI primitives | Same reason. Would add multiple packages for simple UI. |
+| react-select | Massive bundle (25kB+), styled-components dependency, wrong styling system. |
+| Monaco Editor | For basic markdown editing, textarea is sufficient. Monaco adds 2MB+. |
+| CodeMirror | Same as Monaco. Overkill for non-developer facing editor. |
+| TipTap/ProseMirror | WYSIWYG not requested. Markdown textarea is the target UX. |
+| Formik | react-hook-form is lighter and more performant. |
+| Yup | zod is more TypeScript-native with better type inference. |
+| usehooks-ts | Can implement useDebounce manually in 5 lines. |
+
+## Installation
+
+```bash
+# New dependencies (form validation only)
+npm install react-hook-form zod @hookform/resolvers
+
+# Verify versions
+npm ls react-hook-form zod @hookform/resolvers
+```
+
+**Expected package.json additions:**
+
+```json
+{
+  "dependencies": {
+    "react-hook-form": "^7.71.1",
+    "zod": "^4.3.6",
+    "@hookform/resolvers": "^5.2.2"
   }
 }
 ```
 
-Then use anchor link: `<a href="#top">Back to top</a>`
+## Theme Support for Admin
 
-### 4. Content Layout: Responsive Grid
+**No new dependencies needed.** The admin panel already exists in the Next.js app with next-themes provider. Current admin is dark-only because:
 
-**Current layout issue:** Sidebar and content in flex without mobile breakpoints.
+1. Components use hardcoded dark colors (`bg-surface`, `text-foreground`)
+2. These are already semantic variables in Tailwind config
 
-**Pattern:**
+**Fix approach:**
 
-```tsx
-// Content layout wrapper
-<div className="min-h-screen pt-16 bg-turfu-dark">
-  {/* Mobile sidebar toggle */}
-  <MobileSidebarToggle isOpen={isOpen} setIsOpen={setIsOpen} />
+The semantic color system from v1 (CSS variables) already supports both themes:
 
-  {/* Overlay */}
-  {isOpen && <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setIsOpen(false)} />}
+```css
+:root {
+  --surface: #ffffff;
+  --foreground: #171717;
+  /* etc. */
+}
 
-  {/* Sidebar */}
-  <ContentSidebar isOpen={isOpen} setIsOpen={setIsOpen} ... />
-
-  {/* Main content */}
-  <main className="
-    min-w-0
-    md:ml-72
-    px-4 md:px-8
-    py-8
-  ">
-    {children}
-  </main>
-</div>
+.dark {
+  --surface: #0a0a0a;
+  --foreground: #fafafa;
+  /* etc. */
+}
 ```
 
-**Key insight:** Use `md:ml-72` on main content to make room for sidebar on desktop, rather than wrapping both in flex. This simplifies the mobile/desktop toggle.
+Admin components already use `bg-surface`, `text-foreground`, etc. They will automatically respect the theme IF the admin layout is wrapped in the ThemeProvider (which it should be via root layout).
 
-## Tailwind Utilities Reference
+**Verification needed:** Confirm admin pages inherit from root layout with ThemeProvider. If not, wrap admin layout.
 
-### Must-Use for This Project
+## Performance Considerations
 
-| Utility | Purpose | When |
-|---------|---------|------|
-| `md:` prefix | Desktop styles | All responsive breakpoints |
-| `overflow-x-auto` | Horizontal scroll | Code blocks, tables |
-| `overflow-x-hidden` | Prevent page scroll | Main content wrapper |
-| `min-w-0` | Allow shrink | Flex children with overflow |
-| `fixed` | Fixed positioning | Sidebar, back-to-top |
-| `translate-x-full` / `translate-x-0` | Slide animation | Drawer pattern |
-| `transition-transform` | Smooth animation | Drawer slide |
-| `backdrop-blur-lg` | Frosted glass | Mobile overlay |
-| `z-30`, `z-40`, `z-50` | Stacking order | Overlay, sidebar, buttons |
-| `inset-0`, `inset-y-0` | Full coverage | Overlays, drawers |
+### Live Preview Debouncing
 
-### Touch-Friendly Sizing
+For large documents, debounce the preview render:
 
-Notion and other mobile-first UIs use minimum 44x44px touch targets.
+```typescript
+import { useState, useDeferredValue } from 'react';
 
-```tsx
-// Touch-friendly button
-<button className="p-3 min-w-[44px] min-h-[44px]">
+const [rawContent, setRawContent] = useState('');
+const deferredContent = useDeferredValue(rawContent);
+
+// Use deferredContent for preview rendering
+// React will prioritize input responsiveness over preview
 ```
 
-Or simply use `p-3` (12px padding) on icons of 24px = 48px total.
+**Alternative: manual debounce (if targeting older React):**
 
-## Alternatives Considered
+```typescript
+// lib/useDebounce.ts
+import { useState, useEffect } from 'react';
 
-| Approach | Recommended | Alternative | Why Not Alternative |
-|----------|-------------|-------------|---------------------|
-| Sidebar | Off-canvas drawer | Hamburger dropdown | Drawer matches Docusaurus/GitBook UX patterns, better for deep nav |
-| Animation | Tailwind transitions | Framer Motion | Overkill for simple slide animation, adds bundle size |
-| Back-to-top | React useState + scroll listener | Intersection Observer | useState approach is simpler, scroll listener is well-supported |
-| Breakpoints | Tailwind defaults | Custom breakpoints | 768px (md) aligns with industry standard, no benefit to custom |
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
-## No Additional Dependencies Needed
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
 
-The existing stack handles all requirements:
+  return debouncedValue;
+}
+```
 
-- **Tailwind CSS** - All responsive utilities, transitions, positioning
-- **Lucide React** - Already used for icons (Menu, X, ChevronUp)
-- **React** - useState for toggle state, useEffect for scroll listener
+### Form Validation Performance
 
-**Do not add:**
-- Headless UI (unnecessary for simple drawer)
-- Framer Motion (Tailwind transitions sufficient)
-- Custom CSS (use Tailwind utilities)
+react-hook-form uses uncontrolled components by default, which means:
+- Input changes don't trigger re-renders
+- Validation runs only on blur/submit (configurable)
+- Error state updates are isolated
 
-## Implementation Priority
+**Mode recommendation:**
 
-1. **Fix horizontal overflow** - Add `min-w-0 overflow-x-hidden` to content wrapper (5 min)
-2. **Add mobile sidebar toggle** - Drawer pattern with state (30 min)
-3. **Add back-to-top button** - New component (15 min)
-4. **Polish transitions** - Ensure smooth animations (10 min)
+```typescript
+useForm({
+  mode: 'onBlur', // Validate on field blur (good UX)
+  reValidateMode: 'onChange', // Re-validate on change after first error
+});
+```
+
+## Integration Points
+
+### 1. ArticleEditor + react-hook-form
+
+Current `ArticleEditor` uses `useState` for form state. Migration:
+
+```typescript
+// Before (current)
+const [rawContent, setRawContent] = useState(initialContent);
+const [locale, setLocale] = useState(initialLocale);
+const [published, setPublished] = useState(initialPublished);
+
+// After (with react-hook-form)
+const { register, control, handleSubmit, watch, formState: { errors } } = useForm({
+  defaultValues: {
+    rawContent: initialContent,
+    locale: initialLocale,
+    published: initialPublished,
+    category: '',
+    tags: [],
+  },
+  resolver: zodResolver(articleSchema),
+});
+
+const rawContent = watch('rawContent'); // For live preview
+```
+
+### 2. MarkdownRenderer in Preview
+
+Current `MarkdownRenderer` accepts `content` prop (markdown without frontmatter). Usage in editor:
+
+```typescript
+import matter from 'gray-matter';
+import MarkdownRenderer from '@/components/content/MarkdownRenderer';
+
+// In preview pane
+const { content } = matter(rawContent);
+<MarkdownRenderer content={content} />
+```
+
+### 3. Fetching Categories and Tags
+
+Admin API should provide existing categories/tags for autocomplete:
+
+```typescript
+// GET /api/admin/articles/metadata
+// Response: { categories: string[], tags: string[] }
+
+// In ArticleEditor
+const [metadata, setMetadata] = useState<{ categories: string[], tags: string[] }>();
+
+useEffect(() => {
+  fetch('/api/admin/articles/metadata')
+    .then(res => res.json())
+    .then(setMetadata);
+}, []);
+```
+
+**Note:** This requires a small API addition (not frontend-only). If constrained to frontend-only, derive from existing articles list.
+
+## Summary
+
+| Capability | Solution | New Dependency |
+|------------|----------|----------------|
+| Form validation | react-hook-form + zod | YES (3 packages, ~15kB) |
+| Live markdown preview | Reuse MarkdownRenderer + gray-matter | NO |
+| Category dropdown | Custom Combobox component | NO |
+| Tag autocomplete | Custom TagInput component | NO |
+| Theme support | Already in place via next-themes + CSS vars | NO |
+| Debouncing | useDeferredValue (React 18) or manual | NO |
+
+**Total new bundle impact:** ~15kB (react-hook-form 8.5kB + zod 5kB + resolvers 1.5kB)
 
 ## Sources
 
-### HIGH Confidence (Official Documentation)
-- [Tailwind CSS Responsive Design](https://tailwindcss.com/docs/responsive-design) - Breakpoints, mobile-first approach, variants
-- [Tailwind CSS Overflow](https://tailwindcss.com/docs/overflow) - overflow-x-auto, overflow-hidden utilities
+### HIGH Confidence (npm registry verified)
+- react-hook-form: version 7.71.1 verified via `npm show react-hook-form version`
+- zod: version 4.3.6 verified via `npm show zod version`
+- @hookform/resolvers: version 5.2.2 verified via `npm show @hookform/resolvers version`
+- @headlessui/react: version 2.2.9 verified via `npm show @headlessui/react version`
 
-### MEDIUM Confidence (Industry Patterns)
-- [Docusaurus Styling](https://docusaurus.io/docs/styling-layout) - 996px breakpoint, hamburger menu behavior
-- [Notionpresso CSS Structure](https://notionpresso.com/en/docs/customization-guide/css-structure-and-styling) - 720px max-width, CSS variables
-- [Flowbite Sidebar](https://flowbite.com/docs/components/sidebar/) - Off-canvas drawer pattern
-- [daisyUI Drawer](https://daisyui.com/components/drawer/) - lg:drawer-open responsive pattern
-- [TW Elements Back to Top](https://tw-elements.com/docs/standard/components/scroll-back-to-top-button/) - Fixed positioning, scroll listener
+### HIGH Confidence (Existing codebase)
+- react-markdown 10.1.0 already installed and working
+- gray-matter 4.0.3 already installed and working
+- next-themes 0.4.6 already installed and working
+- Semantic color system verified in tailwind.config.ts and CSS variables
+
+### MEDIUM Confidence (Training data + npm verification)
+- react-hook-form integration patterns based on official documentation patterns
+- zod schema patterns based on common TypeScript usage
+- Bundle size estimates from bundlephobia.com patterns (not live verified)

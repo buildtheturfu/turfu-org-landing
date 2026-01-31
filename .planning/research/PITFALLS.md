@@ -1,462 +1,589 @@
-# Mobile Documentation UX Pitfalls
+# Admin Article Editor UX Pitfalls
 
-**Domain:** Mobile-responsive documentation sites
-**Researched:** 2026-01-29
-**Confidence:** HIGH (verified with Tailwind docs, MDN, W3C sources)
+**Domain:** Admin panel article editor improvements
+**Researched:** 2026-01-31
+**Confidence:** HIGH (verified against existing codebase patterns and React/Next.js best practices)
+
+**Context:** Adding live markdown preview, category/tag dropdowns, form validation, and theme support to existing ArticleEditor.tsx (200 lines) that already has split-view structure.
 
 ---
 
 ## Critical Pitfalls
 
-Mistakes that cause broken layouts, unusable navigation, or major UX failures.
+Mistakes that cause data loss, broken functionality, or major integration issues with the existing system.
 
 ---
 
-### Pitfall 1: Using `100vw` for Full-Width Elements
+### Pitfall 1: Re-rendering MarkdownRenderer on Every Keystroke
 
-**What goes wrong:** Horizontal scrollbar appears on pages with vertical scrollbars. Users can scroll horizontally by a few pixels, which feels broken.
+**What goes wrong:** Live preview re-parses and re-renders markdown on every character typed, causing lag, cursor jumping, and poor editing experience.
 
-**Why it happens:** The `100vw` unit includes the scrollbar width in its calculation. On systems with classic (always-visible) scrollbars, `100vw` is wider than the actual visible viewport, causing horizontal overflow.
+**Why it happens:** Direct binding of textarea value to MarkdownRenderer without debouncing. React-markdown with plugins (remarkGfm, rehypeSlug) has non-trivial parsing overhead.
+
+**Warning signs:**
+- Cursor jumps or lags when typing
+- Noticeable delay between keystroke and character appearing
+- CPU spikes visible in DevTools during typing
+- Mobile editing becomes unusable
 
 **Consequences:**
-- Horizontal scroll on every page with vertical content
-- Particularly visible on Windows (classic scrollbars) and macOS with "Always show scrollbars" enabled
-- Breaks the professional feel of the documentation
+- Unusable editor on slower devices
+- Users lose text position and flow
+- May trigger "Maximum update depth exceeded" errors
+- Battery drain on mobile
 
-**Detection:**
-- Test on Windows or enable "Always show scrollbars" in macOS
-- Look for any element using `w-screen` (Tailwind) or `width: 100vw`
-- Check if page has subtle horizontal scroll (a few pixels)
-
-**Prevention (Tailwind-specific):**
-```html
-<!-- BAD: Will overflow on systems with visible scrollbars -->
-<div class="w-screen">...</div>
-
-<!-- GOOD: Uses parent width, not viewport -->
-<div class="w-full">...</div>
-
-<!-- GOOD: For full-bleed within container, use negative margins -->
-<div class="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">...</div>
-```
-
-**Modern fix (Chrome 145+):** Add `scrollbar-gutter: stable` to `html` element. This reserves space for the scrollbar and makes `100vw` scrollbar-aware. However, browser support is still limited in 2026.
-
-**Sources:** [Why 100vw causes horizontal scrollbar](https://dev.to/tepythai/why-100vw-causes-horizontal-scrollbar-4nlm), [Chrome 145 scrollbar-aware vw](https://www.bram.us/2026/01/15/100vw-horizontal-overflow-no-more/)
-
----
-
-### Pitfall 2: Fixed-Width Sidebar Without Mobile Handling
-
-**What goes wrong:** Sidebar (like `ContentSidebar.tsx` with `w-72`) remains visible on mobile, pushing content off-screen or causing horizontal overflow.
-
-**Why it happens:** Fixed pixel widths (`w-72` = 288px) don't respond to viewport size. On a 375px mobile screen, a 288px sidebar leaves only 87px for content.
-
-**Consequences:**
-- Content area too narrow to read
-- Horizontal scrollbar to see content
-- Or sidebar completely covers content
-
-**Detection:**
-- Check for fixed-width sidebars without responsive hiding
-- Look for `w-[fixed]` without corresponding `hidden md:block` or similar
-- Test on 375px viewport width
-
-**Prevention (Tailwind-specific):**
-```html
-<!-- BAD: Always shows 288px sidebar -->
-<aside class="w-72 border-r ...">
-
-<!-- GOOD: Hidden on mobile, shown on md+ -->
-<aside class="hidden md:block w-72 border-r ...">
-```
-
-For the mobile sidebar, use a slide-out drawer pattern triggered by hamburger menu (see Pitfall 3).
-
-**Current codebase issue:** `ContentSidebar.tsx` has `w-72` without responsive hiding. Needs `hidden md:flex md:flex-col` or similar.
-
----
-
-### Pitfall 3: Hamburger Menu Button Exists But Menu Doesn't Slide Out
-
-**What goes wrong:** Hamburger icon is visible on mobile, user taps it, nothing happens (or menu appears but is covered/off-screen).
-
-**Why it happens (common causes):**
-
-1. **Z-index stacking context issues:** Menu has high z-index but parent creates its own stacking context (via `transform`, `opacity`, `will-change`, or having a z-index itself), trapping the menu.
-
-2. **Menu positioned off-screen without animation:** Menu is at `left: -100%` or `translateX(-100%)` but state change doesn't trigger CSS transition.
-
-3. **Click handler not attached or silently failing:** React state updates but component doesn't re-render, or onClick prevented by parent element.
-
-4. **CSS `hidden` class conflicts:** Tailwind's `hidden` (display: none) conflicts with visibility toggling logic.
-
-5. **iOS Safari position:fixed bugs:** On iOS, `position: fixed` elements inside scrollable containers or with certain parent properties don't behave correctly.
-
-**Detection:**
-- Tap hamburger on actual mobile device (not just DevTools)
-- Check if menu element exists in DOM but has wrong positioning
-- Inspect z-index and parent stacking contexts
-- Test specifically on iOS Safari
-
-**Prevention (Tailwind-specific):**
+**Prevention strategy:**
 
 ```tsx
-// State management
-const [isOpen, setIsOpen] = useState(false);
+// BAD: Re-renders on every keystroke
+<MarkdownRenderer content={rawContent} />
 
-// Hamburger button
-<button
-  onClick={() => setIsOpen(!isOpen)}
-  aria-expanded={isOpen}
-  aria-label="Toggle menu"
-  className="md:hidden p-2"
->
-  {isOpen ? <X /> : <Menu />}
-</button>
+// GOOD: Debounce preview updates
+import { useDeferredValue, useState, useEffect } from 'react';
 
-// Mobile sidebar - use fixed positioning at root level
-<div
-  className={`
-    fixed inset-y-0 left-0 z-50 w-72
-    transform transition-transform duration-300 ease-in-out
-    ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-    md:hidden
-  `}
->
-  {/* Sidebar content */}
-</div>
+function ArticleEditor() {
+  const [rawContent, setRawContent] = useState('');
 
-// Backdrop overlay
-{isOpen && (
-  <div
-    className="fixed inset-0 z-40 bg-black/50 md:hidden"
-    onClick={() => setIsOpen(false)}
-  />
-)}
+  // Option 1: useDeferredValue (React 18+) - lets typing remain responsive
+  const deferredContent = useDeferredValue(rawContent);
+
+  // Option 2: Manual debounce (300-500ms sweet spot)
+  const [previewContent, setPreviewContent] = useState('');
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setPreviewContent(rawContent);
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [rawContent]);
+
+  return (
+    <>
+      <textarea
+        value={rawContent}
+        onChange={(e) => setRawContent(e.target.value)}
+      />
+      <MarkdownRenderer content={deferredContent} /> {/* or previewContent */}
+    </>
+  );
+}
 ```
 
-**Critical:** Put mobile menu/sidebar at the root level of the component tree, not nested inside other positioned/transformed elements.
+**Which phase should address it:** Phase 1 (Live Markdown Preview) - must be baked in from the start, not retrofitted.
 
-**iOS Safari fix:** Don't put scrollable content inside position:fixed elements. Instead, when menu opens, add `overflow-hidden` to body and let the menu be part of normal flow with the body scrolling disabled.
-
-**Sources:** [iOS Safari hamburger menu issues](https://medium.com/@jaredt_28429/why-do-hamburger-menus-break-in-ios-safari-e076083bda5c), [Z-index stacking contexts](https://www.joshwcomeau.com/css/stacking-contexts/)
+**Existing codebase note:** The current ArticleEditor.tsx has a `showPreview` toggle but only displays raw content in `<pre>`. When adding actual MarkdownRenderer, debouncing is essential.
 
 ---
 
-### Pitfall 4: Code Blocks Causing Horizontal Page Overflow
+### Pitfall 2: Losing Unsaved Changes on Navigation
 
-**What goes wrong:** Long code examples in documentation overflow their container and cause horizontal scroll on the entire page.
+**What goes wrong:** User edits article, accidentally navigates away (clicks sidebar link, browser back), loses all work without warning.
 
-**Why it happens:** `<pre>` and `<code>` elements preserve whitespace and don't wrap by default. Without `overflow-x: auto` on a containing element, long lines push page width.
+**Why it happens:** No "unsaved changes" detection or beforeunload handler. Existing editor has no isDirty tracking.
+
+**Warning signs:**
+- No asterisk or indicator on unsaved changes
+- No confirmation prompt when navigating away
+- Refresh loses all work
 
 **Consequences:**
-- Entire page scrolls horizontally
-- Users must scroll back and forth to read documentation text
-- Professional appearance destroyed
+- Data loss and user frustration
+- Lost productivity
+- Erodes trust in admin panel
 
-**Detection:**
-- Look at any documentation page with code blocks on mobile
-- Check if scrolling horizontally on code also scrolls the page
-- Inspect code blocks for `overflow` properties
+**Prevention strategy:**
 
-**Prevention (Tailwind-specific):**
+```tsx
+// Track dirty state
+const [initialContent, setInitialContent] = useState(initialContent);
+const isDirty = rawContent !== initialContent;
 
-```html
-<!-- Wrapper for code blocks -->
-<div class="overflow-x-auto">
-  <pre class="...">
-    <code>...</code>
-  </pre>
-</div>
+// Browser beforeunload
+useEffect(() => {
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    if (isDirty) {
+      e.preventDefault();
+      e.returnValue = ''; // Required for Chrome
+    }
+  };
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+}, [isDirty]);
 
-<!-- Or apply directly to pre -->
-<pre class="overflow-x-auto max-w-full">
-  <code>...</code>
-</pre>
+// Next.js navigation (App Router)
+import { useRouter } from 'next/navigation';
+
+// For link clicks within the app
+const handleNavigation = (href: string) => {
+  if (isDirty && !confirm('Vous avez des modifications non enregistrees. Quitter quand meme?')) {
+    return;
+  }
+  router.push(href);
+};
+
+// Visual indicator
+<h2 className="text-lg font-semibold text-foreground">
+  {articleId ? "Modifier l'article" : 'Nouvel article'}
+  {isDirty && <span className="text-turfu-accent ml-2">*</span>}
+</h2>
 ```
 
-**For markdown renderers (like `MarkdownRenderer.tsx`):**
-```css
-/* In globals.css or component styles */
-.prose pre {
-  @apply overflow-x-auto max-w-full;
-}
+**Which phase should address it:** Phase 3 (Form Validation) - natural fit with validation state management.
 
-.prose code {
-  @apply break-words;
-}
-```
-
-**Accessibility requirement:** Add `tabindex="0"` to scrollable code blocks for keyboard navigation:
-```html
-<pre tabindex="0" class="overflow-x-auto">...</pre>
-```
-
-**Sources:** [Accessible responsive code blocks](https://torstenknabe.com/posts/making-accessible-responsive-code-blocks/), [Responsive code block design](https://olivermak.es/2014/10/design-better-responsive-code/)
+**Existing codebase note:** Current `onCancel` handler in ArticleEditor doesn't check for unsaved changes before calling `handleCancel` in AdminDashboard.
 
 ---
 
-### Pitfall 5: Tables Breaking Mobile Layout
+### Pitfall 3: Theme Flash in Editor When Switching Modes
 
-**What goes wrong:** Wide tables in documentation overflow their container, causing horizontal page scroll.
+**What goes wrong:** Adding light mode support causes visible flash when editor loads or theme changes - editor briefly shows wrong colors before theme applies.
 
-**Why it happens:** Tables have intrinsic sizing based on content. Without constraints, they expand to fit all content, regardless of viewport.
+**Why it happens:** SSR renders with initial/system theme, client hydration applies actual theme. Without proper handling, there's a visible theme mismatch.
+
+**Warning signs:**
+- Brief white flash on dark mode or dark flash on light mode
+- Theme toggle causes full component re-render
+- Editor colors lag behind theme toggle
 
 **Consequences:**
-- Same as code blocks: horizontal page scroll
-- Table content cut off or unreadable
-- Data tables especially problematic (many columns)
+- Jarring visual experience
+- Unprofessional appearance
+- May trigger layout shift
 
-**Detection:**
-- Check any documentation page with tables on mobile
-- Look for tables without wrapper elements
-- Test with DevTools at 375px width
+**Prevention strategy:**
 
-**Prevention (Tailwind-specific):**
+The existing codebase already uses next-themes with ThemeProvider. Key patterns:
 
-```html
-<!-- Wrapper makes table independently scrollable -->
-<div class="overflow-x-auto" role="region" aria-label="Data table" tabindex="0">
-  <table class="min-w-full">
-    ...
-  </table>
-</div>
-```
+```tsx
+// Use CSS variables for theme colors (already done in globals.css)
+// Editor should use semantic color tokens, not hardcoded colors
 
-**For markdown renderers:**
-```css
-.prose table {
-  @apply block overflow-x-auto;
+// BAD: Hardcoded dark colors
+<textarea className="bg-[#1a1a1a] text-white" />
+
+// GOOD: CSS variable tokens (already used in existing code)
+<textarea className="bg-surface text-foreground" />
+
+// For theme-aware components, handle hydration mismatch
+'use client';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+
+function ThemeAwareEditor() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering theme-dependent content until mounted
+  if (!mounted) {
+    return <EditorSkeleton />; // Same dimensions, neutral colors
+  }
+
+  return <Editor theme={resolvedTheme} />;
 }
-
-/* Or wrap tables in scrollable container */
-.table-wrapper {
-  @apply overflow-x-auto -mx-4 px-4;
-}
 ```
 
-**Visual hint for scrollability:** Since mobile browsers hide scrollbars, add visual indicator:
-```html
-<div class="overflow-x-auto bg-gradient-to-r from-transparent via-transparent to-gray-200/50">
-  ...
-</div>
+**Which phase should address it:** Phase 4 (Theme Support) - but must audit existing color classes first.
+
+**Existing codebase note:** ArticleEditor.tsx already uses semantic classes like `bg-surface`, `text-foreground`, `border-border`. This is good. The existing ThemeToggle.tsx has proper `mounted` handling as a reference pattern.
+
+---
+
+### Pitfall 4: Category/Tag Dropdown Loading States Not Handled
+
+**What goes wrong:** Dropdowns for category/tag selection show empty or flash while fetching options from API. User can't tell if data is loading or if there are no options.
+
+**Why it happens:** Async data fetching without loading states. Options list empty during fetch looks identical to "no categories exist."
+
+**Warning signs:**
+- Empty dropdown appears before options load
+- User can submit form before dropdown data loads
+- No feedback during slow network conditions
+
+**Consequences:**
+- Confusion about available options
+- Form submission with incomplete data
+- Race conditions if user types while options load
+
+**Prevention strategy:**
+
+```tsx
+// Track loading and error states explicitly
+const [categories, setCategories] = useState<string[]>([]);
+const [loadingCategories, setLoadingCategories] = useState(true);
+const [categoryError, setCategoryError] = useState<string | null>(null);
+
+useEffect(() => {
+  async function fetchCategories() {
+    try {
+      setLoadingCategories(true);
+      const res = await fetch('/api/admin/categories');
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      setCategoryError('Impossible de charger les categories');
+    } finally {
+      setLoadingCategories(false);
+    }
+  }
+  fetchCategories();
+}, []);
+
+// Render with clear states
+<select disabled={loadingCategories || !!categoryError}>
+  {loadingCategories && <option>Chargement...</option>}
+  {categoryError && <option>{categoryError}</option>}
+  {!loadingCategories && !categoryError && (
+    <>
+      <option value="">Selectionner une categorie</option>
+      {categories.map(cat => (
+        <option key={cat} value={cat}>{cat}</option>
+      ))}
+    </>
+  )}
+</select>
 ```
 
-**Sources:** [Responsive tables](https://www.w3schools.com/howto/howto_css_table_responsive.asp), [Under-engineered responsive tables](https://css-tricks.com/under-engineered-responsive-tables/)
+**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - core to the feature.
+
+**Existing codebase note:** Categories currently come from ContentSidebar props (fetched at page level). For admin editor, need API endpoint or pass categories through AdminDashboard. Current ArticleEditor parses category from frontmatter text.
+
+---
+
+### Pitfall 5: Validating Frontmatter Syntax vs Content Separately
+
+**What goes wrong:** Validation checks field presence but not frontmatter YAML syntax. User can have valid fields but malformed YAML that breaks on save.
+
+**Why it happens:** Treating frontmatter as structured data when it's actually a text blob being parsed. Client validates fields, server parses text - mismatch.
+
+**Warning signs:**
+- Client shows "valid" but server returns parse error
+- Quotes within values break parsing
+- Array syntax `["a", "b"]` not validated correctly
+
+**Consequences:**
+- False positive validation ("all fields valid" but save fails)
+- Confusing error messages from server
+- User edits frontmatter manually, bypasses field validation
+
+**Prevention strategy:**
+
+```tsx
+// Parse frontmatter on client to match server behavior
+import matter from 'gray-matter';
+
+const validateContent = (rawContent: string): ValidationResult => {
+  const errors: string[] = [];
+
+  // 1. Validate frontmatter is parseable
+  try {
+    const { data: frontmatter, content } = matter(rawContent);
+
+    // 2. Validate required fields
+    if (!frontmatter.title?.trim()) {
+      errors.push('Le titre est requis');
+    }
+
+    // 3. Validate field types
+    if (frontmatter.tags && !Array.isArray(frontmatter.tags)) {
+      errors.push('Les tags doivent etre une liste');
+    }
+
+    // 4. Validate content exists
+    if (!content.trim()) {
+      errors.push('Le contenu ne peut pas etre vide');
+    }
+
+  } catch (e) {
+    errors.push('Format frontmatter invalide (verifiez la syntaxe YAML)');
+  }
+
+  return { valid: errors.length === 0, errors };
+};
+```
+
+**Which phase should address it:** Phase 3 (Form Validation) - critical validation path.
+
+**Existing codebase note:** Server uses `parseMarkdownWithFrontmatter` from `@/lib/articles`. Client has basic `parseFrontmatter` regex in ArticleEditor. These must match behavior or use same library.
+
+---
+
+### Pitfall 6: Sync Issues Between Dropdown Selection and Frontmatter Text
+
+**What goes wrong:** User selects category from dropdown, but frontmatter text isn't updated. Or user edits frontmatter text, dropdown doesn't reflect change. Dual sources of truth conflict.
+
+**Why it happens:** Maintaining both raw frontmatter text (for power users) and structured form fields (for convenience) without bidirectional sync.
+
+**Warning signs:**
+- Dropdown shows "guide" but frontmatter says `category: "tutorial"`
+- Saving uses dropdown value, ignoring frontmatter edit
+- User confused about which is authoritative
+
+**Consequences:**
+- Data inconsistency
+- Lost edits
+- User trust erosion
+
+**Prevention strategy:**
+
+Choose ONE authoritative source:
+
+```tsx
+// OPTION 1: Frontmatter text is authoritative (simpler, maintains power-user workflow)
+// Dropdown reads from parsed frontmatter, writes back to text
+
+const updateFrontmatterField = (field: string, value: string | string[]) => {
+  // Parse current frontmatter
+  const match = rawContent.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return;
+
+  // Update or add field
+  let frontmatterText = match[1];
+  const fieldRegex = new RegExp(`^${field}:.*$`, 'm');
+  const newValue = Array.isArray(value)
+    ? `${field}: [${value.map(v => `"${v}"`).join(', ')}]`
+    : `${field}: "${value}"`;
+
+  if (fieldRegex.test(frontmatterText)) {
+    frontmatterText = frontmatterText.replace(fieldRegex, newValue);
+  } else {
+    frontmatterText += `\n${newValue}`;
+  }
+
+  setRawContent(rawContent.replace(match[0], `---\n${frontmatterText}\n---`));
+};
+
+// OPTION 2: Structured state is authoritative (cleaner, but loses manual frontmatter editing)
+// Reconstruct frontmatter from structured state on save
+```
+
+**Recommendation:** Option 1 preserves the existing workflow where users can manually edit frontmatter. Dropdowns become convenience helpers, not replacements.
+
+**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - fundamental architecture decision.
 
 ---
 
 ## Moderate Pitfalls
 
-Mistakes that cause poor UX but don't break functionality.
+Mistakes that cause poor UX but don't break core functionality.
 
 ---
 
-### Pitfall 6: Using `sm:` to Target Mobile Devices
+### Pitfall 7: Markdown Preview Styling Doesn't Match Public Render
 
-**What goes wrong:** Developer writes `sm:hidden` thinking it hides on small screens. Instead, element is visible on mobile (under 640px) and hidden on sm+ screens.
+**What goes wrong:** Preview in editor looks different from published article. Users surprised when article goes live.
 
-**Why it happens:** Tailwind's `sm:` prefix means "at 640px and above", not "on small screens". This is counter-intuitive for developers new to Tailwind's mobile-first approach.
+**Why it happens:** Preview uses different styles or component than public MarkdownRenderer. Admin panel has own styling that doesn't include prose classes.
 
-**Consequences:**
-- Layouts appear correct in desktop DevTools, broken on actual mobile
-- Elements meant for mobile appear on desktop
-- Elements meant for desktop appear on mobile
+**Warning signs:**
+- Different fonts, colors, or spacing in preview vs public
+- Code blocks styled differently
+- Links missing hover states in preview
 
-**Detection:**
-- Search codebase for `sm:` usage and verify intent
-- Test at exactly 639px vs 640px width
-- Look for comments like "mobile only" near `sm:` classes
-
-**Prevention (Tailwind-specific):**
-
-```html
-<!-- WRONG: Thinking this hides on "small screens" -->
-<div class="sm:hidden">Mobile content</div>  <!-- Shows on mobile! -->
-
-<!-- RIGHT: Hide on mobile (default), show on 640px+ -->
-<div class="hidden sm:block">Desktop content</div>
-
-<!-- RIGHT: Show on mobile, hide on 640px+ -->
-<div class="block sm:hidden">Mobile content</div>
-
-<!-- RIGHT: Show only on md screens (768px-1023px) -->
-<div class="hidden md:block lg:hidden">Tablet only</div>
-```
-
-**Mental model:** Always write mobile styles first (unprefixed), then add breakpoints to enhance for larger screens.
-
-**Sources:** [Tailwind Responsive Design docs](https://tailwindcss.com/docs/responsive-design)
-
----
-
-### Pitfall 7: Touch Targets Too Small
-
-**What goes wrong:** Links, buttons, and interactive elements are too small to tap accurately on mobile.
-
-**Why it happens:** Designs optimized for mouse precision don't account for finger imprecision (average finger tap area is ~7mm or 44px).
-
-**Consequences:**
-- Users tap wrong links in navigation
-- Frustration with documentation navigation
-- Accessibility failure (WCAG requires minimum target sizes)
-
-**Detection:**
-- Measure interactive elements (should be at least 44x44px tap area)
-- Check spacing between adjacent links (need ~8px minimum)
-- Test on actual mobile devices with finger navigation
-
-**Prevention (Tailwind-specific):**
-
-```html
-<!-- BAD: Tiny tap target -->
-<a class="text-sm">Small link</a>
-
-<!-- GOOD: Adequate padding for tap target -->
-<a class="text-sm py-3 px-4">Link with padding</a>
-
-<!-- GOOD: Minimum height/width utility -->
-<a class="min-h-[44px] min-w-[44px] flex items-center">...</a>
-
-<!-- GOOD: For icon buttons -->
-<button class="p-3 -m-3">  <!-- Padding for tap, negative margin to not affect layout -->
-  <Icon size={16} />
-</button>
-```
-
-**For sidebar navigation items:**
-```html
-<a class="flex items-center gap-2 px-3 py-2.5 min-h-[44px]">
-  <FileText size={16} />
-  <span class="truncate">{title}</span>
-</a>
-```
-
-**Sources:** [NN/g touch target guidelines](https://www.nngroup.com/articles/touch-target-size/), [WCAG 2.2 Target Size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
-
----
-
-### Pitfall 8: Body Scroll Not Locked When Mobile Menu Open
-
-**What goes wrong:** User opens mobile menu/sidebar, but can still scroll the page content behind it. Page scrolls while trying to navigate menu.
-
-**Why it happens:** Opening an overlay doesn't automatically prevent body scroll. Without explicit lock, touch events bubble through to body.
-
-**Consequences:**
-- Confusing UX: content moves behind menu
-- User loses place in documentation
-- Menu overlay may scroll off-screen
-
-**Detection:**
-- Open mobile menu and try scrolling with touch
-- Check if page content behind overlay moves
-- Verify menu stays fixed in viewport
-
-**Prevention (Tailwind-specific):**
+**Prevention strategy:**
 
 ```tsx
-// When menu opens, lock body scroll
-useEffect(() => {
-  if (isMenuOpen) {
-    document.body.classList.add('overflow-hidden');
-  } else {
-    document.body.classList.remove('overflow-hidden');
+// GOOD: Reuse exact same renderer component
+import MarkdownRenderer from '@/components/content/MarkdownRenderer';
+
+// In ArticleEditor preview panel
+{showPreview && (
+  <div className="w-1/2 border-l border-border overflow-auto p-6">
+    <div className="prose-turfu max-w-none">
+      <MarkdownRenderer content={contentWithoutFrontmatter} />
+    </div>
+  </div>
+)}
+```
+
+**Which phase should address it:** Phase 1 (Live Markdown Preview) - use existing MarkdownRenderer.
+
+**Existing codebase note:** MarkdownRenderer.tsx in `/src/components/content/` is well-configured with remark-gfm, rehype-slug, and custom component styling. Reuse it directly.
+
+---
+
+### Pitfall 8: Form Validation Only on Submit (No Inline Feedback)
+
+**What goes wrong:** User fills out form, clicks save, sees list of errors. Must find and fix each field without guidance during input.
+
+**Why it happens:** Validation logic only runs in submit handler. No real-time feedback as user types.
+
+**Warning signs:**
+- All errors appear at once after submit
+- No visual indication of invalid fields until submit
+- User not sure which fields are required
+
+**Prevention strategy:**
+
+```tsx
+// Field-level validation with immediate feedback
+const [errors, setErrors] = useState<Record<string, string>>({});
+const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+const validateField = (field: string, value: string) => {
+  switch (field) {
+    case 'title':
+      return value.trim() ? '' : 'Le titre est requis';
+    case 'category':
+      return value ? '' : ''; // Optional field, no error
+    default:
+      return '';
   }
+};
 
-  // Cleanup on unmount
-  return () => {
-    document.body.classList.remove('overflow-hidden');
-  };
-}, [isMenuOpen]);
+const handleBlur = (field: string, value: string) => {
+  setTouched(prev => ({ ...prev, [field]: true }));
+  setErrors(prev => ({ ...prev, [field]: validateField(field, value) }));
+};
+
+// Show error only for touched fields
+{touched.title && errors.title && (
+  <span className="text-red-400 text-sm">{errors.title}</span>
+)}
+
+// Or use border color
+<input
+  className={`border ${touched.title && errors.title ? 'border-red-400' : 'border-border'}`}
+  onBlur={(e) => handleBlur('title', e.target.value)}
+/>
 ```
 
-**Alternative using Tailwind's arbitrary variants:**
-```tsx
-// In a layout component
-<body className={isMenuOpen ? 'overflow-hidden' : ''}>
-```
-
-**For Next.js App Router (can't directly modify body):**
-```tsx
-// Use a portal for the menu, manage body class via useEffect
-import { createPortal } from 'react-dom';
-
-// Or use a library like body-scroll-lock
-```
-
-**Overscroll prevention on menu itself:**
-```html
-<nav class="overflow-y-auto overscroll-contain">
-  <!-- Menu items -->
-</nav>
-```
+**Which phase should address it:** Phase 3 (Form Validation) - core validation UX.
 
 ---
 
-### Pitfall 9: Missing Back-to-Top Button on Long Documentation Pages
+### Pitfall 9: Tag Input UX - Typing Instead of Selecting
 
-**What goes wrong:** Users scroll deep into documentation, have no quick way to return to navigation/top. Must scroll extensively to navigate elsewhere.
+**What goes wrong:** Tags implemented as plain text input. Users must type exact tag names, leading to typos, inconsistent casing, duplicate variations.
 
-**Why it happens:** Developers test on desktop with fast scroll wheels. Mobile users must swipe many times to return to top on long pages.
+**Why it happens:** Taking the easy path with text input instead of proper tag selector.
 
-**Consequences:**
-- Frustrating navigation on mobile
-- Users abandon documentation rather than navigate
-- Accessibility issue for users with motor impairments
+**Warning signs:**
+- "React", "react", "ReactJS" all treated as different tags
+- No autocomplete for existing tags
+- Users can't see available tags
 
-**Detection:**
-- Visit any documentation page longer than 4 screens
-- Try returning to top on mobile device
-- Count swipes needed
-
-**Prevention (Tailwind-specific):**
+**Prevention strategy:**
 
 ```tsx
-const BackToTop = () => {
-  const [show, setShow] = useState(false);
+// Combobox pattern for tags
+const [inputValue, setInputValue] = useState('');
+const [selectedTags, setSelectedTags] = useState<string[]>([]);
+const availableTags = ['guide', 'tutorial', 'reference', 'api', ...]; // From API
 
-  useEffect(() => {
-    const onScroll = () => {
-      setShow(window.scrollY > 400);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+const filteredTags = availableTags.filter(
+  tag => tag.toLowerCase().includes(inputValue.toLowerCase()) &&
+         !selectedTags.includes(tag)
+);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Move focus to skip link or first focusable element
-    document.querySelector('a[href="#main-content"]')?.focus();
-  };
-
-  if (!show) return null;
-
-  return (
-    <button
-      onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-40
-                 p-3 rounded-full bg-turfu-accent text-white
-                 shadow-lg hover:bg-turfu-accent/90
-                 focus:outline-none focus:ring-2 focus:ring-offset-2
-                 transition-opacity"
-      aria-label="Back to top"
-    >
-      <ChevronUp size={24} aria-hidden="true" />
-    </button>
-  );
+const addTag = (tag: string) => {
+  if (!selectedTags.includes(tag)) {
+    setSelectedTags([...selectedTags, tag]);
+    updateFrontmatterField('tags', [...selectedTags, tag]);
+  }
+  setInputValue('');
 };
+
+const removeTag = (tag: string) => {
+  const newTags = selectedTags.filter(t => t !== tag);
+  setSelectedTags(newTags);
+  updateFrontmatterField('tags', newTags);
+};
+
+// UI: Chips for selected, dropdown for suggestions
+<div className="flex flex-wrap gap-2 p-2 border rounded">
+  {selectedTags.map(tag => (
+    <span key={tag} className="flex items-center gap-1 px-2 py-1 bg-turfu-accent/20 rounded">
+      {tag}
+      <button onClick={() => removeTag(tag)}><X size={14} /></button>
+    </span>
+  ))}
+  <input
+    value={inputValue}
+    onChange={(e) => setInputValue(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' && filteredTags[0]) {
+        e.preventDefault();
+        addTag(filteredTags[0]);
+      }
+    }}
+    placeholder="Ajouter un tag..."
+    className="flex-1 min-w-[100px] bg-transparent outline-none"
+  />
+</div>
+{inputValue && filteredTags.length > 0 && (
+  <div className="absolute mt-1 bg-overlay border rounded shadow-lg">
+    {filteredTags.map(tag => (
+      <button key={tag} onClick={() => addTag(tag)} className="block w-full px-3 py-2 text-left hover:bg-overlay-hover">
+        {tag}
+      </button>
+    ))}
+  </div>
+)}
 ```
 
-**Position:** Lower right corner (convention users expect)
+**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - key UX improvement.
 
-**Accessibility requirements:**
-- Descriptive aria-label (not just icon)
-- Move focus to top of page after activation
-- Keyboard accessible
-- Visible focus indicator
+---
 
-**Sources:** [NN/g Back-to-Top guidelines](https://www.nngroup.com/articles/back-to-top/), [Accessible back-to-top buttons](https://ashleemboyer.com/blog/accessible-smooth-scroll-to-top-buttons-with-little-code/)
+### Pitfall 10: Split View Not Responsive on Narrow Screens
+
+**What goes wrong:** 50/50 split view works on desktop but makes both panels too narrow on tablet. Mobile is even worse.
+
+**Why it happens:** Fixed percentage split without responsive handling. Current ArticleEditor uses `w-1/2` for preview.
+
+**Warning signs:**
+- Text truncates or wraps excessively in narrow split
+- Preview panel unreadable on tablet
+- No way to toggle between editor and preview on mobile
+
+**Prevention strategy:**
+
+```tsx
+// Responsive split: side-by-side on desktop, toggle on mobile/tablet
+const [activePanel, setActivePanel] = useState<'editor' | 'preview'>('editor');
+
+// Desktop: side-by-side
+// Mobile/Tablet: toggle between panels
+
+<div className="flex-1 flex overflow-hidden">
+  {/* Desktop: both panels */}
+  <div className={`hidden lg:flex ${showPreview ? 'lg:w-1/2' : 'lg:w-full'}`}>
+    {/* Editor */}
+  </div>
+  {showPreview && (
+    <div className="hidden lg:block lg:w-1/2">
+      {/* Preview */}
+    </div>
+  )}
+
+  {/* Mobile/Tablet: one panel at a time */}
+  <div className="lg:hidden w-full">
+    {activePanel === 'editor' ? <Editor /> : <Preview />}
+  </div>
+</div>
+
+{/* Mobile panel switcher */}
+<div className="lg:hidden flex border-b">
+  <button
+    onClick={() => setActivePanel('editor')}
+    className={activePanel === 'editor' ? 'border-b-2 border-turfu-accent' : ''}
+  >
+    Editeur
+  </button>
+  <button
+    onClick={() => setActivePanel('preview')}
+    className={activePanel === 'preview' ? 'border-b-2 border-turfu-accent' : ''}
+  >
+    Apercu
+  </button>
+</div>
+```
+
+**Which phase should address it:** Phase 1 (Live Markdown Preview) - affects preview architecture.
 
 ---
 
@@ -466,138 +593,173 @@ Mistakes that cause annoyance but are easily fixable.
 
 ---
 
-### Pitfall 10: Sticky/Fixed Header Height Not Accounted For
+### Pitfall 11: Save Button Doesn't Indicate Validation State
 
-**What goes wrong:** Anchor links scroll content behind fixed header. Users click "Section 2" in TOC, content scrolls but heading is hidden under header.
+**What goes wrong:** Save button always active. User clicks, validation fails, feels like button didn't work.
 
-**Why it happens:** Browsers scroll anchor target to top of viewport, not accounting for fixed/sticky elements.
-
-**Detection:**
-- Click any anchor link with fixed header present
-- Check if target heading is visible or hidden
-- Verify scroll-padding-top matches header height
+**Why it happens:** Button enabled regardless of form validity. Validation happens post-click.
 
 **Prevention:**
-```css
-/* In globals.css - must match fixed header height */
-html {
-  scroll-padding-top: 80px; /* Height of fixed navbar + some buffer */
-}
+
+```tsx
+// Disable save when form is invalid
+const isValid = frontmatter?.title?.trim() && rawContent.trim();
+const canSave = isValid && isDirty && !saving;
+
+<button
+  onClick={handleSave}
+  disabled={!canSave}
+  className={`... ${!canSave ? 'opacity-50 cursor-not-allowed' : ''}`}
+>
+  {saving ? 'Enregistrement...' : 'Enregistrer'}
+</button>
+
+// Optional: tooltip explaining why disabled
+{!canSave && !saving && (
+  <span className="text-xs text-foreground-muted">
+    {!isValid ? 'Remplissez les champs requis' : 'Aucune modification'}
+  </span>
+)}
 ```
 
-**Or in Tailwind config:**
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      scrollPadding: {
-        header: '80px',
-      }
+**Which phase should address it:** Phase 3 (Form Validation).
+
+---
+
+### Pitfall 12: Keyboard Shortcuts Conflict with Textarea
+
+**What goes wrong:** Adding Ctrl+S for save, but textarea already uses Ctrl shortcuts for text editing.
+
+**Why it happens:** Global keyboard handlers capture events meant for text editing.
+
+**Prevention:**
+
+```tsx
+// Only handle shortcut when textarea not focused, or use meta key combinations
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    // Ctrl/Cmd + S to save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      if (canSave) handleSave();
     }
-  }
-}
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, [canSave, handleSave]);
+
+// Note: Ctrl+S doesn't conflict with textarea (browsers don't use it for text)
+// Avoid: Ctrl+B, Ctrl+I, Ctrl+U which are text formatting shortcuts in some contexts
 ```
 
-```html
-<html class="scroll-pt-20">  <!-- 80px -->
-```
-
-**Current codebase:** Already has `scroll-padding-top: 80px` in globals.css - good!
+**Which phase should address it:** Phase 3 (Form Validation) - save behavior enhancement.
 
 ---
 
-### Pitfall 11: Text Content Without Constrained Width on Mobile
+### Pitfall 13: Missing Loading State When Editor First Opens
 
-**What goes wrong:** Prose content stretches to full viewport width, creating overly long line lengths that are hard to read.
+**What goes wrong:** Editor opens with empty content, then content loads and pops in. Jarring experience.
 
-**Why it happens:** No `max-width` applied to text containers. 375px width with 16px padding = 343px lines (acceptable), but tablets in portrait mode can have 600-700px content width.
-
-**Detection:**
-- Check line length on tablet/larger mobile devices
-- Count characters per line (65-75 ideal)
-- Look for missing `max-w-prose` or similar constraints
-
-**Prevention (Tailwind-specific):**
-```html
-<article class="prose prose-invert max-w-prose mx-auto">
-  <!-- Documentation content -->
-</article>
-
-<!-- Or for full-width layouts with constrained text -->
-<div class="max-w-3xl">
-  <article class="prose">...</article>
-</div>
-```
-
----
-
-### Pitfall 12: Images Without Max-Width Breaking Layout
-
-**What goes wrong:** Images in documentation content overflow their container on mobile.
-
-**Why it happens:** Images have intrinsic dimensions. Without constraints, a 1200px wide image will be 1200px on mobile.
+**Why it happens:** Component renders before article content fetched (for edit mode).
 
 **Prevention:**
-```css
-/* Base style for all images in content */
-.prose img {
-  @apply max-w-full h-auto;
+
+```tsx
+// In AdminDashboard, show loading while fetching article for edit
+const handleEdit = async (article: Article) => {
+  setLoadingEdit(true); // New state
+  try {
+    const res = await fetch(...);
+    // ... fetch content
+    setEditingArticle(fullArticle);
+    setEditingContent(frontmatter);
+  } finally {
+    setLoadingEdit(false);
+  }
+};
+
+// Show skeleton while loading
+if (loadingEdit) {
+  return <ArticleEditorSkeleton />;
 }
 ```
 
-**Or using Tailwind prose defaults** - Tailwind Typography plugin already handles this, but verify it's applied.
+**Which phase should address it:** Phase 2 or Phase 3 - general UX polish.
 
 ---
 
 ## Phase-Specific Warnings
 
-| Phase Topic | Likely Pitfall | Mitigation |
-|-------------|----------------|------------|
-| Mobile sidebar | Pitfalls 2, 3 | Use slide-out drawer pattern, test on iOS Safari |
-| Horizontal overflow | Pitfalls 1, 4, 5 | Audit all `w-screen`, `100vw`, code blocks, tables |
-| Navigation | Pitfalls 6, 7 | Review all `sm:` usage, verify touch targets |
-| Back-to-top | Pitfall 9 | Add component early, position in lower-right |
-| Menu open state | Pitfall 8 | Lock body scroll when menu opens |
-| Anchor links | Pitfall 10 | Verify scroll-padding-top matches header |
+| Phase | Likely Pitfall | Mitigation |
+|-------|----------------|------------|
+| Live Markdown Preview | Pitfall 1 (keystroke re-render) | Use useDeferredValue or debounce from day 1 |
+| Live Markdown Preview | Pitfall 7 (style mismatch) | Reuse existing MarkdownRenderer component |
+| Live Markdown Preview | Pitfall 10 (split view) | Design responsive toggle for mobile/tablet |
+| Category/Tag Dropdowns | Pitfall 4 (loading states) | Explicit loading/error handling for async data |
+| Category/Tag Dropdowns | Pitfall 6 (sync issues) | Choose single source of truth (recommend frontmatter text) |
+| Category/Tag Dropdowns | Pitfall 9 (tag UX) | Combobox pattern, not plain text input |
+| Form Validation | Pitfall 2 (unsaved changes) | beforeunload + isDirty tracking |
+| Form Validation | Pitfall 5 (frontmatter syntax) | Client-side gray-matter parsing to match server |
+| Form Validation | Pitfall 8 (submit-only validation) | Field-level validation on blur |
+| Form Validation | Pitfall 11 (save button state) | Disable when invalid or unchanged |
+| Theme Support | Pitfall 3 (theme flash) | Use existing CSS variables, mounted check pattern |
+
+---
+
+## Integration Warnings for Existing System
+
+The existing ArticleEditor.tsx has specific patterns to preserve:
+
+1. **onSave/onCancel callbacks** - Don't break the interface expected by AdminDashboard
+2. **rawContent state** - Entire markdown blob including frontmatter; maintain this pattern
+3. **parseFrontmatter function** - Used for preview display; enhance don't replace
+4. **showPreview toggle** - Existing boolean state; extend for responsive behavior
+
+**Do NOT:**
+- Replace rawContent with structured form state (breaks existing save flow)
+- Remove frontmatter from textarea (power users expect to edit directly)
+- Change API contract (POST/PUT bodies expect `rawContent`, `locale`, `published`)
 
 ---
 
 ## Implementation Checklist
 
-Before marking mobile documentation UX complete:
+Before marking admin editor improvements complete:
 
-- [ ] No horizontal scroll on any documentation page
-- [ ] Mobile sidebar slides out and closes properly
-- [ ] Hamburger menu works on iOS Safari
-- [ ] Body scroll locked when mobile menu open
-- [ ] Code blocks scroll independently (not page)
-- [ ] Tables scroll independently (not page)
-- [ ] All touch targets at least 44x44px
-- [ ] Back-to-top button present and accessible
-- [ ] Anchor links account for fixed header
-- [ ] Text line lengths readable on all screen sizes
+- [ ] Preview updates smoothly without lag (debounced)
+- [ ] Preview styling matches published articles
+- [ ] Unsaved changes warning on navigation
+- [ ] Category/tag dropdowns show loading states
+- [ ] Dropdowns sync with frontmatter text
+- [ ] Tags use combobox pattern, not plain text
+- [ ] Validation feedback shown inline, not just on submit
+- [ ] Save button disabled when invalid
+- [ ] No theme flash when switching light/dark
+- [ ] Split view works on all screen sizes
+- [ ] Keyboard shortcuts don't break text editing
 
 ---
 
 ## Sources
 
-**Official Documentation:**
-- [Tailwind CSS Responsive Design](https://tailwindcss.com/docs/responsive-design)
-- [Tailwind CSS Overflow](https://tailwindcss.com/docs/overflow)
-- [MDN Responsive Web Design](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design)
+**Codebase Analysis (HIGH confidence):**
+- `/src/components/admin/ArticleEditor.tsx` - Existing editor structure
+- `/src/components/content/MarkdownRenderer.tsx` - Reusable markdown renderer
+- `/src/components/ThemeToggle.tsx` - Mounted pattern for theme handling
+- `/src/app/api/admin/articles/route.ts` - API contract for saves
 
-**UX Research:**
-- [NN/g Back-to-Top Guidelines](https://www.nngroup.com/articles/back-to-top/)
-- [WCAG 2.2 Target Size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
+**React Patterns (HIGH confidence):**
+- [React useDeferredValue](https://react.dev/reference/react/useDeferredValue) - For non-blocking preview updates
+- [gray-matter](https://github.com/jonschlinkert/gray-matter) - Already in package.json for frontmatter parsing
+- [next-themes](https://github.com/pacocoursey/next-themes) - Already in package.json for theme handling
 
-**Technical Deep-Dives:**
-- [100vw Horizontal Scrollbar Problem](https://dev.to/tepythai/why-100vw-causes-horizontal-scrollbar-4nlm)
-- [Z-Index and Stacking Contexts](https://www.joshwcomeau.com/css/stacking-contexts/)
-- [iOS Safari Hamburger Menu Issues](https://medium.com/@jaredt_28429/why-do-hamburger-menus-break-in-ios-safari-e076083bda5c)
-- [Accessible Responsive Code Blocks](https://torstenknabe.com/posts/making-accessible-responsive-code-blocks/)
-- [Under-Engineered Responsive Tables](https://css-tricks.com/under-engineered-responsive-tables/)
+**UX Research (MEDIUM confidence):**
+- Form validation best practices from Nielsen Norman Group research
+- Debounce timing recommendations (300-500ms) from general web performance guidance
 
-**Community Patterns:**
-- [Tailwind Fixed Sidebar Pattern](https://gist.github.com/BjornDCode/5cb836a6b23638d6d02f5cb6ed59a04a)
-- [Preventing Body Scroll in Modals](https://dev.to/designly/how-to-disable-body-scroll-when-a-modal-dialog-is-open-in-react-nextjs-693)
+---
+
+*Research completed: 2026-01-31*
+*Focused on: Admin article editor UX improvements*
+*Existing system constraints documented*
