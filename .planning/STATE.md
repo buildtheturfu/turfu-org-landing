@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-31)
 
 **Core value:** Content creators can efficiently manage and preview documentation articles through a polished admin experience
-**Current focus:** Phase 5 - Live Preview & Theme
+**Current focus:** Phase 6 - Metadata Inputs
 
 ## Current Position
 
-Phase: 5 of 7 (Live Preview & Theme) — COMPLETE
-Plan: 05-01 complete
-Status: Phase verified, ready for Phase 6
-Last activity: 2026-01-31 — Phase 5 executed and verified
+Phase: 6 of 7 (Metadata Inputs)
+Plan: 06-01 complete, 06-02, 06-03 pending
+Status: In progress
+Last activity: 2026-01-31 — Completed 06-01-PLAN.md
 
-Progress: [███░░░░░░░] 33% (v2 phases — 1/3 complete)
+Progress: [████░░░░░░] 40% (v2 phases — 1.3/3 complete)
 
 ## Milestones
 
@@ -26,17 +26,17 @@ See: .planning/MILESTONES.md for full history
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0 (v2)
-- Average duration: —
-- Total execution time: —
+- Total plans completed: 2 (v2)
+- Average duration: 5 min
+- Total execution time: 10 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 5. Live Preview | — | — | — |
-| 6. Metadata | — | — | — |
-| 7. Validation | — | — | — |
+| 5. Live Preview | 1 | ~5 min | 5 min |
+| 6. Metadata | 1/3 | 5 min | 5 min |
+| 7. Validation | 0 | — | — |
 
 *Updated after each plan completion*
 
@@ -55,6 +55,11 @@ v2 decisions (from research):
 - Reuse existing MarkdownRenderer for preview
 - Debounce preview updates (150-300ms)
 
+Phase 6 decisions:
+- Admin endpoints return ALL categories/tags (including drafts) for reusability
+- WAI-ARIA combobox with aria-activedescendant for screen reader focus
+- 150ms blur delay pattern for dropdown click-through
+
 ### Pending Todos
 
 None.
@@ -66,5 +71,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-31
-Stopped at: Phase 5 planned, ready for execution
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None
