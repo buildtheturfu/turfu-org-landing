@@ -5,6 +5,8 @@ import { Save, Eye, EyeOff, X, FileText } from 'lucide-react';
 import MarkdownRenderer from '@/components/content/MarkdownRenderer';
 import SaveIndicator from './SaveIndicator';
 import { useBeforeUnload } from '@/hooks/useBeforeUnload';
+import { ComboboxInput } from './ComboboxInput';
+import { TagInput } from './TagInput';
 
 // Memoized preview component - must be outside ArticleEditor function
 // WHY memo: Without memo, useDeferredValue has no effect - parent re-render forces child re-render regardless of props
@@ -55,6 +57,10 @@ export default function ArticleEditor({
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
+  // API data for metadata inputs
+  const [categories, setCategories] = useState<string[]>([]);
+  const [allTags, setAllTags] = useState<string[]>([]);
+
   // Deferred content for preview - enables instant-feel typing while preview updates adaptively
   const deferredContent = useDeferredValue(rawContent);
   const isPreviewStale = rawContent !== deferredContent;
@@ -73,6 +79,23 @@ export default function ArticleEditor({
     }
   }, [initialContent, articleId]);
 
+  // Fetch metadata options on mount
+  useEffect(() => {
+    // Fetch categories
+    fetch('/api/admin/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setCategories(data.data);
+      });
+
+    // Fetch tags
+    fetch('/api/admin/tags')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setAllTags(data.data);
+      });
+  }, []);
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -80,6 +103,38 @@ export default function ArticleEditor({
       setSavedContent(rawContent);
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Parse category from frontmatter
+  const currentCategory = (() => {
+    const match = rawContent.match(/category:\s*["']?([^"'\n]+)["']?/);
+    return match?.[1]?.trim() || '';
+  })();
+
+  // Parse tags from frontmatter
+  const currentTags = (() => {
+    const match = rawContent.match(/tags:\s*\[(.*?)\]/);
+    if (!match) return [];
+    return match[1]
+      .split(',')
+      .map((t) => t.trim().replace(/["']/g, ''))
+      .filter(Boolean);
+  })();
+
+  // Update frontmatter with new value
+  const updateFrontmatter = (key: string, value: string | string[]) => {
+    const valueStr = Array.isArray(value)
+      ? `[${value.map((v) => `"${v}"`).join(', ')}]`
+      : `"${value}"`;
+
+    const regex = new RegExp(`(${key}:)\\s*.*`, 'g');
+
+    if (rawContent.match(regex)) {
+      setRawContent(rawContent.replace(regex, `$1 ${valueStr}`));
+    } else {
+      // Add after first --- line if key doesn't exist
+      setRawContent(rawContent.replace(/^(---\n)/, `$1${key}: ${valueStr}\n`));
     }
   };
 
@@ -173,6 +228,30 @@ export default function ArticleEditor({
             <Save size={16} />
             {saving ? 'Enregistrement...' : 'Enregistrer'}
           </button>
+        </div>
+      </div>
+
+      {/* Metadata section */}
+      <div className="border-b border-border p-4 flex gap-6">
+        <div className="w-64">
+          <ComboboxInput
+            id="category"
+            label="Category"
+            value={currentCategory}
+            options={categories}
+            onChange={(value) => updateFrontmatter('category', value)}
+            placeholder="Select or enter category"
+          />
+        </div>
+        <div className="flex-1">
+          <TagInput
+            id="tags"
+            label="Tags"
+            value={currentTags}
+            suggestions={allTags}
+            onChange={(tags) => updateFrontmatter('tags', tags)}
+            placeholder="Add tags..."
+          />
         </div>
       </div>
 
