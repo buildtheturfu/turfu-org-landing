@@ -11,6 +11,7 @@ interface ComboboxInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   allowCustom?: boolean;
+  onBlur?: () => void;
 }
 
 /**
@@ -27,6 +28,7 @@ export function ComboboxInput({
   onChange,
   placeholder = '',
   allowCustom = true,
+  onBlur,
 }: ComboboxInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(value);
@@ -117,6 +119,7 @@ export function ComboboxInput({
     setTimeout(() => {
       setIsOpen(false);
       setActiveIndex(-1);
+      onBlur?.(); // Call Controller's onBlur AFTER dropdown closes
     }, 150);
   };
 

@@ -10,6 +10,7 @@ interface TagInputProps {
   suggestions: string[];     // Available suggestions from API
   onChange: (tags: string[]) => void;
   placeholder?: string;
+  onBlur?: () => void;
 }
 
 /**
@@ -50,6 +51,7 @@ export function TagInput({
   suggestions,
   onChange,
   placeholder = '',
+  onBlur,
 }: TagInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -150,6 +152,7 @@ export function TagInput({
     setTimeout(() => {
       setIsOpen(false);
       setActiveIndex(-1);
+      onBlur?.(); // Call Controller's onBlur AFTER dropdown closes
     }, 150);
   };
 
