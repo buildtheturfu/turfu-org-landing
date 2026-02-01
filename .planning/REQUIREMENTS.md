@@ -29,12 +29,12 @@ Requirements for admin editor UX improvements. Each maps to roadmap phases.
 
 ### Form UX
 
-- [ ] **FORM-01**: Title field shows inline error if empty on blur
-- [ ] **FORM-02**: Validation errors display below relevant fields
-- [ ] **FORM-03**: Form fields organized into logical groups (metadata vs content)
-- [ ] **FORM-04**: Save button shows loading spinner during save operation
-- [ ] **FORM-05**: Keyboard shortcut Cmd+S triggers save action
-- [ ] **FORM-06**: Unsaved changes warning when navigating away
+- [x] **FORM-01**: Title field shows inline error if empty on blur
+- [x] **FORM-02**: Validation errors display below relevant fields
+- [x] **FORM-03**: Form fields organized into logical groups (metadata vs content)
+- [x] **FORM-04**: Save button shows loading spinner during save operation
+- [x] **FORM-05**: Keyboard shortcut Cmd+S triggers save action
+- [x] **FORM-06**: Unsaved changes warning when navigating away
 
 ## Future Requirements
 
@@ -87,12 +87,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | META-06 | Phase 6 | Complete |
 | META-07 | Phase 6 | Complete |
 | META-08 | Phase 6 | Complete |
-| FORM-01 | Phase 7 | Pending |
-| FORM-02 | Phase 7 | Pending |
-| FORM-03 | Phase 7 | Pending |
-| FORM-04 | Phase 7 | Pending |
-| FORM-05 | Phase 7 | Pending |
-| FORM-06 | Phase 7 | Pending |
+| FORM-01 | Phase 7 | Complete |
+| FORM-02 | Phase 7 | Complete |
+| FORM-03 | Phase 7 | Complete |
+| FORM-04 | Phase 7 | Complete |
+| FORM-05 | Phase 7 | Complete |
+| FORM-06 | Phase 7 | Complete |
 
 **Coverage:**
 - v2 requirements: 20 total
@@ -101,4 +101,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-31*
-*Last updated: 2026-01-31 after roadmap creation*
+*Last updated: 2026-02-01 after Phase 7 completion*

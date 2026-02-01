@@ -3,7 +3,7 @@
 ## Milestones
 
 - v1 Mobile UX - Phases 1-4.1 (shipped 2026-01-31)
-- v2 Admin UX - Phases 5-7 (in progress)
+- v2 Admin UX - Phases 5-7 (complete 2026-02-01)
 
 ## Overview
 
@@ -18,7 +18,7 @@ Transform the admin article editor from functional-but-minimal to a polished CMS
 
 - [x] **Phase 5: Live Preview & Theme** - Real-time markdown preview with theme-aware admin panel
 - [x] **Phase 6: Metadata Inputs** - Category dropdown and tag autocomplete with API endpoints
-- [ ] **Phase 7: Form Validation & Polish** - Inline validation, save states, and keyboard shortcuts
+- [x] **Phase 7: Form Validation & Polish** - Inline validation, save states, and keyboard shortcuts
 
 ## Phase Details
 
@@ -66,8 +66,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Validation foundation (schema, hook, input props)
-- [ ] 07-02-PLAN.md — ArticleEditor integration with react-hook-form
+- [x] 07-01-PLAN.md — Validation foundation (schema, hook, input props)
+- [x] 07-02-PLAN.md — ArticleEditor integration with react-hook-form
 
 ## Progress
 
@@ -78,7 +78,7 @@ Phases execute in numeric order: 5 -> 6 -> 7
 |-------|-----------|----------------|--------|-----------|
 | 5. Live Preview & Theme | v2 | 1/1 | Complete | 2026-01-31 |
 | 6. Metadata Inputs | v2 | 2/2 | Complete | 2026-01-31 |
-| 7. Form Validation & Polish | v2 | 0/2 | Not started | - |
+| 7. Form Validation & Polish | v2 | 2/2 | Complete | 2026-02-01 |
 
 ---
 *Roadmap created: 2026-01-31*

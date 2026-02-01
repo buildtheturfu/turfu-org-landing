@@ -19,7 +19,7 @@ Progress: [██████████] 100% (v2 phases complete)
 ## Milestones
 
 - v1 Mobile UX — Phases 1-4.1 (shipped 2026-01-31)
-- v2 Admin UX — Phases 5-7 (in progress)
+- v2 Admin UX — Phases 5-7 (shipped 2026-02-01)
 
 See: .planning/MILESTONES.md for full history
 
