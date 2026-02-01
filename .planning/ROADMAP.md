@@ -63,10 +63,11 @@ Plans:
   3. Form fields are visually grouped (metadata section vs content section)
   4. Save button shows spinner during save and disables until complete
   5. Pressing Cmd+S saves the article without clicking the button
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: TBD
+- [ ] 07-01-PLAN.md — Validation foundation (schema, hook, input props)
+- [ ] 07-02-PLAN.md — ArticleEditor integration with react-hook-form
 
 ## Progress
 
@@ -77,7 +78,7 @@ Phases execute in numeric order: 5 -> 6 -> 7
 |-------|-----------|----------------|--------|-----------|
 | 5. Live Preview & Theme | v2 | 1/1 | Complete | 2026-01-31 |
 | 6. Metadata Inputs | v2 | 2/2 | Complete | 2026-01-31 |
-| 7. Form Validation & Polish | v2 | 0/? | Not started | - |
+| 7. Form Validation & Polish | v2 | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-31*
