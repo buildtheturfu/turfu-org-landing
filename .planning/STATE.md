@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-31)
 ## Current Position
 
 Phase: 7 of 7 (Form Validation & Polish)
-Plan: 07-01 complete
-Status: In progress
-Last activity: 2026-02-01 — Completed 07-01-PLAN.md
+Plan: 07-02 complete (Phase 7 complete)
+Status: Complete
+Last activity: 2026-02-01 — Completed 07-02-PLAN.md
 
-Progress: [███████░░░] 75% (v2 phases — plan 1 of phase 3 complete)
+Progress: [██████████] 100% (v2 phases complete)
 
 ## Milestones
 
@@ -26,9 +26,9 @@ See: .planning/MILESTONES.md for full history
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3 (v2)
+- Total plans completed: 4 (v2)
 - Average duration: 5 min
-- Total execution time: 14 min
+- Total execution time: ~19 min
 
 **By Phase:**
 
@@ -36,7 +36,7 @@ See: .planning/MILESTONES.md for full history
 |-------|-------|-------|----------|
 | 5. Live Preview | 1 | ~5 min | 5 min |
 | 6. Metadata | 2/2 | ~10 min | 5 min |
-| 7. Validation | 1 | ~4 min | 4 min |
+| 7. Validation | 2/2 | ~9 min | 4.5 min |
 
 *Updated after each plan completion*
 
@@ -64,6 +64,8 @@ Phase 7 decisions:
 - Used zod ^3.x instead of ^4.x (v4 has TypeScript locale import issues)
 - Zod schemas in src/lib/schemas/ with inferred types
 - onBlur called after 150ms timeout in dropdown components for Controller compatibility
+- Form fields are source of truth, synced to rawContent frontmatter via watch + useEffect
+- Title has dedicated input field for proper validation UX
 
 ### Pending Todos
 
@@ -76,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-01
-Stopped at: Completed 07-01-PLAN.md
+Stopped at: Completed 07-02-PLAN.md (Phase 7 complete, v2 milestone complete)
 Resume file: None
