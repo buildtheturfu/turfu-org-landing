@@ -1,4 +1,30 @@
-# Project Milestones: Turfu.org Content Module Mobile UX
+# Project Milestones: Turfu.org Content Module
+
+## v2 Admin UX (Shipped: 2026-02-01)
+
+**Delivered:** Polished admin article editor with live markdown preview, smart metadata inputs with autocomplete, form validation with inline errors, and keyboard shortcuts.
+
+**Phases completed:** 5-7 (5 plans total)
+
+**Key accomplishments:**
+- Live markdown preview with useDeferredValue for instant-feel typing performance
+- SaveIndicator component and useBeforeUnload hook for unsaved changes protection
+- Accessible ComboboxInput and TagInput components with WAI-ARIA patterns
+- API endpoints for categories and tags with autocomplete from database
+- React-hook-form + Zod validation with inline error display on blur
+- Cmd/Ctrl+S keyboard shortcut for saving articles
+
+**Stats:**
+- 41 files changed
+- 7,219 lines added, 1,631 deleted
+- 3 phases, 5 plans
+- 2 days from start to ship (2026-01-31 → 2026-02-01)
+
+**Git range:** `9f53893` → `36c65a0`
+
+**What's next:** Future editor enhancements (markdown toolbar, syntax highlighting) or new milestone
+
+---
 
 ## v1 Mobile UX (Shipped: 2026-01-31)
 
