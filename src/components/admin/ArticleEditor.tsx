@@ -1,12 +1,16 @@
 'use client';
 
-import { useState, useEffect, useDeferredValue, memo } from 'react';
-import { Save, Eye, EyeOff, X, FileText } from 'lucide-react';
+import { useState, useEffect, useDeferredValue, memo, useCallback } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Save, Eye, EyeOff, X, FileText, Loader2 } from 'lucide-react';
 import MarkdownRenderer from '@/components/content/MarkdownRenderer';
 import SaveIndicator from './SaveIndicator';
 import { useBeforeUnload } from '@/hooks/useBeforeUnload';
+import { useSaveShortcut } from '@/hooks/useSaveShortcut';
 import { ComboboxInput } from './ComboboxInput';
 import { TagInput } from './TagInput';
+import { articleSchema, type ArticleFormData } from '@/lib/schemas/article';
 
 // Memoized preview component - must be outside ArticleEditor function
 // WHY memo: Without memo, useDeferredValue has no effect - parent re-render forces child re-render regardless of props
@@ -42,6 +46,36 @@ Texte de la section...
 Autre contenu...
 `;
 
+// Helper functions to parse frontmatter values
+function parseTitleFromContent(content: string): string {
+  const match = content.match(/title:\s*["']?([^"'\n]+)["']?/);
+  return match?.[1]?.trim() || '';
+}
+
+function parseDescriptionFromContent(content: string): string {
+  const match = content.match(/description:\s*["']?([^"'\n]+)["']?/);
+  return match?.[1]?.trim() || '';
+}
+
+function parseCategoryFromContent(content: string): string {
+  const match = content.match(/category:\s*["']?([^"'\n]+)["']?/);
+  return match?.[1]?.trim() || '';
+}
+
+function parseTagsFromContent(content: string): string[] {
+  const match = content.match(/tags:\s*\[(.*?)\]/);
+  if (!match) return [];
+  return match[1]
+    .split(',')
+    .map((t) => t.trim().replace(/["']/g, ''))
+    .filter(Boolean);
+}
+
+function parseAuthorFromContent(content: string): string {
+  const match = content.match(/author:\s*["']?([^"'\n]+)["']?/);
+  return match?.[1]?.trim() || '';
+}
+
 export default function ArticleEditor({
   initialContent = '',
   initialLocale = 'fr',
@@ -50,16 +84,38 @@ export default function ArticleEditor({
   onSave,
   onCancel,
 }: ArticleEditorProps) {
-  const [rawContent, setRawContent] = useState(initialContent);
-  const [savedContent, setSavedContent] = useState(initialContent);
+  // Determine actual initial content
+  const effectiveInitialContent = initialContent || (!articleId ? DEFAULT_TEMPLATE : '');
+
+  const [rawContent, setRawContent] = useState(effectiveInitialContent);
+  const [savedContent, setSavedContent] = useState(effectiveInitialContent);
   const [locale, setLocale] = useState(initialLocale);
   const [published, setPublished] = useState(initialPublished);
-  const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   // API data for metadata inputs
   const [categories, setCategories] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
+
+  // React Hook Form with Zod validation
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+  } = useForm<ArticleFormData>({
+    resolver: zodResolver(articleSchema),
+    mode: 'onBlur', // Validate on blur (FORM-01)
+    defaultValues: {
+      title: parseTitleFromContent(effectiveInitialContent),
+      description: parseDescriptionFromContent(effectiveInitialContent),
+      category: parseCategoryFromContent(effectiveInitialContent),
+      tags: parseTagsFromContent(effectiveInitialContent),
+      author: parseAuthorFromContent(effectiveInitialContent),
+      content: effectiveInitialContent.replace(/^---[\s\S]*?---\n?/, '') || ' ', // Markdown body
+    },
+  });
 
   // Deferred content for preview - enables instant-feel typing while preview updates adaptively
   const deferredContent = useDeferredValue(rawContent);
@@ -71,13 +127,6 @@ export default function ArticleEditor({
 
   // Extract markdown body from deferred content (strip frontmatter)
   const markdownBody = deferredContent.replace(/^---[\s\S]*?---\n?/, '');
-
-  useEffect(() => {
-    if (!initialContent && !articleId) {
-      setRawContent(DEFAULT_TEMPLATE);
-      setSavedContent(DEFAULT_TEMPLATE);
-    }
-  }, [initialContent, articleId]);
 
   // Fetch metadata options on mount
   useEffect(() => {
@@ -96,47 +145,54 @@ export default function ArticleEditor({
       });
   }, []);
 
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      await onSave({ rawContent, locale, published });
-      setSavedContent(rawContent);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Parse category from frontmatter
-  const currentCategory = (() => {
-    const match = rawContent.match(/category:\s*["']?([^"'\n]+)["']?/);
-    return match?.[1]?.trim() || '';
-  })();
-
-  // Parse tags from frontmatter
-  const currentTags = (() => {
-    const match = rawContent.match(/tags:\s*\[(.*?)\]/);
-    if (!match) return [];
-    return match[1]
-      .split(',')
-      .map((t) => t.trim().replace(/["']/g, ''))
-      .filter(Boolean);
-  })();
-
-  // Update frontmatter with new value
-  const updateFrontmatter = (key: string, value: string | string[]) => {
+  // Update frontmatter with new value - now returns updated content
+  const updateFrontmatter = useCallback((content: string, key: string, value: string | string[]): string => {
     const valueStr = Array.isArray(value)
       ? `[${value.map((v) => `"${v}"`).join(', ')}]`
       : `"${value}"`;
 
     const regex = new RegExp(`(${key}:)\\s*.*`, 'g');
 
-    if (rawContent.match(regex)) {
-      setRawContent(rawContent.replace(regex, `$1 ${valueStr}`));
+    if (content.match(regex)) {
+      return content.replace(regex, `$1 ${valueStr}`);
     } else {
       // Add after first --- line if key doesn't exist
-      setRawContent(rawContent.replace(/^(---\n)/, `$1${key}: ${valueStr}\n`));
+      return content.replace(/^(---\n)/, `$1${key}: ${valueStr}\n`);
     }
+  }, []);
+
+  // Handle form submission - must be async for isSubmitting to work (Pitfall 1)
+  const onFormSubmit = async () => {
+    // We use rawContent for actual save, form is for validation and metadata management
+    await onSave({ rawContent, locale, published });
+    setSavedContent(rawContent);
   };
+
+  // Trigger save on Cmd+S (FORM-05)
+  useSaveShortcut(() => handleSubmit(onFormSubmit)());
+
+  // Handle title change - sync to rawContent frontmatter
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    setRawContent((prev) => updateFrontmatter(prev, 'title', newTitle));
+  }, [updateFrontmatter]);
+
+  // Handle category change - sync to rawContent frontmatter
+  const handleCategoryChange = useCallback((value: string) => {
+    setValue('category', value);
+    setRawContent((prev) => updateFrontmatter(prev, 'category', value));
+  }, [setValue, updateFrontmatter]);
+
+  // Handle tags change - sync to rawContent frontmatter
+  const handleTagsChange = useCallback((tags: string[]) => {
+    setValue('tags', tags);
+    setRawContent((prev) => updateFrontmatter(prev, 'tags', tags));
+  }, [setValue, updateFrontmatter]);
+
+  // Parse current values from rawContent for display
+  const currentCategory = parseCategoryFromContent(rawContent);
+  const currentTags = parseTagsFromContent(rawContent);
+  const currentTitle = parseTitleFromContent(rawContent);
 
   // Parse frontmatter for preview
   const parseFrontmatter = () => {
@@ -219,46 +275,98 @@ export default function ArticleEditor({
             Apercu
           </button>
 
-          {/* Save button */}
+          {/* Save button (FORM-04) */}
           <button
-            onClick={handleSave}
-            disabled={saving}
+            type="button"
+            onClick={() => handleSubmit(onFormSubmit)()}
+            disabled={isSubmitting}
             className="flex items-center gap-2 px-4 py-2 bg-turfu-accent text-black rounded-lg text-sm font-medium hover:bg-turfu-accent/90 transition-colors disabled:opacity-50"
           >
-            <Save size={16} />
-            {saving ? 'Enregistrement...' : 'Enregistrer'}
+            {isSubmitting ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
+            {isSubmitting ? 'Enregistrement...' : 'Enregistrer'}
           </button>
         </div>
       </div>
 
-      {/* Metadata section */}
-      <div className="border-b border-border p-4 flex gap-6">
-        <div className="w-64">
-          <ComboboxInput
-            id="category"
-            label="Category"
-            value={currentCategory}
-            options={categories}
-            onChange={(value) => updateFrontmatter('category', value)}
-            placeholder="Select or enter category"
-          />
+      {/* Metadata section (FORM-03 fieldset) */}
+      <fieldset className="border-b border-border p-4">
+        <legend className="text-sm font-medium text-foreground-muted px-2 -ml-2 mb-3">
+          Metadata
+        </legend>
+        <div className="flex gap-6">
+          {/* Title input with validation (FORM-01, FORM-02) */}
+          <div className="w-64">
+            <label htmlFor="title" className="block text-sm font-medium text-foreground mb-1">
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              {...register('title', {
+                onChange: handleTitleChange,
+              })}
+              value={currentTitle}
+              aria-invalid={!!errors.title}
+              aria-describedby={errors.title ? 'title-error' : undefined}
+              className={`w-full px-3 py-2 bg-overlay border rounded-lg text-foreground focus:outline-none ${
+                errors.title ? 'border-red-500 focus:border-red-500' : 'border-border focus:border-turfu-accent'
+              }`}
+              placeholder="Article title"
+            />
+            {errors.title && (
+              <p id="title-error" role="alert" className="text-red-500 text-sm mt-1">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
+          {/* Category with Controller */}
+          <div className="w-64">
+            <Controller
+              control={control}
+              name="category"
+              render={({ field: { onBlur } }) => (
+                <ComboboxInput
+                  id="category"
+                  label="Category"
+                  value={currentCategory}
+                  options={categories}
+                  onChange={handleCategoryChange}
+                  onBlur={onBlur}
+                  placeholder="Select or enter category"
+                />
+              )}
+            />
+          </div>
+          {/* Tags with Controller */}
+          <div className="flex-1">
+            <Controller
+              control={control}
+              name="tags"
+              render={({ field: { onBlur } }) => (
+                <TagInput
+                  id="tags"
+                  label="Tags"
+                  value={currentTags}
+                  suggestions={allTags}
+                  onChange={handleTagsChange}
+                  onBlur={onBlur}
+                  placeholder="Add tags..."
+                />
+              )}
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <TagInput
-            id="tags"
-            label="Tags"
-            value={currentTags}
-            suggestions={allTags}
-            onChange={(tags) => updateFrontmatter('tags', tags)}
-            placeholder="Add tags..."
-          />
-        </div>
-      </div>
+      </fieldset>
 
-      {/* Content area */}
+      {/* Content area (FORM-03 fieldset) */}
       <div className="flex-1 flex overflow-hidden">
         {/* Editor */}
-        <div className={`flex-1 flex flex-col ${showPreview ? 'w-1/2' : 'w-full'}`}>
+        <fieldset className={`flex-1 flex flex-col ${showPreview ? 'w-1/2' : 'w-full'}`}>
+          <legend className="sr-only">Content</legend>
           <textarea
             value={rawContent}
             onChange={(e) => setRawContent(e.target.value)}
@@ -266,7 +374,7 @@ export default function ArticleEditor({
             placeholder="Collez votre markdown avec frontmatter ici..."
             spellCheck={false}
           />
-        </div>
+        </fieldset>
 
         {/* Preview */}
         {showPreview && (

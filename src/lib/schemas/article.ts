@@ -8,7 +8,7 @@ export const articleSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
   category: z.string().optional(),
-  tags: z.array(z.string()).default([]),
+  tags: z.array(z.string()), // Always an array, use [] as default in useForm
   author: z.string().optional(),
   content: z.string().min(1, 'Content is required'),
 });
