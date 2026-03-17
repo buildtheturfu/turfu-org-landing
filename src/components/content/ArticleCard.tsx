@@ -12,29 +12,29 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
   return (
     <Link
       href={`/${article.locale}/content/${article.slug}`}
-      className="group block p-6 rounded-xl bg-overlay border border-border hover:border-turfu-accent/50 transition-all hover:-translate-y-0.5"
+      className="group block p-6 rounded-xl bg-paper-depth border border-border hover:border-accent/50 transition-all hover:-translate-y-0.5"
     >
       {/* Category */}
       {article.category && (
-        <span className="inline-block px-2 py-0.5 text-xs font-medium bg-turfu-accent/20 text-turfu-accent rounded mb-3">
+        <span className="inline-block px-2 py-0.5 text-xs font-medium bg-accent-light text-accent rounded mb-3">
           {article.category}
         </span>
       )}
 
       {/* Title */}
-      <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-turfu-accent transition-colors">
+      <h2 className="text-lg font-semibold text-ink mb-2 group-hover:text-accent transition-colors">
         {article.title}
       </h2>
 
       {/* Description */}
       {article.description && (
-        <p className="text-sm text-foreground-muted mb-4 line-clamp-2">
+        <p className="text-sm text-ink-secondary mb-4 line-clamp-2">
           {article.description}
         </p>
       )}
 
       {/* Meta */}
-      <div className="flex flex-wrap items-center gap-3 text-xs text-foreground-muted">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
         <span className="flex items-center gap-1">
           <Calendar size={12} />
           {date}
@@ -57,14 +57,14 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
           {article.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="flex items-center gap-1 px-2 py-0.5 text-xs bg-overlay text-foreground-muted rounded"
+              className="flex items-center gap-1 px-2 py-0.5 text-xs bg-paper-depth text-ink-secondary rounded"
             >
               <Tag size={10} />
               {tag}
             </span>
           ))}
           {article.tags.length > 3 && (
-            <span className="text-xs text-foreground-muted">
+            <span className="text-xs text-ink-secondary">
               +{article.tags.length - 3}
             </span>
           )}
@@ -72,7 +72,7 @@ export default function ArticleCard({ article }: { article: ArticleMeta }) {
       )}
 
       {/* Arrow */}
-      <div className="flex items-center gap-1 mt-4 text-sm text-turfu-accent opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 mt-4 text-sm text-accent opacity-0 group-hover:opacity-100 transition-opacity">
         Lire <ArrowRight size={14} />
       </div>
     </Link>

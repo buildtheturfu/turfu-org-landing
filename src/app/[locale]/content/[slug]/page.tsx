@@ -41,7 +41,7 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
         {/* Back */}
         <Link
           href={`/${locale}/content`}
-          className="inline-flex items-center gap-1 text-sm text-foreground-muted hover:text-turfu-accent mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-ink-secondary hover:text-accent mb-6 transition-colors"
         >
           <ArrowLeft size={14} />
           {t.back}
@@ -52,19 +52,19 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
           {article.category && (
             <Link
               href={`/${locale}/content?category=${article.category}`}
-              className="inline-block px-2 py-0.5 text-xs font-medium bg-turfu-accent/20 text-turfu-accent rounded mb-4 hover:bg-turfu-accent/30 transition-colors"
+              className="inline-block px-2 py-0.5 text-xs font-medium bg-accent-light text-accent rounded mb-4 hover:bg-accent/30 transition-colors"
             >
               {article.category}
             </Link>
           )}
 
-          <h1 className="text-4xl font-bold text-foreground mb-4">{article.title}</h1>
+          <h1 className="text-4xl font-bold text-ink mb-4">{article.title}</h1>
 
           {article.description && (
-            <p className="text-lg text-foreground-muted mb-6">{article.description}</p>
+            <p className="text-lg text-ink-secondary mb-6">{article.description}</p>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-foreground-muted pb-6 border-b border-border">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-ink-secondary pb-6 border-b border-border">
             <span className="flex items-center gap-1">
               <Calendar size={14} />
               {date}
@@ -95,7 +95,7 @@ export default async function ArticlePage({ params: { locale, slug } }: Props) {
                 <Link
                   key={tag}
                   href={`/${locale}/content?tag=${tag}`}
-                  className="flex items-center gap-1 px-3 py-1 text-sm bg-overlay text-foreground-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
+                  className="flex items-center gap-1 px-3 py-1 text-sm bg-paper-depth text-ink-secondary hover:bg-accent-light hover:text-accent rounded-full transition-colors"
                 >
                   <Tag size={12} />
                   {tag}

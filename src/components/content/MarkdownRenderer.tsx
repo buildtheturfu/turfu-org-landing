@@ -16,39 +16,39 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       rehypePlugins={[rehypeSlug]}
       components={{
         h1: ({ children, id }) => (
-          <h1 id={id as string} className="text-3xl font-bold mt-8 mb-4 text-foreground">
+          <h1 id={id as string} className="text-display-1 font-display font-bold mt-8 mb-4 text-ink">
             {children}
           </h1>
         ),
         h2: ({ children, id }) => (
-          <h2 id={id as string} className="text-2xl font-bold mt-8 mb-4 text-foreground scroll-mt-20">
+          <h2 id={id as string} className="text-display-2 font-display font-bold mt-8 mb-4 text-ink scroll-mt-20">
             {children}
           </h2>
         ),
         h3: ({ children, id }) => (
-          <h3 id={id as string} className="text-xl font-semibold mt-6 mb-3 text-foreground scroll-mt-20">
+          <h3 id={id as string} className="text-heading-3 font-medium mt-6 mb-3 text-ink scroll-mt-20">
             {children}
           </h3>
         ),
         h4: ({ children }) => (
-          <h4 className="text-lg font-semibold mt-4 mb-2 text-foreground">{children}</h4>
+          <h4 className="text-heading-4 font-medium mt-4 mb-2 text-ink">{children}</h4>
         ),
         p: ({ children }) => (
-          <p className="text-foreground-muted leading-relaxed mb-4">{children}</p>
+          <p className="text-ink-secondary leading-relaxed mb-4">{children}</p>
         ),
         ul: ({ children }) => (
-          <ul className="list-disc list-outside ml-6 mb-4 text-foreground-muted space-y-1">
+          <ul className="list-disc list-outside ml-6 mb-4 text-ink-secondary space-y-1">
             {children}
           </ul>
         ),
         ol: ({ children }) => (
-          <ol className="list-decimal list-outside ml-6 mb-4 text-foreground-muted space-y-1">
+          <ol className="list-decimal list-outside ml-6 mb-4 text-ink-secondary space-y-1">
             {children}
           </ol>
         ),
         li: ({ children }) => <li className="leading-relaxed">{children}</li>,
         blockquote: ({ children }) => (
-          <blockquote className="border-l-4 border-turfu-accent pl-4 my-4 text-foreground-muted italic">
+          <blockquote className="border-l-4 border-accent pl-4 my-4 text-ink-secondary italic">
             {children}
           </blockquote>
         ),
@@ -56,17 +56,17 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           const isInline = !className;
           if (isInline) {
             return (
-              <code className="bg-overlay text-turfu-accent px-1.5 py-0.5 rounded text-sm font-mono">
+              <code className="bg-paper-depth text-accent px-1.5 py-0.5 rounded text-code font-mono">
                 {children}
               </code>
             );
           }
           return (
-            <code className={`${className} font-mono text-sm`}>{children}</code>
+            <code className={`${className} font-mono text-code`}>{children}</code>
           );
         },
         pre: ({ children }) => (
-          <pre className="bg-surface-muted border border-border rounded-lg p-4 overflow-x-auto mb-4 text-sm">
+          <pre className="bg-paper-depth border border-border rounded-lg p-4 overflow-x-auto mb-4 text-sm font-mono">
             {children}
           </pre>
         ),
@@ -78,7 +78,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-turfu-accent hover:text-turfu-accent2 underline underline-offset-2 transition-colors"
+                className="text-accent hover:text-accent-hover underline underline-offset-2 transition-colors"
               >
                 {children}
               </a>
@@ -87,7 +87,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           return (
             <Link
               href={href || '#'}
-              className="text-turfu-accent hover:text-turfu-accent2 underline underline-offset-2 transition-colors"
+              className="text-accent hover:text-accent-hover underline underline-offset-2 transition-colors"
             >
               {children}
             </Link>
@@ -101,21 +101,21 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           </div>
         ),
         thead: ({ children }) => (
-          <thead className="bg-overlay">{children}</thead>
+          <thead className="bg-paper-depth">{children}</thead>
         ),
         th: ({ children }) => (
-          <th className="px-4 py-3 text-left font-semibold text-foreground border-b border-border">
+          <th className="px-4 py-3 text-left font-semibold text-ink border-b border-border">
             {children}
           </th>
         ),
         td: ({ children }) => (
-          <td className="px-4 py-3 text-foreground-muted border-b border-border">
+          <td className="px-4 py-3 text-ink-secondary border-b border-border">
             {children}
           </td>
         ),
         hr: () => <hr className="border-border my-8" />,
         strong: ({ children }) => (
-          <strong className="font-semibold text-foreground">{children}</strong>
+          <strong className="font-semibold text-ink">{children}</strong>
         ),
         em: ({ children }) => <em className="italic">{children}</em>,
         img: ({ src, alt }) => (

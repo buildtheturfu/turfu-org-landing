@@ -24,13 +24,13 @@ function TagChip({
   onRemove: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-1 bg-turfu-accent/20 text-foreground rounded-md text-sm">
+    <span className="inline-flex items-center gap-1 px-2 py-1 bg-accent-light text-ink rounded-md text-sm">
       {tag}
       <button
         type="button"
         onClick={onRemove}
         aria-label={`Remove ${tag}`}
-        className="p-0.5 hover:bg-turfu-accent/30 rounded"
+        className="p-0.5 hover:bg-accent/30 rounded"
       >
         <X size={14} />
       </button>
@@ -160,7 +160,7 @@ export function TagInput({
     <div>
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-foreground mb-1"
+        className="block text-sm font-medium text-ink mb-1"
       >
         {label}
       </label>
@@ -179,8 +179,8 @@ export function TagInput({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="w-full px-3 py-2 bg-overlay border border-border rounded-lg
-                     text-foreground focus:outline-none focus:border-turfu-accent"
+          className="w-full px-3 py-2 bg-paper-depth border border-border rounded-lg
+                     text-ink focus:outline-none focus:border-accent"
         />
         {isOpen && filteredSuggestions.length > 0 && (
           <ul
@@ -188,7 +188,7 @@ export function TagInput({
             ref={listboxRef}
             role="listbox"
             aria-label={label}
-            className="absolute z-10 w-full mt-1 bg-surface-elevated border border-border
+            className="absolute z-10 w-full mt-1 bg-paper-warm border border-border
                        rounded-lg shadow-lg max-h-40 overflow-auto"
           >
             {filteredSuggestions.map((suggestion, index) => (
@@ -200,8 +200,8 @@ export function TagInput({
                 onClick={() => addTag(suggestion)}
                 className={`px-3 py-2 cursor-pointer ${
                   index === activeIndex
-                    ? 'bg-turfu-accent/20 text-foreground'
-                    : 'text-foreground hover:bg-overlay'
+                    ? 'bg-accent-light text-ink'
+                    : 'text-ink hover:bg-paper-depth'
                 }`}
               >
                 {suggestion}

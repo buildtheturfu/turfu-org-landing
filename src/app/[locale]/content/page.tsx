@@ -60,8 +60,8 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
     <main className="flex-1 p-4 md:p-8 max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">{title}</h1>
-        <p className="text-foreground-muted">
+        <h1 className="text-3xl font-bold text-ink mb-2">{title}</h1>
+        <p className="text-ink-secondary">
           {articles.length} {articles.length !== 1 ? t.articles_plural : t.article}
         </p>
       </div>
@@ -70,7 +70,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
       {(searchParams.tag || searchParams.category) && (
         <Link
           href={`/${locale}/content`}
-          className="inline-flex items-center gap-1 text-sm text-turfu-accent hover:underline mb-6"
+          className="inline-flex items-center gap-1 text-sm text-accent hover:underline mb-6"
         >
           ← {t.viewAll}
         </Link>
@@ -83,7 +83,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
             <Link
               key={tag}
               href={`/${locale}/content?tag=${tag}`}
-              className="flex items-center gap-1 px-3 py-1 text-sm bg-overlay text-foreground-muted hover:bg-turfu-accent/20 hover:text-turfu-accent rounded-full transition-colors"
+              className="flex items-center gap-1 px-3 py-1 text-sm bg-paper-depth text-ink-secondary hover:bg-accent-light hover:text-accent rounded-full transition-colors"
             >
               <Tag size={12} />
               {tag}
@@ -100,7 +100,7 @@ export default async function ContentPage({ params: { locale }, searchParams }: 
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 text-foreground-muted">
+        <div className="text-center py-16 text-ink-secondary">
           <FileText size={48} className="mx-auto mb-4 opacity-50" />
           <p>{t.noArticles}</p>
         </div>

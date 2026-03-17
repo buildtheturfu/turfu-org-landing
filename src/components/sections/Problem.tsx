@@ -14,10 +14,10 @@ export default function Problem() {
   ];
 
   return (
-    <section id="problem" className="section bg-surface-muted">
-      <div className="container-narrow">
+    <section id="problem" className="section bg-paper-depth">
+      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center mb-16"
+          className="text-3xl md:text-4xl font-display font-bold text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -29,19 +29,19 @@ export default function Problem() {
           {points.map((point, index) => (
             <motion.div
               key={point.key}
-              className="p-6 rounded-2xl bg-overlay border border-border hover:border-turfu-accent/50 transition-colors"
+              className="p-6 rounded-2xl bg-paper-depth border border-border hover:border-accent/50 transition-colors"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-turfu flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
                 <point.icon size={24} className="text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-3">
                 {t(`${point.key}_title`)}
               </h3>
-              <p className="text-foreground-muted leading-relaxed">
+              <p className="text-ink-secondary leading-relaxed">
                 {t(`${point.key}_desc`)}
               </p>
             </motion.div>

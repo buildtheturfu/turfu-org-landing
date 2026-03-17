@@ -137,7 +137,7 @@ export default function Architecture() {
         }}
       />
 
-      <div className="container-narrow relative z-10">
+      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
           className="text-center mb-12"
@@ -148,12 +148,12 @@ export default function Architecture() {
           <span className="inline-block px-6 py-2 bg-amber-400/15 border border-amber-400/30 rounded-full text-sm text-amber-400 uppercase tracking-widest mb-6">
             {t('badge')}
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-4">
             <span className="bg-gradient-to-r from-white via-amber-400 to-cyan-400 bg-clip-text text-transparent">
               {t('title')}
             </span>
           </h2>
-          <p className="text-lg text-foreground-secondary max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-ink-secondary max-w-3xl mx-auto leading-relaxed">
             {t('subtitle')}
             <br />
             <span className="text-amber-400 font-medium">{t('subtitle_highlight')}</span>
@@ -167,7 +167,7 @@ export default function Architecture() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <span className="text-sm text-foreground-muted mr-2">{t('equation_label')}</span>
+          <span className="text-sm text-ink-tertiary mr-2">{t('equation_label')}</span>
           {[
             { nameKey: 'eq_foundation', subtitleKey: 'eq_foundation_sub', icon: '🏛️', color: 'amber' },
             { nameKey: 'eq_dao', subtitleKey: 'eq_dao_sub', icon: '🌐', color: 'cyan' },
@@ -183,9 +183,9 @@ export default function Architecture() {
                 <span className={`text-sm font-semibold block ${item.color === 'amber' ? 'text-amber-400' : item.color === 'cyan' ? 'text-cyan-400' : 'text-rose-400'}`}>
                   {t(item.nameKey)}
                 </span>
-                <span className="text-xs text-foreground-muted">{t(item.subtitleKey)}</span>
+                <span className="text-xs text-ink-tertiary">{t(item.subtitleKey)}</span>
               </div>
-              {i < 2 && <span className="text-2xl text-foreground/30">+</span>}
+              {i < 2 && <span className="text-2xl text-ink/30">+</span>}
             </React.Fragment>
           ))}
           <span className="text-2xl text-cyan-400 mx-2">=</span>
@@ -239,14 +239,14 @@ export default function Architecture() {
                           >
                             {layerKey.toUpperCase().replace('LAYER', 'LAYER ')}
                           </span>
-                          <span className="px-3 py-1 bg-overlay-hover rounded-full text-xs text-foreground-muted">
+                          <span className="px-3 py-1 bg-paper-warm rounded-full text-xs text-ink-secondary">
                             {t(layer.legalStatusKey)}
                           </span>
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">
+                        <h3 className="text-xl md:text-2xl font-bold text-ink mb-1">
                           {t(layer.nameKey)}
                         </h3>
-                        <p className="text-foreground-muted">{t(layer.subtitleKey)}</p>
+                        <p className="text-ink-secondary">{t(layer.subtitleKey)}</p>
                       </div>
                       <div
                         className={`px-4 py-2 rounded-xl text-sm font-medium ${layer.accent}`}
@@ -261,7 +261,7 @@ export default function Architecture() {
 
                     {/* Description */}
                     <p
-                      className="text-sm text-foreground-secondary mb-6 p-4 bg-black/20 rounded-xl leading-relaxed"
+                      className="text-sm text-ink-secondary mb-6 p-4 bg-black/20 rounded-xl leading-relaxed"
                       style={{ borderLeft: `3px solid ${accentColor}` }}
                     >
                       {t(layer.descKey)}
@@ -294,11 +294,11 @@ export default function Architecture() {
                               >
                                 {iconMap[module.id]}
                               </div>
-                              <span className="font-semibold text-foreground text-sm">
+                              <span className="font-semibold text-ink text-sm">
                                 {t(module.nameKey)}
                               </span>
                             </div>
-                            <p className="text-xs text-foreground-muted leading-relaxed">
+                            <p className="text-xs text-ink-tertiary leading-relaxed">
                               {t(module.descKey)}
                             </p>
                           </motion.div>
@@ -328,7 +328,7 @@ export default function Architecture() {
               className={`px-4 py-2 rounded-full text-sm cursor-pointer transition-all ${
                 showFlows
                   ? 'bg-amber-400/20 border border-amber-400/40 text-amber-400'
-                  : 'bg-overlay border border-border text-foreground-muted'
+                  : 'bg-paper-depth border border-border text-ink-secondary'
               }`}
             >
               {showFlows ? t('flow_show') : t('flow_hide')}
@@ -353,11 +353,11 @@ export default function Architecture() {
                     >
                       L{flow.from.replace('layer', '')}
                     </span>
-                    <span className="text-foreground/30">
+                    <span className="text-ink/30">
                       {flow.direction === 'up' ? '↑' : flow.direction === 'down' ? '↓' : '→'}
                     </span>
-                    <span className="text-xs text-foreground-secondary">{t(flow.labelKey)}</span>
-                    <span className="text-foreground/30">
+                    <span className="text-xs text-ink-secondary">{t(flow.labelKey)}</span>
+                    <span className="text-ink/30">
                       {flow.direction === 'up' ? '↑' : flow.direction === 'down' ? '↓' : '→'}
                     </span>
                     <span
@@ -387,7 +387,7 @@ export default function Architecture() {
             <div key={i} className="p-6 bg-white/[0.03] rounded-2xl border border-white/10">
               <div className="text-amber-400 mb-4">{concept.icon}</div>
               <h4 className="text-base font-semibold text-amber-400 mb-2">{t(concept.titleKey)}</h4>
-              <p className="text-sm text-foreground-secondary leading-relaxed">{t(concept.descKey)}</p>
+              <p className="text-sm text-ink-secondary leading-relaxed">{t(concept.descKey)}</p>
             </div>
           ))}
         </motion.div>
@@ -399,11 +399,11 @@ export default function Architecture() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-base text-foreground-muted italic max-w-3xl mx-auto mb-3">
+          <p className="text-base text-ink-tertiary italic max-w-3xl mx-auto mb-3">
             &ldquo;{t('quote')}&rdquo;
           </p>
           <p className="text-sm text-amber-400">— R. Buckminster Fuller</p>
-          <p className="mt-5 text-xs text-foreground/40">{t('version')}</p>
+          <p className="mt-5 text-xs text-ink/40">{t('version')}</p>
         </motion.footer>
       </div>
     </section>

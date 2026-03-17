@@ -221,18 +221,18 @@ export default function ArticleEditor({
   const frontmatter = parseFrontmatter();
 
   return (
-    <div className="h-screen flex flex-col bg-surface">
+    <div className="h-screen flex flex-col bg-paper">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-4">
           <button
             onClick={onCancel}
-            className="p-2 text-foreground-muted hover:text-foreground transition-colors"
+            className="p-2 text-ink-secondary hover:text-ink transition-colors"
           >
             <X size={20} />
           </button>
           <SaveIndicator isDirty={isDirty} />
-          <h2 className="text-lg font-semibold text-foreground">
+          <h2 className="text-lg font-semibold text-ink">
             {articleId ? 'Modifier l\'article' : 'Nouvel article'}
           </h2>
         </div>
@@ -242,7 +242,7 @@ export default function ArticleEditor({
           <select
             value={locale}
             onChange={(e) => setLocale(e.target.value)}
-            className="bg-overlay border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-turfu-accent"
+            className="bg-paper-depth border border-border rounded-lg px-3 py-2 text-sm text-ink focus:outline-none focus:border-accent"
           >
             <option value="fr">Francais</option>
             <option value="en">English</option>
@@ -255,7 +255,7 @@ export default function ArticleEditor({
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
               published
                 ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                : 'bg-overlay text-foreground-muted border border-border'
+                : 'bg-paper-depth text-ink-secondary border border-border'
             }`}
           >
             {published ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -267,8 +267,8 @@ export default function ArticleEditor({
             onClick={() => setShowPreview(!showPreview)}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
               showPreview
-                ? 'bg-turfu-accent/20 text-turfu-accent border border-turfu-accent/30'
-                : 'bg-overlay text-foreground-muted border border-border'
+                ? 'bg-accent-light text-accent border border-accent/30'
+                : 'bg-paper-depth text-ink-secondary border border-border'
             }`}
           >
             <FileText size={16} />
@@ -280,7 +280,7 @@ export default function ArticleEditor({
             type="button"
             onClick={() => handleSubmit(onFormSubmit)()}
             disabled={isSubmitting}
-            className="flex items-center gap-2 px-4 py-2 bg-turfu-accent text-black rounded-lg text-sm font-medium hover:bg-turfu-accent/90 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors disabled:opacity-50"
           >
             {isSubmitting ? (
               <Loader2 size={16} className="animate-spin" />
@@ -294,13 +294,13 @@ export default function ArticleEditor({
 
       {/* Metadata section (FORM-03 fieldset) */}
       <fieldset className="border-b border-border p-4">
-        <legend className="text-sm font-medium text-foreground-muted px-2 -ml-2 mb-3">
+        <legend className="text-sm font-medium text-ink-secondary px-2 -ml-2 mb-3">
           Metadata
         </legend>
         <div className="flex gap-6">
           {/* Title input with validation (FORM-01, FORM-02) */}
           <div className="w-64">
-            <label htmlFor="title" className="block text-sm font-medium text-foreground mb-1">
+            <label htmlFor="title" className="block text-sm font-medium text-ink mb-1">
               Title
             </label>
             <input
@@ -312,8 +312,8 @@ export default function ArticleEditor({
               value={currentTitle}
               aria-invalid={!!errors.title}
               aria-describedby={errors.title ? 'title-error' : undefined}
-              className={`w-full px-3 py-2 bg-overlay border rounded-lg text-foreground focus:outline-none ${
-                errors.title ? 'border-red-500 focus:border-red-500' : 'border-border focus:border-turfu-accent'
+              className={`w-full px-3 py-2 bg-paper-depth border rounded-lg text-ink focus:outline-none ${
+                errors.title ? 'border-red-500 focus:border-red-500' : 'border-border focus:border-accent'
               }`}
               placeholder="Article title"
             />
@@ -370,7 +370,7 @@ export default function ArticleEditor({
           <textarea
             value={rawContent}
             onChange={(e) => setRawContent(e.target.value)}
-            className="flex-1 w-full p-6 bg-transparent text-foreground font-mono text-sm resize-none focus:outline-none"
+            className="flex-1 w-full p-6 bg-transparent text-ink font-mono text-sm resize-none focus:outline-none"
             placeholder="Collez votre markdown avec frontmatter ici..."
             spellCheck={false}
           />
@@ -383,13 +383,13 @@ export default function ArticleEditor({
             style={{ opacity: isPreviewStale ? 0.7 : 1, transition: 'opacity 0.15s' }}
           >
             {frontmatter && (
-              <div className="mb-6 p-4 bg-overlay rounded-lg">
-                <h3 className="text-xs font-medium text-foreground-muted uppercase mb-3">Frontmatter</h3>
+              <div className="mb-6 p-4 bg-paper-depth rounded-lg">
+                <h3 className="text-xs font-medium text-ink-secondary uppercase mb-3">Frontmatter</h3>
                 <div className="space-y-2">
                   {Object.entries(frontmatter).map(([key, value]) => (
                     <div key={key} className="flex gap-2 text-sm">
-                      <span className="text-turfu-accent">{key}:</span>
-                      <span className="text-foreground">{value}</span>
+                      <span className="text-accent">{key}:</span>
+                      <span className="text-ink">{value}</span>
                     </div>
                   ))}
                 </div>

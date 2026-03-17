@@ -16,9 +16,9 @@ export default function Principles() {
 
   return (
     <section id="principles" className="section">
-      <div className="container-narrow">
+      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center mb-16"
+          className="text-3xl md:text-4xl font-display font-bold text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -30,17 +30,17 @@ export default function Principles() {
           {principles.map((principle, index) => (
             <motion.div
               key={principle.key}
-              className="p-6 rounded-xl border border-border hover:border-turfu-accent/50 transition-all hover:-translate-y-1"
+              className="p-6 rounded-xl border border-border hover:border-accent/50 transition-all hover:-translate-y-1"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <principle.icon size={32} className="text-turfu-accent mb-4" />
+              <principle.icon size={32} className="text-accent mb-4" />
               <h3 className="text-lg font-semibold mb-2">
                 {t(`${principle.key}_name`)}
               </h3>
-              <p className="text-sm text-foreground-muted leading-relaxed">
+              <p className="text-sm text-ink-secondary leading-relaxed">
                 {t(`${principle.key}_desc`)}
               </p>
             </motion.div>

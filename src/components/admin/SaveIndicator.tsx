@@ -19,7 +19,7 @@ export default function SaveIndicator({ isDirty }: SaveIndicatorProps) {
   }
 
   return (
-    <span className="flex items-center gap-1.5 text-sm text-foreground-muted">
+    <span className="flex items-center gap-1.5 text-sm text-ink-secondary">
       <Check size={14} />
       Saved
     </span>

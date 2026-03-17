@@ -153,38 +153,38 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-surface p-8">
+    <div className="min-h-screen bg-paper p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold text-foreground">Admin - Articles</h1>
+            <h1 className="text-3xl font-bold text-ink">Admin - Articles</h1>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href={`/${locale}`}
-              className="flex items-center gap-2 px-3 py-2 text-foreground-muted hover:text-foreground transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-ink-secondary hover:text-ink transition-colors"
               title="Retour au site"
             >
               <Home size={18} />
             </Link>
             <Link
               href={`/${locale}/content`}
-              className="flex items-center gap-2 px-3 py-2 text-foreground-muted hover:text-foreground transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-ink-secondary hover:text-ink transition-colors"
               title="Voir le contenu"
             >
               <BookOpen size={18} />
             </Link>
             <button
               onClick={fetchArticles}
-              className="p-2 text-foreground-muted hover:text-foreground transition-colors"
+              className="p-2 text-ink-secondary hover:text-ink transition-colors"
               title="Actualiser"
             >
               <RefreshCw size={20} />
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-foreground-muted hover:text-foreground transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-ink-secondary hover:text-ink transition-colors"
             >
               <LogOut size={18} />
             </button>
@@ -192,13 +192,13 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-6 p-4 bg-overlay rounded-lg">
+        <div className="flex items-center justify-between mb-6 p-4 bg-paper-depth rounded-lg">
           <div className="flex items-center gap-4">
-            <label className="text-sm text-foreground-muted">Filtrer par langue:</label>
+            <label className="text-sm text-ink-secondary">Filtrer par langue:</label>
             <select
               value={filterLocale}
               onChange={(e) => setFilterLocale(e.target.value)}
-              className="bg-overlay border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-turfu-accent"
+              className="bg-paper-depth border border-border rounded-lg px-3 py-2 text-sm text-ink focus:outline-none focus:border-accent"
             >
               <option value="all">Toutes</option>
               <option value="fr">Francais</option>
@@ -209,7 +209,7 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
 
           <button
             onClick={() => setIsCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-turfu-accent text-black rounded-lg text-sm font-medium hover:bg-turfu-accent/90 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             <Plus size={18} />
             Nouvel article
@@ -225,42 +225,42 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
 
         {/* Loading */}
         {loading ? (
-          <div className="text-center py-12 text-foreground-muted">
+          <div className="text-center py-12 text-ink-secondary">
             Chargement...
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-12 text-foreground-muted">
+          <div className="text-center py-12 text-ink-secondary">
             Aucun article trouve. Creez votre premier article !
           </div>
         ) : (
           /* Articles table */
-          <div className="bg-overlay rounded-lg overflow-hidden">
+          <div className="bg-paper-depth rounded-lg overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Titre</th>
-                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Langue</th>
-                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Categorie</th>
-                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Statut</th>
-                  <th className="text-left p-4 text-sm font-medium text-foreground-muted">Date</th>
-                  <th className="text-right p-4 text-sm font-medium text-foreground-muted">Actions</th>
+                  <th className="text-left p-4 text-sm font-medium text-ink-secondary">Titre</th>
+                  <th className="text-left p-4 text-sm font-medium text-ink-secondary">Langue</th>
+                  <th className="text-left p-4 text-sm font-medium text-ink-secondary">Categorie</th>
+                  <th className="text-left p-4 text-sm font-medium text-ink-secondary">Statut</th>
+                  <th className="text-left p-4 text-sm font-medium text-ink-secondary">Date</th>
+                  <th className="text-right p-4 text-sm font-medium text-ink-secondary">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-border-muted hover:bg-overlay">
+                  <tr key={article.id} className="border-b border-border hover:bg-paper-warm">
                     <td className="p-4">
                       <div>
-                        <div className="text-foreground font-medium">{article.title}</div>
-                        <div className="text-xs text-foreground-muted">{article.slug}</div>
+                        <div className="text-ink font-medium">{article.title}</div>
+                        <div className="text-xs text-ink-secondary">{article.slug}</div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="px-2 py-1 text-xs bg-overlay-hover rounded">
+                      <span className="px-2 py-1 text-xs bg-paper-warm rounded">
                         {article.locale.toUpperCase()}
                       </span>
                     </td>
-                    <td className="p-4 text-sm text-foreground-muted">
+                    <td className="p-4 text-sm text-ink-secondary">
                       {article.category || '-'}
                     </td>
                     <td className="p-4">
@@ -269,26 +269,26 @@ export default function AdminDashboard({ locale }: AdminDashboardProps) {
                           <Eye size={14} /> Public
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-foreground-muted text-sm">
+                        <span className="flex items-center gap-1 text-ink-secondary text-sm">
                           <EyeOff size={14} /> Brouillon
                         </span>
                       )}
                     </td>
-                    <td className="p-4 text-sm text-foreground-muted">
+                    <td className="p-4 text-sm text-ink-secondary">
                       {new Date(article.created_at).toLocaleDateString()}
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEdit(article)}
-                          className="p-2 text-foreground-muted hover:text-turfu-accent transition-colors"
+                          className="p-2 text-ink-secondary hover:text-accent transition-colors"
                           title="Modifier"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(article.id)}
-                          className="p-2 text-foreground-muted hover:text-red-400 transition-colors"
+                          className="p-2 text-ink-secondary hover:text-red-400 transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 size={16} />

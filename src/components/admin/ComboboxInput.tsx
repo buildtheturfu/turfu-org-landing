@@ -127,7 +127,7 @@ export function ComboboxInput({
     <div className="relative">
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-foreground mb-1"
+        className="block text-sm font-medium text-ink mb-1"
       >
         {label}
       </label>
@@ -146,12 +146,12 @@ export function ComboboxInput({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="w-full px-3 py-2 pr-10 bg-overlay border border-border rounded-lg
-                     text-foreground focus:outline-none focus:border-turfu-accent"
+          className="w-full px-3 py-2 pr-10 bg-paper-depth border border-border rounded-lg
+                     text-ink focus:outline-none focus:border-accent"
         />
         <ChevronDown
           size={16}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-secondary pointer-events-none"
         />
       </div>
       {isOpen && filteredOptions.length > 0 && (
@@ -160,7 +160,7 @@ export function ComboboxInput({
           ref={listboxRef}
           role="listbox"
           aria-label={label}
-          className="absolute z-10 w-full mt-1 bg-surface-elevated border border-border
+          className="absolute z-10 w-full mt-1 bg-paper-warm border border-border
                      rounded-lg shadow-lg max-h-60 overflow-auto"
         >
           {filteredOptions.map((option, index) => (
@@ -172,8 +172,8 @@ export function ComboboxInput({
               onClick={() => handleSelect(option)}
               className={`px-3 py-2 cursor-pointer ${
                 index === activeIndex
-                  ? 'bg-turfu-accent/20 text-foreground'
-                  : 'text-foreground hover:bg-overlay'
+                  ? 'bg-accent-light text-ink'
+                  : 'text-ink hover:bg-paper-depth'
               }`}
             >
               {option}
