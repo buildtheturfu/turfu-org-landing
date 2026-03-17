@@ -38,8 +38,8 @@ export default function LanguageSwitcher() {
           onClick={() => switchLocale(loc)}
           className={`px-2 py-1 text-sm rounded transition-colors ${
             locale === loc
-              ? 'text-foreground bg-overlay-hover'
-              : 'text-foreground-muted hover:text-foreground'
+              ? 'text-ink bg-paper-warm'
+              : 'text-ink-secondary hover:text-ink'
           }`}
           aria-label={`Switch to ${localeNames[loc]}`}
         >
