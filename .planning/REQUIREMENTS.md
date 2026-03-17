@@ -1,104 +1,112 @@
-# Requirements: Turfu.org Admin Editor v2
+# Requirements: TURFu.org v3.0 — Site Architecture & Publications
 
-**Defined:** 2026-01-31
-**Core Value:** Content creators can efficiently manage and preview documentation articles through a polished admin experience
+**Defined:** 2026-03-17
+**Core Value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
 
-## v2 Requirements
+## v3.0 Requirements
 
-Requirements for admin editor UX improvements. Each maps to roadmap phases.
+Requirements for site redesign. Each maps to roadmap phases.
 
-### Live Preview & Theme
+### Design System
 
-- [x] **PREV-01**: Editor shows live rendered markdown preview as user types
-- [x] **PREV-02**: Preview updates are debounced (150-300ms) for performance
-- [x] **PREV-03**: Preview uses same styling as published articles (MarkdownRenderer)
-- [x] **THEME-01**: Admin panel respects dark/light mode toggle
-- [x] **THEME-02**: All admin components use semantic color variables
-- [x] **SAVE-01**: Autosave indicator shows "Saved" / "Unsaved changes" status
+- [ ] **DS-01**: Site uses stone palette (warm grays) replacing current zinc/gray tokens, in both light and dark mode
+- [ ] **DS-02**: Instrument Serif loads for display headings (H1, H2), DM Sans for body/interface, JetBrains Mono for code
+- [ ] **DS-03**: Typographic scale implemented (H1 48px → caption 13px, body at 17px)
+- [ ] **DS-04**: Layer-coded accent colors functional (violet L0, teal L1, orange L2, amber CTA)
+- [ ] **DS-05**: Dark mode uses stone-900 background with same accent colors
 
-### Metadata Inputs
+### Layout & Navigation
 
-- [x] **META-01**: Category field is dropdown populated from existing categories
-- [x] **META-02**: Category dropdown allows typing to filter options
-- [x] **META-03**: Category dropdown allows entering new category not in list
-- [x] **META-04**: Tags field is multi-select with autocomplete from existing tags
-- [x] **META-05**: Tags display as removable chips below input
-- [x] **META-06**: Tags can be added by typing and pressing Enter/comma
-- [x] **META-07**: API endpoint returns list of existing categories
-- [x] **META-08**: API endpoint returns list of existing tags
+- [ ] **NAV-01**: Header shows 5-section nav (Vision | Publications | Ecosystem | Research | Join) + language switch + dark mode toggle
+- [ ] **NAV-02**: Footer rebuilt with complete links, inter-sites references, legal
+- [ ] **NAV-03**: ProseLayout wrapper (720px max-width) used for long-form content pages
+- [ ] **NAV-04**: GridLayout wrapper (1200px max-width) used for feed and multi-column pages
 
-### Form UX
+### Home Page
 
-- [x] **FORM-01**: Title field shows inline error if empty on blur
-- [x] **FORM-02**: Validation errors display below relevant fields
-- [x] **FORM-03**: Form fields organized into logical groups (metadata vs content)
-- [x] **FORM-04**: Save button shows loading spinner during save operation
-- [x] **FORM-05**: Keyboard shortcut Cmd+S triggers save action
-- [x] **FORM-06**: Unsaved changes warning when navigating away
+- [ ] **HOME-01**: Hero section with editorial accroche (Instrument Serif), subtitle, 2 CTAs
+- [ ] **HOME-02**: "Publications récentes" section showing 3-4 latest publication cards
+- [ ] **HOME-03**: Ecosystem section with compact Layer 0/1/2 schema and product cards
+- [ ] **HOME-04**: CTA section (Contribuer — publier, construire, rejoindre)
+- [ ] **HOME-05**: Current one-pager sections removed (flux inter-couches, redundant ecosystem, dead CTAs)
 
-## Future Requirements
+### Publications
 
-Deferred to post-v2 milestone. Tracked but not in current roadmap.
+- [ ] **PUB-01**: /publications feed page with cards (title, abstract, author, tags, date, image)
+- [ ] **PUB-02**: /publications/[slug] renders MDX articles with custom components (QuoteBlock, InfoBox, DiagramEmbed)
+- [ ] **PUB-03**: Publication model in Supabase (title, slug, abstract, body_mdx, author, tags, discipline, type, status, featured_image, locale, published_at)
+- [ ] **PUB-04**: Tag/discipline filtering on feed page
+- [ ] **PUB-05**: Pagination on feed page
+- [ ] **PUB-06**: Dynamic OpenGraph meta tags per article (title, abstract, image)
 
-### Editor Enhancements
+### Static Pages
 
-- **EDIT-01**: Markdown syntax highlighting in editor textarea
-- **EDIT-02**: Markdown toolbar with formatting buttons (bold, italic, link)
-- **EDIT-03**: Scroll sync between editor and preview panels
-- **EDIT-04**: Word count and reading time estimate display
+- [ ] **PAGES-01**: /vision page with long-form content in ProseLayout
+- [ ] **PAGES-02**: /research page listing formal documents with abstracts
+- [ ] **PAGES-03**: /ecosystem overview with Layer 0/1/2 schema + product cards linking to /ecosystem/[slug]
+- [ ] **PAGES-04**: /ecosystem/[slug] product pages (problem, solution, status, stack, link)
+- [ ] **PAGES-05**: /join page with contribution CTAs (publish, build, join)
 
-### Advanced Features
+### Admin Panel
 
-- **ADV-01**: Visual frontmatter editor (form fields sync to YAML)
-- **ADV-02**: Draft auto-save to localStorage
-- **ADV-03**: Undo/redo history beyond browser default
+- [ ] **ADMIN-01**: Publication editor with structured form fields (title, abstract, discipline, tags, type, status, featured_image)
+- [ ] **ADMIN-02**: MDX body editor with live preview
+- [ ] **ADMIN-03**: Publication list/management (create, edit, delete, draft/published toggle)
+- [ ] **ADMIN-04**: Existing auth system preserved and working
+
+### Polish & Deploy
+
+- [ ] **DEPLOY-01**: Responsive audit passes on mobile 375px, tablet, desktop
+- [ ] **DEPLOY-02**: Dark mode consistent across all pages
+- [ ] **DEPLOY-03**: FR/EN/TR i18n complete on all pages
+- [ ] **DEPLOY-04**: Lighthouse score > 90 on mobile
+- [ ] **DEPLOY-05**: turfu.org DNS pointed to Vercel (when validated)
+
+## v4 Requirements
+
+Deferred to future release.
+
+### Contributions
+- **CONTRIB-01**: External users can submit publication proposals
+- **CONTRIB-02**: Review/approval workflow for submitted publications
+
+### Glossaire
+- **GLOSS-01**: /glossaire page with searchable, trilingual term definitions
+- **GLOSS-02**: Terms linked from publications and static pages
+
+### Sub-sites
+- **SUB-01**: epis.network protocol documentation site
+- **SUB-02**: ozam.turfu.org incubator presentation
+- **SUB-03**: Shared header component across sub-sites
+
+### Advanced Publications
+- **PUB-ADV-01**: JSX/interactive publication pages (beyond MDX)
+- **PUB-ADV-02**: Reading time estimate per article
+- **PUB-ADV-03**: Related publications suggestions
 
 ## Out of Scope
 
-Explicitly excluded. Documented to prevent scope creep.
-
 | Feature | Reason |
 |---------|--------|
-| WYSIWYG editor | Project is markdown-based, would require architecture change |
-| Image upload to storage | Requires storage infrastructure, use external URLs |
-| Version history | Database complexity, future enhancement |
-| Concurrent edit detection | Single admin assumed |
-| Bulk operations | Individual editing sufficient |
-| Mobile-optimized admin | Desktop-focused workflow |
-| AI writing assistance | Feature creep, separate concern |
+| Token/wallet integration | No Web3 features in v3, turfu.org is 100% public |
+| EPIS Spec / formal documents as publications | Not ready for publication, will be on Drive |
+| Automated TCP pipeline | Manual content for now |
+| Full WYSIWYG/block editor (Tiptap/BlockNote) | Anti-feature — 50KB+ bundle, unnecessary for single-author |
+| Real-time collaboration | Single admin, not needed |
+| Comments on publications | Community features deferred |
+| Search (Algolia/Pagefind) | Deferred to v4, filtering sufficient for v3 volume |
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PREV-01 | Phase 5 | Complete |
-| PREV-02 | Phase 5 | Complete |
-| PREV-03 | Phase 5 | Complete |
-| THEME-01 | Phase 5 | Complete |
-| THEME-02 | Phase 5 | Complete |
-| SAVE-01 | Phase 5 | Complete |
-| META-01 | Phase 6 | Complete |
-| META-02 | Phase 6 | Complete |
-| META-03 | Phase 6 | Complete |
-| META-04 | Phase 6 | Complete |
-| META-05 | Phase 6 | Complete |
-| META-06 | Phase 6 | Complete |
-| META-07 | Phase 6 | Complete |
-| META-08 | Phase 6 | Complete |
-| FORM-01 | Phase 7 | Complete |
-| FORM-02 | Phase 7 | Complete |
-| FORM-03 | Phase 7 | Complete |
-| FORM-04 | Phase 7 | Complete |
-| FORM-05 | Phase 7 | Complete |
-| FORM-06 | Phase 7 | Complete |
+| (Populated during roadmap creation) | | |
 
 **Coverage:**
-- v2 requirements: 20 total
-- Mapped to phases: 20
-- Unmapped: 0
+- v3.0 requirements: 31 total
+- Mapped to phases: 0
+- Unmapped: 31 ⚠️
 
 ---
-*Requirements defined: 2026-01-31*
-*Last updated: 2026-02-01 after Phase 7 completion*
+*Requirements defined: 2026-03-17*
+*Last updated: 2026-03-17 after initial definition*
