@@ -4,69 +4,32 @@
 
 @layer base {
   :root {
-    --background: #fafafa;
-    --foreground: #0a0a0a;
-
-    /* Surfaces */
-    --surface: #ffffff;
-    --surface-elevated: #f4f4f5;
-    --surface-muted: #e4e4e7;
-
-    /* Text */
-    --text-primary: #0a0a0a;
-    --text-secondary: #52525b;
-    --text-muted: #71717a;
-
-    /* Borders */
-    --border: #d4d4d8;
-    --border-muted: #e4e4e7;
-    --border-hover: rgba(10, 10, 10, 0.4);
-
-    /* Overlays */
-    --overlay: rgba(0, 0, 0, 0.05);
-    --overlay-hover: rgba(0, 0, 0, 0.08);
-
-    /* Focus ring */
-    --ring: rgba(10, 10, 10, 0.5);
-
-    /* Accent color - blue for light mode (blue-700/cyan-600) */
-    --turfu-accent: 29 78 216;
-    --turfu-accent2: 8 145 178;
-    --turfu-accent-hover: 30 64 175;
-    --turfu-accent2-hover: 14 116 144;
+    --ink: #1C1917;
+    --ink-secondary: #78716C;
+    --ink-tertiary: #A8A29E;
+    --paper: #FAFAF9;
+    --paper-warm: #F5F5F4;
+    --paper-depth: #E7E5E4;
+    --border: #D6D3D1;
+    --layer-0: #7C3AED;
+    --layer-0-light: #EDE9FE;
+    --layer-1: #0D9488;
+    --layer-1-light: #CCFBF1;
+    --layer-2: #EA580C;
+    --layer-2-light: #FFF7ED;
+    --accent: #B45309;
+    --accent-hover: #92400E;
+    --accent-light: #FFFBEB;
   }
 
   .dark {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
-
-    /* Surfaces */
-    --surface: #0a0a0a;
-    --surface-elevated: #18181b;
-    --surface-muted: #27272a;
-
-    /* Text */
-    --text-primary: #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
-
-    /* Borders */
-    --border: #3f3f46;
-    --border-muted: #27272a;
-    --border-hover: rgba(250, 250, 250, 0.4);
-
-    /* Overlays */
-    --overlay: rgba(255, 255, 255, 0.05);
-    --overlay-hover: rgba(255, 255, 255, 0.10);
-
-    /* Focus ring */
-    --ring: rgba(250, 250, 250, 0.5);
-
-    /* Accent color - brighter violet for dark mode */
-    --turfu-accent: 139 92 246;
-    --turfu-accent2: 6 182 212;
-    --turfu-accent-hover: 124 58 237;
-    --turfu-accent2-hover: 8 145 178;
+    --ink: #F5F5F4;
+    --ink-secondary: #A8A29E;
+    --ink-tertiary: #78716C;
+    --paper: #1C1917;
+    --paper-warm: #292524;
+    --paper-depth: #44403C;
+    --border: #57534E;
   }
 
   html {
@@ -75,11 +38,11 @@
   }
 
   body {
-    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
+    @apply bg-paper text-ink antialiased font-body text-body;
   }
 
   ::selection {
-    background-color: rgb(var(--turfu-accent) / 0.3);
+    background-color: var(--accent-light);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -91,43 +54,5 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-  }
-}
-
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3
-           bg-gradient-turfu hover:bg-gradient-turfu-hover
-           text-white font-medium rounded-lg
-           transition-all duration-200
-           hover:shadow-lg hover:shadow-turfu-accent/25
-           focus:outline-none focus:ring-2 focus:ring-turfu-accent focus:ring-offset-2 focus:ring-offset-[var(--background)];
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3
-           border border-[var(--border)] hover:border-[var(--border-hover)]
-           text-[var(--foreground)] font-medium rounded-lg
-           transition-all duration-200
-           hover:bg-[var(--overlay)]
-           focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:ring-offset-2 focus:ring-offset-[var(--background)];
-  }
-
-  .section {
-    @apply py-20 md:py-32;
-  }
-
-  .container-narrow {
-    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-}
-
-@layer utilities {
-  .bg-gradient-turfu {
-    background-image: linear-gradient(135deg, rgb(var(--turfu-accent)) 0%, rgb(var(--turfu-accent2)) 100%);
-  }
-
-  .bg-gradient-turfu-hover {
-    background-image: linear-gradient(135deg, rgb(var(--turfu-accent-hover)) 0%, rgb(var(--turfu-accent2-hover)) 100%);
   }
 }

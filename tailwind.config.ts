@@ -10,34 +10,46 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        turfu: {
-          dark: '#0a0a0a',
-          darker: '#050505',
-          accent: 'rgb(var(--turfu-accent) / <alpha-value>)',
-          accent2: 'rgb(var(--turfu-accent2) / <alpha-value>)',
-          muted: '#a1a1aa',
+        ink: {
+          DEFAULT: 'var(--ink)',
+          secondary: 'var(--ink-secondary)',
+          tertiary: 'var(--ink-tertiary)',
         },
-        surface: {
-          DEFAULT: 'var(--surface)',
-          elevated: 'var(--surface-elevated)',
-          muted: 'var(--surface-muted)',
+        paper: {
+          DEFAULT: 'var(--paper)',
+          warm: 'var(--paper-warm)',
+          depth: 'var(--paper-depth)',
         },
-        foreground: {
-          DEFAULT: 'var(--foreground)',
-          secondary: 'var(--text-secondary)',
-          muted: 'var(--text-muted)',
+        border: { DEFAULT: 'var(--border)' },
+        layer: {
+          0: { DEFAULT: 'var(--layer-0)', light: 'var(--layer-0-light)' },
+          1: { DEFAULT: 'var(--layer-1)', light: 'var(--layer-1-light)' },
+          2: { DEFAULT: 'var(--layer-2)', light: 'var(--layer-2-light)' },
         },
-        border: {
-          DEFAULT: 'var(--border)',
-          muted: 'var(--border-muted)',
-        },
-        overlay: {
-          DEFAULT: 'var(--overlay)',
-          hover: 'var(--overlay-hover)',
+        accent: {
+          DEFAULT: 'var(--accent)',
+          hover: 'var(--accent-hover)',
+          light: 'var(--accent-light)',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+      },
+      fontSize: {
+        'display-1': ['3rem', { lineHeight: '1.1' }],
+        'display-2': ['2rem', { lineHeight: '1.2' }],
+        'heading-3': ['1.5rem', { lineHeight: '1.3' }],
+        'heading-4': ['1.25rem', { lineHeight: '1.4' }],
+        body: ['1.0625rem', { lineHeight: '1.7' }],
+        'body-sm': ['0.9375rem', { lineHeight: '1.6' }],
+        caption: ['0.8125rem', { lineHeight: '1.5' }],
+        code: ['0.875rem', { lineHeight: '1.6' }],
+      },
+      maxWidth: {
+        prose: '720px',
+        layout: '1200px',
       },
     },
   },
