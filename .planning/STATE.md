@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v3.0
+milestone_name: Site Architecture & Publications
+status: executing
+stopped_at: Completed 08-01-PLAN.md (Design Token Foundation)
+last_updated: "2026-03-17T22:37:48.574Z"
+last_activity: 2026-03-17 — Completed 08-01 Design Token Foundation
+progress:
+  total_phases: 9
+  completed_phases: 0
+  total_plans: 2
+  completed_plans: 1
+  percent: 50
+---
+
 # Project State
 
 ## Project Reference
@@ -10,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 ## Current Position
 
 Phase: 8 of 16 (Design System Foundation)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-03-17 — Roadmap v3.0 created (9 phases, 17 plans)
+Plan: 1 of 2 in current phase
+Status: Executing
+Last activity: 2026-03-17 — Completed 08-01 Design Token Foundation
 
-Progress: [░░░░░░░░░░] 0% (0/17 plans)
+Progress: [█████░░░░░] 50% (1/2 plans)
 
 ## Milestones
 
@@ -27,15 +43,15 @@ See: .planning/MILESTONES.md for full history
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 3 min
+- Total execution time: 0.05 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 08 Design System Foundation | 1 | 3 min | 3 min |
 
 *Updated after each plan completion*
 
@@ -57,6 +73,9 @@ New v3 decisions:
 - Supabase only (NOT Prisma) — confirmed by codebase analysis
 - New `publications` table (not extending `articles`)
 - next-mdx-remote@5 for MDX (pinned, not ^5) — needs validation spike in Phase 10
+- [Phase 08]: Stone palette replaces zinc/gray — warmer tone aligned with livrable v0.3
+- [Phase 08]: Layer accent colors stay identical in dark mode — only ink/paper/border swap
+- [Phase 08]: DM Sans default body font at 17px for readability
 
 ### Pending Todos
 
@@ -71,5 +90,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-17
-Stopped at: Roadmap v3.0 created, ready to plan Phase 8
+Stopped at: Completed 08-01-PLAN.md (Design Token Foundation)
 Resume file: None

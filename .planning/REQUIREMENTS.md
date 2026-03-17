@@ -9,11 +9,11 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 ### Design System
 
-- [ ] **DS-01**: Site uses stone palette (warm grays) replacing current zinc/gray tokens, in both light and dark mode
-- [ ] **DS-02**: Instrument Serif loads for display headings (H1, H2), DM Sans for body/interface, JetBrains Mono for code
-- [ ] **DS-03**: Typographic scale implemented (H1 48px → caption 13px, body at 17px)
-- [ ] **DS-04**: Layer-coded accent colors functional (violet L0, teal L1, orange L2, amber CTA)
-- [ ] **DS-05**: Dark mode uses stone-900 background with same accent colors
+- [x] **DS-01**: Site uses stone palette (warm grays) replacing current zinc/gray tokens, in both light and dark mode
+- [x] **DS-02**: Instrument Serif loads for display headings (H1, H2), DM Sans for body/interface, JetBrains Mono for code
+- [x] **DS-03**: Typographic scale implemented (H1 48px → caption 13px, body at 17px)
+- [x] **DS-04**: Layer-coded accent colors functional (violet L0, teal L1, orange L2, amber CTA)
+- [x] **DS-05**: Dark mode uses stone-900 background with same accent colors
 
 ### Layout & Navigation
 
@@ -100,11 +100,11 @@ Deferred to future release.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | Phase 8 | Pending |
-| DS-02 | Phase 8 | Pending |
-| DS-03 | Phase 8 | Pending |
-| DS-04 | Phase 8 | Pending |
-| DS-05 | Phase 8 | Pending |
+| DS-01 | Phase 8 | Complete |
+| DS-02 | Phase 8 | Complete |
+| DS-03 | Phase 8 | Complete |
+| DS-04 | Phase 8 | Complete |
+| DS-05 | Phase 8 | Complete |
 | NAV-01 | Phase 9 | Pending |
 | NAV-02 | Phase 9 | Pending |
 | NAV-03 | Phase 9 | Pending |
