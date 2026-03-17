@@ -1,95 +1,95 @@
-# Turfu.org Landing Page
+# TURFu.org — Centre de Recherche Transdisciplinaire
 
 ## What This Is
 
-Turfu.org landing page with mobile-friendly /content documentation module and admin panel for article management. The site supports multiple locales (fr, en, tr), dark/light mode, and provides a CMS-like experience for content creators.
+turfu.org is a transdisciplinary open science research center website. It publishes analyses, builds epistemic tools (EPIS, PICKR), and operates across three layers: research/metaethics (L0), incubation/infrastructure (L1), and products/apps (L2). The site serves as the public face of the TURFu project — part institutional identity, part living publication journal, part product showcase.
 
 ## Core Value
 
-Content creators can efficiently manage and preview documentation articles through a polished admin experience.
+Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
 
-## Current Milestone: v2 Admin UX
+## Current Milestone: v3.0 Site Architecture & Publications
 
-**Goal:** Transform the admin article editor from functional-but-minimal to a polished content management experience.
+**Goal:** Transform the one-pager + CMS into a transdisciplinary research center with a Medium-like publication journal as its living core.
 
 **Target features:**
-- Live markdown preview (rendered HTML as you type)
-- Category/tag dropdowns with autocomplete
-- Cleaner form layout and visual organization
-- Inline validation (errors as you type)
-- Admin panel respects dark/light theme
+- New design system (stone palette, Instrument Serif/DM Sans typography, layer-coded colors)
+- Refactored multi-page layout with new navigation (Vision | Publications | Ecosystem | Research | Join)
+- Publication feed — Medium-like index with cards, filtering by tag/discipline, pagination
+- Article pages — MDX rendering with custom components, OpenGraph meta for social sharing
+- Static pages: Vision, Research, Ecosystem (product cards + layer schema), Join
+- Admin panel rebuilt for publication management (Medium/journal style)
+- Responsive, dark/light mode, FR/EN/TR i18n
+- Deploy to turfu.org only when all 3 locales are complete
 
 ## Requirements
 
 ### Validated
 
-- ✓ Multi-locale landing page (fr, en, tr) — existing
-- ✓ Content/article listing with filtering — existing
-- ✓ Article detail pages with markdown rendering — existing
-- ✓ Admin dashboard for article management — existing
-- ✓ Authentication system with bcrypt hashing — existing
-- ✓ Responsive homepage sections — existing
-- ✓ Fix horizontal scroll overflow on /content mobile view — v1
-- ✓ Fix hamburger menu functionality in /content pages — v1
-- ✓ Add "back to top" button site-wide — v1
-- ✓ Dark/light mode toggle with system preference — v1
-- ✓ Semantic color system with WCAG AA contrast — v1
+- ✓ Multi-locale support (fr, en, tr) — v1
+- ✓ Responsive layout with mobile navigation — v1
+- ✓ Dark/light mode with semantic color system — v1
+- ✓ Authentication system — v1
+- ✓ Article CRUD with markdown rendering — v2
+- ✓ Live markdown preview in editor — v2
+- ✓ Form validation with inline errors — v2
 
 ### Active
 
-- [ ] Live markdown preview in article editor
-- [ ] Category dropdown with existing categories
-- [ ] Tag input with autocomplete from existing tags
-- [ ] Cleaner editor form layout
-- [ ] Inline validation with error messages
-- [ ] Admin panel respects dark/light theme toggle
+(Defined in REQUIREMENTS.md)
 
 ### Out of Scope
 
-- Image upload to storage — use external URLs for now
-- Article versioning/history — future enhancement
-- Multi-user concurrent edit detection — single admin assumed
-- Bulk operations (batch delete/publish) — individual editing sufficient
-- Admin mobile optimization — desktop-focused workflow
+- EPIS Spec, Farcaster Audit and other formal documents — not ready for publication, will be on Drive later
+- Sub-sites (epis.network, ozam.turfu.org, pickr) — turfu.org first
+- Token/wallet integration — no Web3 features in v3
+- Automated TCP pipeline — manual content for now
+- Soumissions ouvertes / external contributions — v4+
+- Glossaire — deferred to future milestone
 
 ## Context
 
-**Current State (v1 shipped 2026-01-31):**
-- 4,565 lines of TypeScript/CSS
-- Next.js 14 App Router with TypeScript
-- Tailwind CSS with semantic color system
-- next-intl for i18n (fr, en, tr locales)
-- next-themes for dark/light mode
-- framer-motion for animations
-- react-remove-scroll for drawer scroll lock
-- Deployed on Vercel
+**Current State (v2 shipped 2026-02-01):**
+- Next.js 14 App Router, TypeScript, Tailwind CSS
+- next-intl (fr, en, tr), next-themes, framer-motion
+- Prisma + PostgreSQL, deployed on Vercel
+- Admin panel with article CRUD + markdown preview
 
-**Live site:** https://turfu-org-landing.vercel.app/fr/content
+**Conception documents:**
+- `.planning/sources/TURFu-Site-Conception-v0.1.md` — architecture & positioning (A+B+C hybrid)
+- `.planning/sources/TURFu-Site-Livrable-v0.3.md` — design system, milestone structure, home+vision content
+- `.planning/sources/turfu_ecosystem_architecture.svg` — layer diagram
 
-**Known issues:**
-- iOS Safari testing recommended for position:fixed elements
+**Key identity decisions:**
+- TURFu = Centre de Recherche Transdisciplinaire Open Science (CIRET lineage)
+- Hybrid positioning: A (cathedral/institution) + B (product showcase) + C (media-lab/journal)
+- Visitor flow: content (C) → foundation (A) → products (B)
+- Aesthetic: "Quanta Magazine transdisciplinaire" — editorial, warm, no SaaS/crypto vibes
+
+**Content status:**
+- Home copy: drafted (hero to iterate)
+- Vision page: complete (~1200 words)
+- Product cards, publication content: to be defined later
+- Content is NOT a blocker
 
 ## Constraints
 
-- **Frontend only**: No backend/API changes
-- **Existing stack**: Must use Tailwind CSS (no new CSS frameworks)
-- **Locale-aware**: Fixes must work across all 3 locales
+- **Stack**: Keep Next.js 14, Tailwind, next-intl, Prisma, Vercel — rebuild on top, not from scratch
+- **DNS**: Don't point turfu.org until FR/EN/TR all complete and validated
+- **Admin**: Full rebuild — current Obsidian-like module doesn't match journal direction
+- **No seed data**: Publications feed starts empty or with placeholder content, no specific documents (EPIS Spec etc.)
+- **Hero text**: Treat as placeholder, iterate with Ek
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Reference modern doc sites | User specified Notion, GitBook, Docusaurus, Tailwind Docs as UX targets | ✓ Good |
-| CSS/Tailwind only fixes | Scope is responsive UX, not structural changes | ✓ Good |
-| overflow-x-hidden on layout | Prevent any child content from causing horizontal scroll | ✓ Good |
-| PanelLeftOpen icon for hamburger | Clearer visual indication of sidebar panel | ✓ Good |
-| Replicate sidebar in drawer | Proper scroll behavior within drawer context | ✓ Good |
-| next-themes for theming | Handles localStorage, system preference, SSR gracefully | ✓ Good |
-| mounted-state pattern | Prevents hydration mismatch in Next.js | ✓ Good |
-| Semantic CSS variables | 10 variable groups for consistent theming | ✓ Good |
-| Blue accent for light mode | Better visual harmony with light backgrounds | ✓ Good |
-| Force dark on Architecture | Gradient backgrounds require dark for visibility | ✓ Good |
-| Fixed sidebar positioning | Align with sticky header on long pages | ✓ Good |
+| Hybrid A+B+C positioning | Pure cathedral/product/media each has risks alone | — Pending |
+| Stone palette (not gray/zinc) | Warm undertone evokes paper, organic — fits research center identity | — Pending |
+| Instrument Serif + DM Sans | Editorial serif for display, warm geometric for body — "revue savante" | — Pending |
+| 17px body text | Better readability for long-form (Quanta, Aeon, Stripe Press use this) | — Pending |
+| Admin panel full rebuild | Current module too Obsidian-like, need Medium/journal UX | — Pending |
+| No formal documents in v3 | EPIS Spec etc. not ready, content will come from Drive later | — Pending |
 
 ---
-*Last updated: 2026-01-31 after v2 milestone start*
+*Last updated: 2026-03-17 after v3.0 milestone start*

@@ -2,60 +2,43 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-31)
+See: .planning/PROJECT.md (updated 2026-03-17)
 
-**Core value:** Content creators can efficiently manage and preview documentation articles through a polished admin experience
-**Current focus:** Between milestones — v2 complete, ready for new milestone
+**Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
+**Current focus:** Defining requirements for v3.0 Site Architecture & Publications
 
 ## Current Position
 
-Phase: None (milestone complete)
-Plan: None
-Status: Awaiting new milestone
-Last activity: 2026-02-01 — Completed v2 Admin UX milestone
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-17 — Milestone v3.0 started
 
-Progress: Ready for /gsd:new-milestone
+Progress: Ready for requirements definition
 
 ## Milestones
 
 - v1 Mobile UX — Phases 1-4.1 (shipped 2026-01-31)
 - v2 Admin UX — Phases 5-7 (shipped 2026-02-01)
+- v3.0 Site Architecture & Publications — In progress
 
 See: .planning/MILESTONES.md for full history
-
-## Performance Metrics
-
-**v2 Velocity:**
-- Total plans completed: 5
-- Average duration: 5 min
-- Total execution time: ~24 min
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 5. Live Preview | 1 | ~5 min | 5 min |
-| 6. Metadata | 2 | ~10 min | 5 min |
-| 7. Validation | 2 | ~9 min | 4.5 min |
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions from v1 still apply:
-- Semantic CSS variables for theming (bg-[var(--surface)])
-- Theme-aware accents: blue for light, violet for dark
+Decisions from v1/v2 that still apply:
+- Semantic CSS variables for theming
 - mounted-state pattern for hydration safety
+- next-themes for dark/light mode management
 
-v2 decisions (archived with milestone):
-- Build custom dropdown/autocomplete components (no new UI libraries)
-- Use react-hook-form + zod for validation (15kB total)
-- Reuse existing MarkdownRenderer for preview
-- useDeferredValue for smooth preview performance
-- Admin endpoints return ALL categories/tags (including drafts)
-- WAI-ARIA combobox with aria-activedescendant
-- 150ms blur delay pattern for dropdown click-through
-- Form fields as source of truth, synced to rawContent frontmatter
+New v3 decisions:
+- Hybrid A+B+C site positioning (cathedral + journal + product showcase)
+- Stone palette, Instrument Serif/DM Sans typography
+- Admin panel full rebuild (Medium/journal style)
+- No formal documents (EPIS Spec etc.) in v3 scope
+- DNS turfu.org only when FR/EN/TR complete
 
 ### Pending Todos
 
@@ -67,6 +50,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01
-Stopped at: Milestone v2 complete and archived
+Last session: 2026-03-17
+Stopped at: Milestone v3.0 initialization
 Resume file: None
