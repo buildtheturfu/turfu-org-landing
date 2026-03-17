@@ -100,13 +100,46 @@ Deferred to future release.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Populated during roadmap creation) | | |
+| DS-01 | Phase 8 | Pending |
+| DS-02 | Phase 8 | Pending |
+| DS-03 | Phase 8 | Pending |
+| DS-04 | Phase 8 | Pending |
+| DS-05 | Phase 8 | Pending |
+| NAV-01 | Phase 9 | Pending |
+| NAV-02 | Phase 9 | Pending |
+| NAV-03 | Phase 9 | Pending |
+| NAV-04 | Phase 9 | Pending |
+| HOME-01 | Phase 13 | Pending |
+| HOME-02 | Phase 13 | Pending |
+| HOME-03 | Phase 13 | Pending |
+| HOME-04 | Phase 13 | Pending |
+| HOME-05 | Phase 13 | Pending |
+| PUB-01 | Phase 11 | Pending |
+| PUB-02 | Phase 11 | Pending |
+| PUB-03 | Phase 10 | Pending |
+| PUB-04 | Phase 11 | Pending |
+| PUB-05 | Phase 11 | Pending |
+| PUB-06 | Phase 12 | Pending |
+| PAGES-01 | Phase 14 | Pending |
+| PAGES-02 | Phase 14 | Pending |
+| PAGES-03 | Phase 14 | Pending |
+| PAGES-04 | Phase 14 | Pending |
+| PAGES-05 | Phase 14 | Pending |
+| ADMIN-01 | Phase 15 | Pending |
+| ADMIN-02 | Phase 15 | Pending |
+| ADMIN-03 | Phase 15 | Pending |
+| ADMIN-04 | Phase 15 | Pending |
+| DEPLOY-01 | Phase 16 | Pending |
+| DEPLOY-02 | Phase 16 | Pending |
+| DEPLOY-03 | Phase 16 | Pending |
+| DEPLOY-04 | Phase 16 | Pending |
+| DEPLOY-05 | Phase 16 | Pending |
 
 **Coverage:**
-- v3.0 requirements: 31 total
-- Mapped to phases: 0
-- Unmapped: 31 ⚠️
+- v3.0 requirements: 34 total
+- Mapped to phases: 34
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-17*
-*Last updated: 2026-03-17 after initial definition*
+*Last updated: 2026-03-17 after roadmap creation*
