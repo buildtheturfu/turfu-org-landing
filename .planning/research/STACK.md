@@ -1,372 +1,276 @@
-# Technology Stack: Admin Editor Improvements
+# Stack Research
 
-**Project:** TURFu Landing - v2 Admin UX
-**Researched:** 2026-01-31
-**Overall Confidence:** HIGH (versions verified via npm registry)
+**Domain:** MDX publication journal + design system for Next.js 14 App Router
+**Researched:** 2026-03-17
+**Confidence:** HIGH
 
-## Executive Summary
+## Existing Stack (DO NOT CHANGE)
 
-This research identifies stack additions for transforming the admin article editor from minimal to polished. The existing stack (React 18, Next.js 14, Tailwind, react-markdown) handles most requirements. Only TWO new dependencies are recommended: react-hook-form for form state/validation and zod for schema validation. Dropdown and autocomplete components should be built in-house using Tailwind CSS to avoid dependency bloat.
+Already validated and deployed. Listed for integration context only.
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Next.js | 14.2.15 | App Router, SSR, RSC |
+| React | ^18.3.1 | UI framework |
+| TypeScript | ^5.6.0 | Type safety |
+| Tailwind CSS | ^3.4.14 | Utility-first styling |
+| next-intl | ^3.22.0 | i18n (fr, en, tr) |
+| next-themes | ^0.4.6 | Dark/light mode |
+| framer-motion | ^11.0.0 | Animations |
+| @supabase/supabase-js | ^2.93.2 | Database (PostgreSQL via Supabase) |
+| react-markdown | ^10.1.0 | Current markdown rendering |
+| react-hook-form + zod | ^7.71 / ^3.25 | Form validation |
+| reading-time | ^1.5.0 | Reading time calculation |
+| gray-matter | ^4.0.3 | Frontmatter parsing |
+| rehype-slug + rehype-autolink-headings | ^6.0 / ^7.1 | Heading anchors |
+| remark-gfm | ^4.0.1 | GitHub-flavored markdown |
+
+**Important correction:** PROJECT.md says "Prisma + PostgreSQL" but the actual codebase uses Supabase client directly (`@supabase/supabase-js`). There is no Prisma schema or dependency. All new features must use Supabase, not Prisma.
 
 ## Recommended Stack Additions
 
-### Form Validation
+### 1. MDX Rendering: next-mdx-remote
 
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| react-hook-form | ^7.71.1 | Form state management, validation triggers, error handling | Industry standard for React forms. Uncontrolled components = performant. Excellent TypeScript support. Zero dependencies. |
-| zod | ^4.3.6 | Schema validation, type inference | Best DX for TypeScript. Infers types from schemas. Smaller bundle than yup. Composable schemas. |
-| @hookform/resolvers | ^5.2.2 | Bridge between react-hook-form and zod | Official integration. One-liner to connect zod schema to form. |
+| Technology | Version | Purpose | Why Recommended |
+|------------|---------|---------|-----------------|
+| next-mdx-remote | ^5.0.0 | Compile and render MDX strings from Supabase in RSC | Only viable option for rendering MDX stored in a database with Next.js 14 + React 18. Provides `compileMDX` and `MDXRemote` from `/rsc` entry point for server component rendering. Custom components passed directly (no context needed). |
+
+**Why v5, not v6:** Version 6.0.0 exists (published Feb 2026) but the GitHub repo is archived. v5 is the last well-documented, battle-tested release for React 18 + Next.js 14. v6 may work but carries risk with an archived repo. Pin to v5 and evaluate v6 later.
+
+**Why not `@next/mdx`:** That package is for local `.mdx` files in the filesystem. TURFu stores article content in Supabase -- the content is a string fetched at request time, not a file on disk. `next-mdx-remote` is designed exactly for this "remote content" use case.
+
+**Why not `next-mdx-remote-client`:** Requires React >= 19.1.0. This project uses React 18.3. **Incompatible** without a major React upgrade.
+
+**Why not plain `@mdx-js/mdx`:** Would work but requires wiring up the compile+evaluate pipeline manually. `next-mdx-remote/rsc` wraps this with proper Next.js integration and the `compileMDX` helper. No reason to reinvent it.
 
 **Integration pattern:**
-
 ```typescript
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+// In article page server component
+import { compileMDX } from 'next-mdx-remote/rsc';
+import { mdxComponents } from '@/components/mdx';
 
-const articleSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(100, 'Title too long'),
-  description: z.string().max(200, 'Description too long').optional(),
-  category: z.string().min(1, 'Category is required'),
-  tags: z.array(z.string()).min(1, 'At least one tag required'),
-  content: z.string().min(10, 'Content too short'),
-});
-
-type ArticleFormData = z.infer<typeof articleSchema>;
-
-const { register, handleSubmit, formState: { errors } } = useForm<ArticleFormData>({
-  resolver: zodResolver(articleSchema),
+const { content, frontmatter } = await compileMDX({
+  source: article.content, // string from Supabase
+  components: mdxComponents, // QuoteBlock, InfoBox, DiagramEmbed, etc.
+  options: {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, [rehypePrettyCode, { theme: 'github-light' }]],
+    },
+    parseFrontmatter: true,
+  },
 });
 ```
 
-**Why react-hook-form over alternatives:**
+### 2. Syntax Highlighting: rehype-pretty-code + shiki
 
-| Library | Bundle Size | Re-renders | TypeScript | Why Not |
-|---------|-------------|------------|------------|---------|
-| react-hook-form | 8.5kB | Minimal (uncontrolled) | Excellent | RECOMMENDED |
-| formik | 13kB | On every keystroke | Good | Heavier, more re-renders |
-| react-final-form | 5kB | Configurable | Fair | Less ecosystem, dying |
-| useState manually | 0kB | On every keystroke | Manual | Boilerplate hell for complex forms |
+| Technology | Version | Purpose | Why Recommended |
+|------------|---------|---------|-----------------|
+| rehype-pretty-code | ^0.14.3 | Code block syntax highlighting in MDX | Build-time highlighting via rehype plugin -- zero client-side JS. Uses VS Code themes (fits JetBrains Mono aesthetic). Works as a rehype plugin in the MDX pipeline. |
+| shiki | ^4.0.2 | Syntax highlighting engine (peer dep of rehype-pretty-code) | Industry standard, VS Code-compatible themes, supports all languages TURFu might need (TypeScript, Solidity, Python, JSON). |
 
-### Live Markdown Preview
+**Why not highlight.js or Prism:** Both require client-side JS and runtime theme loading. rehype-pretty-code runs at compile time in RSC, ships zero JS to the client, and produces pre-highlighted HTML. Perfect for a publication site where performance matters.
 
-**No new dependencies needed.** Reuse existing stack:
+### 3. Fonts: next/font/google (already installed via Next.js)
 
-| Existing | Version | Use For |
-|----------|---------|---------|
-| react-markdown | ^10.1.0 | Render markdown to HTML |
-| remark-gfm | ^4.0.1 | GitHub Flavored Markdown (tables, strikethrough) |
-| rehype-slug | ^6.0.0 | Add IDs to headings |
-| gray-matter | ^4.0.3 | Parse frontmatter from raw content |
+| Technology | Version | Purpose | Why Recommended |
+|------------|---------|---------|-----------------|
+| next/font/google | (bundled with Next.js 14.2.15) | Load Instrument Serif, DM Sans, JetBrains Mono | Built into Next.js. Self-hosts fonts, eliminates external requests to Google, automatic `font-display: swap`, preloading. No additional dependency needed. |
 
-**Implementation approach:** Import existing `MarkdownRenderer` component into `ArticleEditor`. Split editor into two panes: textarea (left) + live preview (right). Use `useDeferredValue` or debounce for performance on long documents.
+**Verified availability:** All three fonts confirmed present in Next.js 14.2.15's compiled font catalog (`next/dist/compiled/@next/font/dist/google/index.d.ts`):
+- `Instrument_Serif` -- NOT a variable font; requires explicit `weight: "400"` and `style: ['normal', 'italic']`
+- `DM_Sans` -- variable font, no weight specification needed
+- `JetBrains_Mono` -- variable font, no weight specification needed
 
+**Implementation pattern:**
 ```typescript
-// ArticleEditor.tsx
-import MarkdownRenderer from '@/components/content/MarkdownRenderer';
-import matter from 'gray-matter';
+// In layout.tsx -- replace current Inter import
+import { Instrument_Serif, DM_Sans, JetBrains_Mono } from 'next/font/google';
 
-const { content } = matter(rawContent); // Strip frontmatter
-// Render preview using existing component
-<MarkdownRenderer content={content} />
+const instrumentSerif = Instrument_Serif({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
+// Apply CSS variables to <body>:
+<body className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
 ```
 
-### Dropdown and Autocomplete
-
-**Recommendation: Build in-house with Tailwind CSS.**
-
-**Why NOT add a library:**
-
-| Library | Bundle Size | Why Not |
-|---------|-------------|---------|
-| @headlessui/react | 14kB | Overkill for 2 simple dropdowns. Would add dependency for 1% of app. |
-| downshift | 11kB | Flexible but complex API. More setup than value for simple use case. |
-| cmdk | 8kB | Command palette focused. Wrong abstraction for form dropdowns. |
-| react-select | 25kB+ | Massive bundle. Styled-components dependency. Overkill. |
-
-**Custom implementation approach:**
-
+Then in `tailwind.config.ts`:
 ```typescript
-// components/ui/Combobox.tsx - ~60 lines
-interface ComboboxProps {
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-}
-
-// Core pattern:
-// 1. Input for filtering
-// 2. Dropdown list with keyboard nav (ArrowUp/Down, Enter, Escape)
-// 3. Tailwind for styling
-// 4. useState for open state, filter text
-// 5. useRef + onBlur for click-outside
+fontFamily: {
+  display: ['var(--font-display)', 'Georgia', 'serif'],
+  body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+  mono: ['var(--font-mono)', 'monospace'],
+},
 ```
 
-**Key Tailwind classes for dropdowns:**
+Usage: `font-display` for H1/H2/blockquotes (Instrument Serif), `font-body` for everything else (DM Sans), `font-mono` for code blocks (JetBrains Mono).
 
-```css
-/* Dropdown container */
-.dropdown-menu {
-  @apply absolute top-full left-0 right-0 mt-1
-         bg-overlay border border-border rounded-lg shadow-lg
-         max-h-60 overflow-y-auto z-50;
-}
+### 4. OpenGraph Dynamic Images: next/og (built-in)
 
-/* Option */
-.dropdown-option {
-  @apply px-3 py-2 cursor-pointer text-foreground
-         hover:bg-overlay-hover
-         focus:bg-overlay-hover focus:outline-none;
-}
+| Technology | Version | Purpose | Why Recommended |
+|------------|---------|---------|-----------------|
+| next/og (ImageResponse) | (bundled with Next.js 14.2.15) | Generate dynamic OG images per article | Built into Next.js App Router. No extra dependency. Uses Satori + Resvg to render JSX to PNG at the edge. Can embed custom fonts for brand consistency. |
 
-/* Selected */
-.dropdown-option-selected {
-  @apply bg-turfu-accent/10 text-turfu-accent;
+**No package to install.** `ImageResponse` is imported from `next/og` which ships with Next.js 14.
+
+**Implementation pattern:** Create `app/[locale]/publications/[slug]/opengraph-image.tsx`:
+```typescript
+import { ImageResponse } from 'next/og';
+
+export const runtime = 'edge';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
+
+export default async function OGImage({ params }: { params: { locale: string; slug: string } }) {
+  const article = await getArticle(params.locale, params.slug);
+
+  return new ImageResponse(
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      background: '#FAFAF9', // stone-50 (paper)
+      color: '#1C1917',      // stone-900 (ink)
+      width: '100%',
+      height: '100%',
+      padding: '60px',
+    }}>
+      <div style={{ fontSize: '48px', fontFamily: 'Instrument Serif' }}>
+        {article.title}
+      </div>
+      <div style={{ fontSize: '24px', color: '#78716C', marginTop: '24px' }}>
+        {article.description}
+      </div>
+      <div style={{ marginTop: 'auto', fontSize: '20px' }}>
+        TURFu -- Centre de Recherche Transdisciplinaire
+      </div>
+    </div>,
+    { ...size }
+  );
 }
 ```
 
-**Tag input (multi-select):**
+**Limitation:** Only supports flexbox layout (no CSS grid). Only a subset of CSS properties work. This is fine for OG cards (title + abstract + branding).
 
-Build a `TagInput` component that:
-1. Shows selected tags as pills
-2. Has input for typing/filtering
-3. Dropdown shows filtered suggestions from existing tags
-4. Enter or click adds tag
-5. Backspace removes last tag when input empty
+**Note:** The existing layout already has `generateMetadata` with OG tags pointing to a static `/og-image.png`. For publications, the dynamic `opengraph-image.tsx` convention will override per-article, while static pages keep the default. No conflict.
 
-## Existing Stack (No Changes Needed)
+## Supporting Libraries (Already Present, Reuse)
 
-### Core Framework
-| Technology | Version | Status |
-|------------|---------|--------|
-| Next.js | 14.2.15 | Keep - App Router works well |
-| React | 18.3.1 | Keep - Concurrent features available |
-| TypeScript | 5.6.0 | Keep - Type safety |
+These existing dependencies serve double duty in new features -- no reinstall needed.
 
-### Styling
-| Technology | Version | Status |
-|------------|---------|--------|
-| Tailwind CSS | 3.4.14 | Keep - Semantic color system in place |
-| next-themes | 0.4.6 | Keep - Already handles dark/light toggle |
-
-### Content
-| Technology | Version | Status |
-|------------|---------|--------|
-| react-markdown | 10.1.0 | Keep - Reuse for live preview |
-| gray-matter | 4.0.3 | Keep - Frontmatter parsing |
-| remark-gfm | 4.0.1 | Keep - GFM support |
-| rehype-slug | 6.0.0 | Keep - Heading anchors |
-
-### Icons
-| Technology | Version | Status |
-|------------|---------|--------|
-| lucide-react | 0.460.0 | Keep - Add ChevronDown, Check icons for dropdowns |
-
-## What NOT to Add
-
-| Library | Reason |
-|---------|--------|
-| @headlessui/react | Overkill. Custom combobox is ~60 lines with better bundle impact. |
-| Radix UI primitives | Same reason. Would add multiple packages for simple UI. |
-| react-select | Massive bundle (25kB+), styled-components dependency, wrong styling system. |
-| Monaco Editor | For basic markdown editing, textarea is sufficient. Monaco adds 2MB+. |
-| CodeMirror | Same as Monaco. Overkill for non-developer facing editor. |
-| TipTap/ProseMirror | WYSIWYG not requested. Markdown textarea is the target UX. |
-| Formik | react-hook-form is lighter and more performant. |
-| Yup | zod is more TypeScript-native with better type inference. |
-| usehooks-ts | Can implement useDebounce manually in 5 lines. |
+| Library | Current Usage | New Usage in v3 |
+|---------|---------------|-----------------|
+| remark-gfm | Markdown rendering | MDX compiler remarkPlugin (tables, strikethrough in articles) |
+| rehype-slug | Markdown rendering | MDX compiler rehypePlugin (heading anchors in articles) |
+| rehype-autolink-headings | Markdown rendering | MDX compiler rehypePlugin (clickable heading links) |
+| gray-matter | Frontmatter parsing | Admin preview panel (live preview of MDX frontmatter) |
+| reading-time | Article cards | Publication feed cards (reading time display) |
+| lucide-react | Icons | Navigation, publication cards, tag pills, filter controls |
+| zod | Form validation | Publication form schema, enhanced with new fields (discipline, type, featured_image) |
+| react-hook-form | Admin forms | Publication editor with expanded fields |
+| framer-motion | Animations | Page transitions, card hover effects, feed loading states |
 
 ## Installation
 
 ```bash
-# New dependencies (form validation only)
-npm install react-hook-form zod @hookform/resolvers
-
-# Verify versions
-npm ls react-hook-form zod @hookform/resolvers
+# New dependencies (3 packages total for the ENTIRE v3 milestone)
+npm install next-mdx-remote@5 rehype-pretty-code shiki
 ```
 
-**Expected package.json additions:**
+That is the complete list of new dependencies.
 
-```json
-{
-  "dependencies": {
-    "react-hook-form": "^7.71.1",
-    "zod": "^4.3.6",
-    "@hookform/resolvers": "^5.2.2"
-  }
-}
-```
+## What to Remove (Gradually)
 
-## Theme Support for Admin
+| Current Dependency | Action | Rationale |
+|-------------------|--------|-----------|
+| react-markdown | Phase out after migration | Replaced by MDX rendering via next-mdx-remote for published pages. Keep during migration: the admin preview panel needs it for synchronous client-side preview (MDX compilation is async/server-only). Remove once admin preview is also migrated. |
 
-**No new dependencies needed.** The admin panel already exists in the Next.js app with next-themes provider. Current admin is dark-only because:
+## What NOT to Add
 
-1. Components use hardcoded dark colors (`bg-surface`, `text-foreground`)
-2. These are already semantic variables in Tailwind config
+| Temptation | Why to Avoid |
+|------------|--------------|
+| Prisma ORM | Codebase uses Supabase client directly. Adding Prisma creates two data access patterns. Extend Supabase queries for new publication fields. |
+| contentlayer / velite | Designed for local file-based content. TURFu content is in Supabase. Would add complexity with zero benefit. |
+| @tailwindcss/typography (`prose`) | The design system specifies exact typographic values (17px body, specific line-heights per heading level, Instrument Serif for H1/H2). The `prose` plugin defaults would conflict and require extensive overrides. Build custom MDX component styles using the design tokens directly. |
+| next-seo | Next.js 14 App Router has built-in `generateMetadata` (already used in the codebase at `app/[locale]/layout.tsx`). next-seo is for Pages Router. |
+| plaiceholder / blur-hash | Over-engineering for a publication site starting with few images. Add later if the feed becomes image-heavy. |
+| fumadocs-mdx | Documentation-focused MDX framework. Overkill -- TURFu needs article rendering, not a docs site generator. |
+| Upgrade to Next.js 15 / React 19 | Significant migration with breaking changes (async params, new React APIs). No v3 feature requires it. Stay on Next.js 14 + React 18. |
+| sanitize-html / DOMPurify | MDX content is authored by admins (trusted), compiled server-side by next-mdx-remote. No user-generated content risk. |
 
-**Fix approach:**
+## Design System Token Implementation Notes
 
-The semantic color system from v1 (CSS variables) already supports both themes:
+The design system (stone palette, layer colors, accent) is a **configuration change**, not a new dependency.
 
-```css
-:root {
-  --surface: #ffffff;
-  --foreground: #171717;
-  /* etc. */
-}
+**Current state** (tailwind.config.ts): Uses `turfu.*`, `surface.*`, `foreground.*` color tokens mapped to CSS variables. `fontFamily.sans` is `['Inter', 'system-ui', 'sans-serif']`.
 
-.dark {
-  --surface: #0a0a0a;
-  --foreground: #fafafa;
-  /* etc. */
-}
-```
+**Target state:** Replace all color tokens with stone-based system from livrable v0.3. Replace font family definitions.
 
-Admin components already use `bg-surface`, `text-foreground`, etc. They will automatically respect the theme IF the admin layout is wrapped in the ThemeProvider (which it should be via root layout).
+**Approach:**
+1. Define CSS variables in `:root` and `.dark` selectors in `globals.css` (as specified in the livrable: `--ink`, `--paper`, `--layer-0`, etc.)
+2. Map them in `tailwind.config.ts` under `extend.colors` (replacing current `turfu.*`, `surface.*`, `foreground.*`)
+3. Update `extend.fontFamily` to use the three new font CSS variables
+4. Current `darkMode: 'class'` config is correct -- keep it (works with next-themes)
 
-**Verification needed:** Confirm admin pages inherit from root layout with ThemeProvider. If not, wrap admin layout.
+The current tailwind.config.ts already uses CSS variable patterns (`var(--surface)`, etc.) so the architecture is right. The variable names and values just need updating.
 
-## Performance Considerations
+## Version Compatibility Matrix
 
-### Live Preview Debouncing
+| Package | Compatible With | Notes |
+|---------|-----------------|-------|
+| next-mdx-remote@5 | React >= 16, Next.js 13-14 | Stable with current stack |
+| next-mdx-remote@6 | React >= 16, Next.js 13+ | Archived repo, use only if v5 has bugs |
+| next-mdx-remote-client@2 | React >= 19.1 | **INCOMPATIBLE** with React 18 |
+| rehype-pretty-code@0.14 | shiki >= 1.0 | Requires shiki as peer dependency |
+| shiki@4.0 | Any | No framework dependency |
+| Instrument_Serif (next/font) | Next.js 14.2.15 | Verified in font catalog, NOT variable font |
+| DM_Sans (next/font) | Next.js 14.2.15 | Variable font, verified |
+| JetBrains_Mono (next/font) | Next.js 14.2.15 | Variable font, verified |
+| next/og ImageResponse | Next.js 14.2.15 | Built-in, no install needed |
 
-For large documents, debounce the preview render:
+## Alternatives Considered
 
-```typescript
-import { useState, useDeferredValue } from 'react';
-
-const [rawContent, setRawContent] = useState('');
-const deferredContent = useDeferredValue(rawContent);
-
-// Use deferredContent for preview rendering
-// React will prioritize input responsiveness over preview
-```
-
-**Alternative: manual debounce (if targeting older React):**
-
-```typescript
-// lib/useDebounce.ts
-import { useState, useEffect } from 'react';
-
-export function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-```
-
-### Form Validation Performance
-
-react-hook-form uses uncontrolled components by default, which means:
-- Input changes don't trigger re-renders
-- Validation runs only on blur/submit (configurable)
-- Error state updates are isolated
-
-**Mode recommendation:**
-
-```typescript
-useForm({
-  mode: 'onBlur', // Validate on field blur (good UX)
-  reValidateMode: 'onChange', // Re-validate on change after first error
-});
-```
-
-## Integration Points
-
-### 1. ArticleEditor + react-hook-form
-
-Current `ArticleEditor` uses `useState` for form state. Migration:
-
-```typescript
-// Before (current)
-const [rawContent, setRawContent] = useState(initialContent);
-const [locale, setLocale] = useState(initialLocale);
-const [published, setPublished] = useState(initialPublished);
-
-// After (with react-hook-form)
-const { register, control, handleSubmit, watch, formState: { errors } } = useForm({
-  defaultValues: {
-    rawContent: initialContent,
-    locale: initialLocale,
-    published: initialPublished,
-    category: '',
-    tags: [],
-  },
-  resolver: zodResolver(articleSchema),
-});
-
-const rawContent = watch('rawContent'); // For live preview
-```
-
-### 2. MarkdownRenderer in Preview
-
-Current `MarkdownRenderer` accepts `content` prop (markdown without frontmatter). Usage in editor:
-
-```typescript
-import matter from 'gray-matter';
-import MarkdownRenderer from '@/components/content/MarkdownRenderer';
-
-// In preview pane
-const { content } = matter(rawContent);
-<MarkdownRenderer content={content} />
-```
-
-### 3. Fetching Categories and Tags
-
-Admin API should provide existing categories/tags for autocomplete:
-
-```typescript
-// GET /api/admin/articles/metadata
-// Response: { categories: string[], tags: string[] }
-
-// In ArticleEditor
-const [metadata, setMetadata] = useState<{ categories: string[], tags: string[] }>();
-
-useEffect(() => {
-  fetch('/api/admin/articles/metadata')
-    .then(res => res.json())
-    .then(setMetadata);
-}, []);
-```
-
-**Note:** This requires a small API addition (not frontend-only). If constrained to frontend-only, derive from existing articles list.
-
-## Summary
-
-| Capability | Solution | New Dependency |
-|------------|----------|----------------|
-| Form validation | react-hook-form + zod | YES (3 packages, ~15kB) |
-| Live markdown preview | Reuse MarkdownRenderer + gray-matter | NO |
-| Category dropdown | Custom Combobox component | NO |
-| Tag autocomplete | Custom TagInput component | NO |
-| Theme support | Already in place via next-themes + CSS vars | NO |
-| Debouncing | useDeferredValue (React 18) or manual | NO |
-
-**Total new bundle impact:** ~15kB (react-hook-form 8.5kB + zod 5kB + resolvers 1.5kB)
+| Recommended | Alternative | When to Use Alternative |
+|-------------|-------------|-------------------------|
+| next-mdx-remote@5 (RSC) | next-mdx-remote@6 | If v5 has a specific bug with your content. v6 exists but repo is archived. |
+| next-mdx-remote@5 (RSC) | Raw @mdx-js/mdx compile+evaluate | If next-mdx-remote causes bundling issues. Gives full control but requires manual pipeline. |
+| rehype-pretty-code | rehype-shiki | If you only need basic highlighting without line numbers/titles/line highlighting. |
+| next/og ImageResponse | Static OG image per locale | If dynamic generation is too slow or complex. Fall back to a single branded image. |
+| Custom MDX component styles | @tailwindcss/typography | Only if rapid prototyping is prioritized over design fidelity. The design system is specific enough that custom styles are needed regardless. |
 
 ## Sources
 
-### HIGH Confidence (npm registry verified)
-- react-hook-form: version 7.71.1 verified via `npm show react-hook-form version`
-- zod: version 4.3.6 verified via `npm show zod version`
-- @hookform/resolvers: version 5.2.2 verified via `npm show @hookform/resolvers version`
-- @headlessui/react: version 2.2.9 verified via `npm show @headlessui/react version`
+### HIGH Confidence (verified against live systems)
+- npm registry: next-mdx-remote@6.0.0 latest, v5 stable, peerDeps `react >= 16` -- verified via `npm view`
+- npm registry: next-mdx-remote-client@2.1.9 requires `react >= 19.1.0` -- verified via `npm view`, rules it out
+- npm registry: rehype-pretty-code@0.14.3, shiki@4.0.2 -- verified via `npm view`
+- Local codebase: Instrument_Serif, DM_Sans, JetBrains_Mono confirmed in `next/dist/compiled/@next/font/dist/google/index.d.ts`
+- Local codebase: No Prisma schema or dependency exists; Supabase client used directly
 
-### HIGH Confidence (Existing codebase)
-- react-markdown 10.1.0 already installed and working
-- gray-matter 4.0.3 already installed and working
-- next-themes 0.4.6 already installed and working
-- Semantic color system verified in tailwind.config.ts and CSS variables
+### MEDIUM Confidence (official docs + web search cross-referenced)
+- [next-mdx-remote GitHub](https://github.com/hashicorp/next-mdx-remote) -- RSC API (`compileMDX` from `/rsc`), custom components pattern, archived status
+- [Next.js MDX Guide](https://nextjs.org/docs/app/guides/mdx) -- confirms @next/mdx is for local files only
+- [rehype-pretty-code docs](https://rehype-pretty.pages.dev/) -- shiki integration, build-time highlighting, VS Code themes
+- [Next.js Font Optimization](https://nextjs.org/docs/app/getting-started/fonts) -- next/font/google API, CSS variable approach
+- [Vercel OG Image Generation](https://vercel.com/docs/og-image-generation) -- ImageResponse API, Satori+Resvg, flexbox-only constraint
+- [Next.js Metadata API](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) -- generateMetadata, opengraph-image.tsx convention
 
-### MEDIUM Confidence (Training data + npm verification)
-- react-hook-form integration patterns based on official documentation patterns
-- zod schema patterns based on common TypeScript usage
-- Bundle size estimates from bundlephobia.com patterns (not live verified)
+---
+*Stack research for: TURFu v3 -- MDX publications, design system, OG images*
+*Researched: 2026-03-17*

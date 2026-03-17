@@ -1,407 +1,234 @@
-# Feature Landscape: Admin Article Editor UX
+# Feature Research
 
-**Domain:** CMS admin editor for markdown content management
-**Researched:** 2026-01-31
-**Confidence:** MEDIUM (based on established CMS patterns from Ghost, Sanity, Strapi, Contentful, WordPress Gutenberg)
-**Focus:** Improving existing admin editor from functional-but-minimal to polished experience
+**Domain:** Transdisciplinary research center with publication journal (editorial site, not SaaS)
+**Researched:** 2026-03-17
+**Confidence:** HIGH (well-trodden patterns in Next.js ecosystem, clear design spec from livrable v0.3)
 
-## Executive Summary
+## Feature Landscape
 
-Modern CMS admin editors share common UX patterns that content creators now expect. This research maps table stakes features (must-have for a polished admin editor), differentiators (competitive advantages), and anti-features (things to deliberately NOT build). The current admin editor has basic functionality but lacks the polish expected from modern content management experiences.
+### Table Stakes (Users Expect These)
 
-**Current State Analysis:**
-- Split-view editor with preview toggle (basic, not live)
-- Locale selector dropdown (functional)
-- Draft/published toggle (functional)
-- Raw textarea for markdown editing (no syntax highlighting)
-- Frontmatter parsed but displayed as key-value pairs (not rendered)
-- No validation feedback
-- No category/tag autocomplete
+Features users assume exist on an editorial/journal site. Missing these = site feels like a draft.
 
----
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Publication feed with cards | Every editorial site (Medium, Quanta, Aeon) has a browseable index with visual cards showing title, abstract, author, date | MEDIUM | Rebuild cards with new design system (stone palette, pill tags, featured image). Reuse existing Supabase query infra, add pagination via URL search params |
+| Tag/discipline filtering | Readers expect to narrow content by topic. Quanta, Medium, Aeon all have this | LOW | Already have `tags` and `category` in Supabase schema plus `getAllTags()`/`getCategories()`. Add URL-param-based filtering UI. Map `category` to discipline/layer concept |
+| Pagination | Feeds without pagination break once you exceed ~10 articles. SEO requires crawlable pages | LOW | Use `searchParams` in App Router for page number. Server-side offset/limit on Supabase query. Cursor-based not needed at this scale |
+| Article page with rich typography | Long-form reading experience is the product. Must feel like Quanta/Aeon, not a README | MEDIUM | 720px max-width prose layout, Instrument Serif for H1/H2, DM Sans body at 17px, 1.7 line-height. Apply via Tailwind utilities + CSS variables |
+| Markdown/MDX rendering with custom components | Research content needs callout boxes, quotes, diagrams. Standard markdown is insufficient for editorial quality | HIGH | Core complexity of the milestone. Content stored in Supabase as markdown strings. Need `next-mdx-remote-client` to compile DB-stored MDX at render time. Custom components: QuoteBlock, InfoBox, DiagramEmbed |
+| OpenGraph meta per article | Sharing on Twitter/Discord/Slack without a proper card is a missed opportunity for every shared link | MEDIUM | Use Next.js `generateMetadata()` + `opengraph-image.tsx` route handler with `next/og` ImageResponse API |
+| Dark/light mode on all new pages | Already shipped in v2. New pages without it = regression | LOW | Extend existing next-themes setup. CSS variables for stone palette define both modes per the design spec |
+| i18n on all new pages | Already have fr/en/tr. New routes must participate in locale routing | LOW | Existing next-intl handles routing. Add translation keys for UI chrome. Article content is per-locale in DB, not translated per-article |
+| Responsive layout (375px to desktop) | Non-negotiable for any public site | MEDIUM | 720px prose, 1200px grid. Mobile: single column, hamburger nav already exists. Cards stack vertically |
+| Multi-page navigation | Five-section nav (Vision, Publications, Ecosystem, Research, Join) is the new site architecture | LOW | Rebuild Navbar component with new links. Existing hamburger nav pattern reusable |
+| Static pages (Vision, Research, Ecosystem, Join) | Promised in the nav. Empty nav links = broken trust | MEDIUM | Vision is longform MDX (content provided). Research is a download index. Ecosystem has product cards with layer-coded colors. Join has CTAs |
+| Home page redesign | Current one-pager must become the hub: hero + latest publications + ecosystem preview + CTA | MEDIUM | 4 sections per livrable spec. Publication cards reuse feed card component |
 
-## Table Stakes
+### Differentiators (Competitive Advantage)
 
-Features users expect from a polished admin editor. Missing = editor feels incomplete or amateurish.
-
-| Feature | Why Expected | Complexity | Dependencies | Notes |
-|---------|--------------|------------|--------------|-------|
-| **Live markdown preview** | Real-time feedback while writing | Low | Existing `MarkdownRenderer` | Debounce 150-300ms for performance |
-| **Rendered HTML preview** | See final output, not raw markdown | Low | Existing `MarkdownRenderer` | Current preview shows raw markdown body |
-| **Category dropdown** | Quick selection from existing categories | Low | `getCategories()` exists | Fetch on mount, allow custom entry |
-| **Tag autocomplete** | Discover existing tags, maintain consistency | Medium | `getAllTags()` exists | Multi-select with type-ahead |
-| **Inline validation** | Immediate feedback on errors | Low | None | Title required, slug conflicts |
-| **Autosave indicator** | Know when work is saved | Low | None | "Saved" / "Unsaved changes" status |
-| **Keyboard shortcuts** | Power user efficiency | Low | None | Cmd+S to save, Cmd+P for preview |
-| **Form field organization** | Clear visual hierarchy | Low | None | Group metadata, separate from content |
-| **Theme consistency** | Admin matches site theme | Low | `next-themes` exists | Apply dark/light CSS variables |
-| **Loading states** | Feedback during operations | Low | None | Save button spinner, skeleton loaders |
-
-### Details on Critical Table Stakes
-
-#### 1. Live Markdown Preview
-
-**What users expect:** As they type markdown, the rendered HTML updates in real-time in the adjacent panel.
-
-**Current state:** Preview toggle shows parsed frontmatter + raw markdown body (not rendered).
-
-**Standard pattern (Ghost, Sanity, Notion):**
-- Side-by-side layout: editor left, preview right
-- Preview updates as you type (debounced 150-300ms)
-- Preview matches final article styling
-- Scroll sync between editor and preview (optional, nice-to-have)
-
-**Implementation approach:**
-```typescript
-// Debounced preview update
-const [previewContent, setPreviewContent] = useState('');
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    const { content } = parseMarkdownWithFrontmatter(rawContent);
-    setPreviewContent(content);
-  }, 200);
-  return () => clearTimeout(timer);
-}, [rawContent]);
-```
-
-**Complexity:** Low - existing `MarkdownRenderer` component can be reused directly.
-
-#### 2. Category Dropdown with Existing Categories
-
-**What users expect:** Click dropdown, see categories already used in other articles, can also type new category.
-
-**Current state:** Category must be typed manually in frontmatter YAML.
-
-**Standard pattern (Strapi, WordPress):**
-- Dropdown populated from existing categories
-- Type-ahead filtering
-- Option to create new category inline
-- Clear visual of selected category
-
-**Implementation approach:**
-- Fetch categories on editor mount via API endpoint
-- Use combobox pattern (dropdown + text input)
-- Allow free-form entry for new categories
-
-**Complexity:** Low - `getCategories()` already exists, need API endpoint + UI component.
-
-#### 3. Tag Input with Autocomplete
-
-**What users expect:** Type tag name, see suggestions from existing tags, select multiple, remove easily.
-
-**Current state:** Tags must be typed as YAML array in frontmatter (`tags: ["tag1", "tag2"]`).
-
-**Standard pattern (Ghost, WordPress, Notion):**
-- Pills/chips showing selected tags
-- Text input with type-ahead suggestions
-- Click to add, X to remove
-- Comma or Enter to confirm new tag
-
-**Implementation approach:**
-- Fetch all tags on mount via API endpoint
-- Combobox with multi-select
-- Display as removable chips below input
-
-**Complexity:** Medium - requires multi-select combobox component.
-
-#### 4. Inline Validation
-
-**What users expect:** See errors immediately as they type, not after clicking save.
-
-**Current state:** Validation happens server-side, errors shown via alert().
-
-**Standard pattern (all modern CMS):**
-- Required field indicators (asterisk or label)
-- Error messages below problematic fields
-- Save button disabled until valid (optional)
-- Success confirmation after save
-
-**Validation rules to implement:**
-- Title required (empty check)
-- Slug uniqueness (check on blur, show conflict warning)
-- Valid frontmatter YAML syntax
-- Description recommended but not required
-
-**Complexity:** Low - straightforward form validation.
-
-#### 5. Theme Consistency (Dark/Light Mode)
-
-**What users expect:** Admin panel respects system/user theme preference, matches site design.
-
-**Current state:** Admin uses hardcoded dark theme colors (e.g., `bg-gray-900`, `text-white`).
-
-**Implementation approach:**
-- Replace hardcoded colors with semantic CSS variables
-- Use existing `next-themes` integration
-- Apply `bg-surface`, `text-foreground`, `border-border` classes
-
-**Complexity:** Low - CSS variable substitution, no logic changes.
-
----
-
-## Differentiators
-
-Features that elevate the editor experience but are not expected as baseline.
+Features that set TURFu apart from a standard blog or academic site.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Syntax highlighting** | Better code editing experience | Medium | Use CodeMirror or Monaco |
-| **Scroll sync** | Editor and preview scroll together | Medium | Map editor lines to preview elements |
-| **Markdown toolbar** | Insert formatting without knowing syntax | Low | Bold, italic, link, image buttons |
-| **Image URL preview** | See image before publishing | Low | Validate and thumbnail external URLs |
-| **Word/character count** | Track content length | Low | Real-time in footer |
-| **Reading time estimate** | Match front-end display | Low | `reading-time` library exists |
-| **Undo/redo history** | Recover from mistakes | Medium | Built into textarea, but limited |
-| **Draft auto-save** | Never lose work | Medium | LocalStorage + periodic save |
-| **Frontmatter visual editor** | Edit metadata without YAML | High | Parse and regenerate YAML |
-| **Split/full/preview modes** | Flexible layout options | Low | Toggle buttons for layout |
+| Layer-coded color system | Every piece of content visually tagged to its layer (L0 violet, L1 teal, L2 orange). Creates instant visual taxonomy no generic blog has | LOW | Pill tags + card accents. CSS variables `--layer-0/1/2` already defined in spec. Map article `discipline` field to layer |
+| Custom MDX components (QuoteBlock, InfoBox, DiagramEmbed) | Elevates articles from "blog post" to "research publication". Structured callouts signal editorial quality | HIGH | QuoteBlock: styled blockquote with Instrument Serif italic + accent bar. InfoBox: colored aside with layer-coded border. DiagramEmbed: iframe/SVG embed with caption. These make it feel like Quanta, not Medium |
+| Editorial typography system | Instrument Serif + DM Sans + JetBrains Mono at 17px body creates a distinctive "revue savante" aesthetic signaling intellectual seriousness | MEDIUM | Font loading via `next/font` (Google Fonts). Typographic scale as CSS variables. Single biggest visual differentiator from generic Tailwind sites |
+| Ecosystem product cards with layer schema | The L0/L1/L2 visual architecture is unique to TURFu. Showing products as a coherent layered system communicates the vision | MEDIUM | Ecosystem page with layer sections. Each product: name, problem, solution, status. Layer diagram (SVG already exists). Individual `/ecosystem/[slug]` pages |
+| Dynamic OG images per article | Custom-generated social cards with article title, layer color, TURFu branding. Every share becomes a visual identity touchpoint | MEDIUM | `next/og` ImageResponse API. Template renders JSX with Instrument Serif font (must embed .ttf file). Much more memorable than generic link previews |
+| Trilingual research center (FR/EN/TR) | Almost no research publication sites offer three languages including Turkish. Reflects the transdisciplinary identity | LOW | Already built in v2. Extending to new pages is incremental work |
 
-### Notable Differentiator Details
+### Anti-Features (Commonly Requested, Often Problematic)
 
-#### Markdown Toolbar
+Features that seem good but create problems for this project.
 
-**What it provides:** Insert markdown syntax without memorizing it.
-
-**Standard buttons (Ghost, Notion pattern):**
-- Bold (**text**)
-- Italic (_text_)
-- Heading levels (# ## ###)
-- Link insertion
-- Image URL insertion
-- Code block
-- Blockquote
-- List (bulleted, numbered)
-
-**Implementation complexity:** Low - wrap selection with markdown syntax.
-
-#### Frontmatter Visual Editor
-
-**What it provides:** Edit title, description, category, tags through form fields rather than YAML.
-
-**Tradeoffs:**
-- Pro: More user-friendly, prevents YAML syntax errors
-- Con: Higher complexity, need to sync form state with raw content
-- Con: Loses flexibility of arbitrary frontmatter fields
-
-**Recommendation:** For v2, implement as OPTIONAL. Keep raw editor as primary, offer visual fields as convenience that sync bidirectionally.
-
----
-
-## Anti-Features
-
-Features to explicitly NOT build. Common mistakes in admin editor development.
-
-| Anti-Feature | Why Avoid | What to Do Instead |
-|--------------|-----------|-------------------|
-| **Rich text editor (WYSIWYG)** | Scope creep, inconsistent with markdown workflow | Keep markdown as primary format |
-| **Image upload to server** | Requires storage infrastructure, out of scope | Keep external URL approach |
-| **Version history** | Database complexity, out of scope for v2 | Document as future enhancement |
-| **Concurrent edit detection** | Single admin assumed, unnecessary complexity | N/A for single-user system |
-| **Bulk operations** | Individual editing sufficient for content volume | Keep single-article operations |
-| **Mobile-optimized admin** | Desktop workflow assumed, scope control | Desktop-first, responsive optional |
-| **AI writing assistance** | Feature creep, separate concern | Out of scope |
-| **Custom block types** | Beyond markdown standard | Use markdown extensions if needed |
-| **Collaborative editing** | Single admin, no need | N/A |
-| **Content scheduling** | Simple publish/draft sufficient | Future enhancement if needed |
-
-### Critical Anti-Patterns to Avoid
-
-#### 1. Replacing Markdown with WYSIWYG
-
-**Why tempting:** "Non-technical users don't know markdown"
-
-**Why avoid:**
-- The project is already markdown-based with frontmatter
-- WYSIWYG editors have inconsistent HTML output
-- Would require significant architecture changes
-- Content creators using this admin are expected to know markdown
-
-**Instead:** Add markdown toolbar for common formatting, keep raw markdown as source of truth.
-
-#### 2. Building Image Upload
-
-**Why tempting:** "External URLs are clunky"
-
-**Why avoid:**
-- Requires storage infrastructure (S3, Cloudinary, etc.)
-- Security considerations for uploads
-- Out of explicit scope ("use external URLs for now")
-
-**Instead:** Add URL validation and thumbnail preview for external images.
-
-#### 3. Complex Form State Management
-
-**Why tempting:** "Bidirectional sync between visual fields and raw content"
-
-**Why avoid:**
-- High complexity
-- Edge cases with custom frontmatter fields
-- Parsing/regenerating YAML is error-prone
-
-**Instead:** Keep raw content as source of truth, visual fields as optional convenience that write to frontmatter section.
-
----
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| Full WYSIWYG block editor (Notion/Tiptap) | Feels modern, every CMS has one | Massive complexity (Tiptap/BlockNote = 50KB+ bundle, complex state management). Content stored as JSON blocks, not portable markdown. Overkill for a single-author research site. MDX content authoring requires markdown anyway | Keep markdown editor with live preview. Add formatting toolbar for common shortcuts. MDX components inserted as text snippets, not drag-and-drop blocks |
+| Real-time collaborative editing | Medium and Google Docs have it | Single author (Ek) for now. Requires WebSocket infrastructure, CRDT/OT conflict resolution. Explicitly out of scope -- no external contributions in v3 | Single-author markdown editor. "Soumissions ouvertes" deferred to v4+ per PROJECT.md |
+| Fancy instant-search UI | Every major publication has search | Supabase already has `textSearch` with `fts` column. Building debounced instant-search with result previews is scope creep for <50 articles. Tag filtering covers 90% of discovery | Use existing Supabase text search if needed. Primary discovery via tag/discipline filtering. Add search UI later when content volume justifies it |
+| Comments/discussion on articles | Academic journals have peer commentary | Requires moderation, spam protection, user accounts for commenters. Massive ongoing maintenance | Link to Discord for discussion. Add "Discuss on Discord" CTA on articles. Consider Giscus (GitHub Discussions-backed) in v4 |
+| Newsletter/email subscription | Every publication has a mailing list | Requires email service (Resend/Mailchimp), GDPR compliance, unsubscribe flows, template design. Orthogonal to the site rebuild | Simple "Join" CTA linking to Discord or Buttondown. Not a v3 feature |
+| Infinite scroll on feed | Medium uses it, feels modern | Breaks "Back" button, hurts SEO (pages not indexable), bad for accessibility. URL-based pagination is better for a research journal | Standard paginated feed with URL params (`?page=2`). Each page is a distinct crawlable URL |
+| Automated content pipeline (TCP) | Spec mentions TCP | Explicitly out of scope per PROJECT.md: "Automated TCP pipeline -- manual content for now" | Manual content creation through admin panel |
+| Glossary/knowledge graph | Research sites benefit from linked concepts | Deferred to future milestone per PROJECT.md. Requires significant content authoring and inter-article linking infrastructure | Use tags and categories as lightweight taxonomy. Glossary is v4+ |
+| Content scheduling (publish at date) | Common CMS feature | Simple publish/draft is sufficient for a single-author site with low volume. Scheduling adds cron job complexity | Manual publish via admin toggle, as currently implemented |
 
 ## Feature Dependencies
 
 ```
-Theme Consistency (Dark/Light Mode)
+Design System (palette, fonts, spacing, CSS variables)
     |
-    +-- No dependencies, independent CSS variable change
+    +-- required by --> Publication Feed Cards
+    +-- required by --> Article Pages
+    +-- required by --> Static Pages (Vision, Research, Ecosystem, Join)
+    +-- required by --> Home Page Redesign
+    +-- required by --> OG Image Generation (needs font .ttf files)
+    +-- required by --> Navigation Rebuild
 
-Live Markdown Preview
+Supabase Schema Updates (abstract, discipline, featured_image, status enum)
     |
-    +-- Reuses existing MarkdownRenderer component
-    +-- Debounce for performance
+    +-- required by --> Publication Feed (new fields for cards)
+    +-- required by --> Article Pages (abstract, discipline display)
+    +-- required by --> OG Images (title, abstract for template)
+    +-- required by --> Admin Panel field updates
 
-Category Dropdown
+MDX Rendering Pipeline (next-mdx-remote-client + custom components)
     |
-    +-- Requires API endpoint for categories (GET /api/admin/categories)
-    +-- getCategories() lib function exists
+    +-- required by --> Article Pages
+    +-- required by --> Vision Page (longform MDX content)
 
-Tag Autocomplete
-    |
-    +-- Requires API endpoint for tags (GET /api/admin/tags)
-    +-- getAllTags() lib function exists
-    +-- More complex UI component (multi-select combobox)
+Navigation Rebuild
+    +-- required by --> Static Pages (routes must exist in nav)
+    +-- depends on --> Design System (new nav styling)
 
-Inline Validation
-    |
-    +-- Title validation: local only
-    +-- Slug uniqueness: requires API check (could reuse existing POST error)
+Publication Feed
+    +-- depends on --> Design System (card components)
+    +-- depends on --> Schema Updates (new fields)
+    +-- enhances --> Home Page ("latest publications" section reuses feed cards)
 
-Form Layout Cleanup
-    |
-    +-- Depends on Category/Tag components being built first
-    +-- Theme consistency should be done first
+Article Pages
+    +-- depends on --> MDX Pipeline
+    +-- depends on --> Design System
+    +-- depends on --> Schema Updates
+
+Static Pages
+    +-- depends on --> Design System
+    +-- depends on --> Navigation (routes registered)
+
+OG Images
+    +-- depends on --> Design System (font .ttf files, color tokens)
+    +-- depends on --> Schema Updates (article metadata)
+
+Admin Panel Updates
+    +-- depends on --> Schema Updates (new fields to edit)
+    +-- independent of --> Public-facing design system
 ```
 
----
+### Dependency Notes
 
-## MVP Recommendation (For v2 Milestone)
+- **Design System is the foundation:** Every visual feature depends on it. Must be Phase 1. The stone palette CSS variables, font loading, and typographic scale unlock all downstream work.
+- **Schema updates are cheap but blocking:** Adding `abstract`, `discipline`, `featured_image`, `status` fields to the Supabase `articles` table is trivial migration work but must happen before feed cards or article pages can use the new data.
+- **MDX pipeline is the highest-risk dependency:** `next-mdx-remote-client` compiling DB-stored content to React components at render time is the most complex technical piece. It must work before article pages or the Vision page can render. Current stack uses `react-markdown` which cannot handle custom React components embedded in content.
+- **Admin panel updates are partially independent:** Extending ArticleEditor with new fields (abstract, discipline, featured_image) does not depend on the public design system. The "Medium-style editor" aspiration should be scoped as "markdown editor with better formatting toolbar", not a full block editor.
+- **OG images depend on font embedding:** The `next/og` ImageResponse API cannot use `next/font` Google Fonts directly. Font `.ttf/.woff` files must be fetched and embedded manually in the OG image route handler. This is a known gotcha.
 
-**Phase 1 - Foundation (do first):**
-1. **Theme consistency** - Apply semantic color variables to admin
-2. **Live markdown preview** - Replace raw display with MarkdownRenderer
+## MVP Definition
 
-**Phase 2 - Metadata UX:**
-3. **Category dropdown** - Add API endpoint + dropdown component
-4. **Tag autocomplete** - Add API endpoint + multi-select component
-5. **Form layout cleanup** - Reorganize fields into logical groups
+### Launch With (v3.0)
 
-**Phase 3 - Polish:**
-6. **Inline validation** - Title required, error messages below fields
-7. **Autosave indicator** - Show saved/unsaved status
-8. **Keyboard shortcuts** - Cmd+S to save
+Minimum to ship turfu.org as a credible research center.
 
-**Defer to post-v2:**
-- Syntax highlighting (complexity, debatable value)
-- Markdown toolbar (nice but not essential)
-- Scroll sync (complexity outweighs benefit)
-- Visual frontmatter editor (high complexity)
-- Draft auto-save to localStorage (nice but complex)
+- [ ] Design system implemented (stone palette, 3 fonts, typographic scale, CSS variables, dark/light)
+- [ ] New navigation (Vision | Publications | Ecosystem | Research | Join)
+- [ ] Home page redesign (hero + latest publications + ecosystem compact + CTA)
+- [ ] Publication feed with cards, tag filtering, pagination
+- [ ] Article pages with MDX rendering and custom components (QuoteBlock, InfoBox)
+- [ ] OpenGraph meta per article (`generateMetadata` + dynamic OG images)
+- [ ] Vision page (longform content, already written in livrable v0.3)
+- [ ] Ecosystem page with layer diagram and product cards
+- [ ] Join page with contribution CTAs
+- [ ] Research page (document list with downloadable files + abstracts)
+- [ ] Schema updates: `abstract`, `discipline`, `featured_image` fields in Supabase
+- [ ] Admin panel updated with new fields (extend existing ArticleEditor, not full rebuild)
+- [ ] Responsive + dark mode on all new pages
+- [ ] FR/EN/TR i18n on all pages
 
----
+### Add After Validation (v3.x)
 
-## Implementation Priorities
+Features to add once core site is live and getting traffic.
 
-| Priority | Feature | Rationale |
-|----------|---------|-----------|
-| P0 | Theme consistency | Foundation for all other work, quick win |
-| P0 | Live markdown preview | Highest user-visible improvement |
-| P1 | Category dropdown | Replaces manual YAML editing |
-| P1 | Tag autocomplete | Replaces manual YAML editing |
-| P1 | Form layout cleanup | Organizes the improved components |
-| P2 | Inline validation | Polish, prevents errors |
-| P2 | Autosave indicator | User confidence |
-| P3 | Keyboard shortcuts | Power user efficiency |
+- [ ] DiagramEmbed MDX component (interactive SVG/iframe embeds) -- defer until articles need it
+- [ ] Full-text search UI -- only when article count exceeds ~20
+- [ ] Article series/collections -- group related publications into sequences
+- [ ] Reading progress indicator on article pages
+- [ ] "Discuss on Discord" per-article integration
 
----
+### Future Consideration (v4+)
 
-## Technical Notes for Implementation
+Features to defer until product-market fit is established.
 
-### Stack Context
-- Next.js 14 App Router
-- Tailwind CSS with semantic color system (CSS variables)
-- `next-themes` for dark/light mode
-- `react-markdown` with `remark-gfm`, `rehype-slug` for rendering
-- `gray-matter` for frontmatter parsing
-- Existing lib functions: `getCategories()`, `getAllTags()`
+- [ ] External contributions / open submissions (requires review workflow, moderation)
+- [ ] Glossary / knowledge graph (requires content and linking infrastructure)
+- [ ] Newsletter integration (requires email service)
+- [ ] Comments via Giscus or custom (requires moderation strategy)
+- [ ] Automated TCP pipeline (per PROJECT.md, manual for now)
+- [ ] Multi-author support with individual profiles
 
-### New API Endpoints Needed
-```typescript
-// GET /api/admin/categories
-// Returns: string[] of existing categories
+## Feature Prioritization Matrix
 
-// GET /api/admin/tags
-// Returns: string[] of existing tags
-```
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Design system (palette, fonts, spacing) | HIGH | MEDIUM | P1 |
+| Navigation rebuild | HIGH | LOW | P1 |
+| Publication feed with cards | HIGH | MEDIUM | P1 |
+| Tag/discipline filtering | HIGH | LOW | P1 |
+| Pagination | MEDIUM | LOW | P1 |
+| Article pages with MDX rendering | HIGH | HIGH | P1 |
+| Custom MDX components (QuoteBlock, InfoBox) | HIGH | MEDIUM | P1 |
+| Home page redesign | HIGH | MEDIUM | P1 |
+| Dynamic OG images per article | MEDIUM | MEDIUM | P1 |
+| Vision page | HIGH | LOW | P1 |
+| Ecosystem page + product cards | HIGH | MEDIUM | P1 |
+| Join page | MEDIUM | LOW | P1 |
+| Research page | MEDIUM | LOW | P1 |
+| Layer-coded color system | MEDIUM | LOW | P1 |
+| Schema updates (abstract, discipline, featured_image) | HIGH | LOW | P1 |
+| Admin panel field updates | MEDIUM | LOW | P1 |
+| DiagramEmbed MDX component | LOW | HIGH | P2 |
+| Full-text search UI | LOW | MEDIUM | P3 |
+| Article series/collections | LOW | MEDIUM | P3 |
+| External contributions workflow | LOW | HIGH | P3 |
+| Newsletter integration | LOW | MEDIUM | P3 |
 
-### Component Patterns
+**Priority key:**
+- P1: Must have for v3.0 launch (turfu.org goes live)
+- P2: Should have, add in v3.x when content demands it
+- P3: Nice to have, v4+ consideration
 
-**Combobox (Category/Tag selection):**
-- Input with dropdown
-- Filter as you type
-- Allow custom values
-- For tags: multi-select with chips
+## Competitor Feature Analysis
 
-**Form validation pattern:**
-```typescript
-const [errors, setErrors] = useState<Record<string, string>>({});
+| Feature | Quanta Magazine | Medium | Aeon | Our Approach |
+|---------|----------------|--------|------|--------------|
+| Feed layout | Curated editorial grid, category sections | Infinite scroll, algorithm-driven | Curated list, minimal cards | Paginated card grid with tag filtering. Manual curation via admin, not algorithmic |
+| Article typography | Custom serif display, 17-18px body, generous spacing | System fonts, 21px body | Georgia serif, restrained palette | Instrument Serif display + DM Sans body at 17px. Closest to Quanta's editorial feel |
+| Custom components | Interactive diagrams, animated illustrations, data viz | Basic embeds (YouTube, tweets) | Minimal, text-focused | QuoteBlock, InfoBox, DiagramEmbed. Start static, add interactivity in v3.x |
+| Social sharing | Standard OG + curated illustrations per article | Dynamic OG with author photo + title | Standard OG | Dynamic OG with Instrument Serif title, layer color accent, TURFu branding |
+| Navigation | Topic-based (Math, Physics, Biology, CS) | Following / recommended / topics | Simple (Ideas, Video, Audio) | Organizational (Vision, Publications, Ecosystem, Research, Join) -- maps to mission, not just content |
+| Dark mode | No | Yes (system preference) | No | Yes -- full dark mode with warm stone palette inversion |
+| i18n | English only | Via user content | English only | FR/EN/TR -- significant differentiator for French-origin research center |
+| Editor/CMS | Custom CMS | Proprietary built-in editor | Custom CMS | Extended markdown ArticleEditor with MDX support. Not a full CMS rebuild |
+| Content taxonomy | Categories + series | Tags + topics + publications | Sections (Ideas, Video) | Disciplines + tags + layer mapping. Semantic rather than flat |
 
-const validateTitle = (title: string) => {
-  if (!title.trim()) {
-    setErrors(prev => ({ ...prev, title: 'Title is required' }));
-    return false;
-  }
-  setErrors(prev => ({ ...prev, title: '' }));
-  return true;
-};
-```
+## Existing Feature Reuse
 
-### Tailwind Classes for Theme Consistency
-Replace hardcoded colors:
-- `bg-gray-900` -> `bg-surface`
-- `bg-gray-800` -> `bg-overlay`
-- `text-white` -> `text-foreground`
-- `text-gray-400` -> `text-foreground-muted`
-- `border-gray-700` -> `border-border`
+The following v2 features carry forward and reduce v3 implementation scope.
 
----
-
-## Confidence Assessment
-
-| Area | Confidence | Notes |
-|------|------------|-------|
-| Table stakes list | HIGH | Consistent across Ghost, Sanity, Strapi, WordPress |
-| Implementation complexity | MEDIUM | Based on existing codebase structure |
-| Differentiators | MEDIUM | Industry patterns, subjective value |
-| Anti-features | HIGH | Clear scope boundaries from PROJECT.md |
-| Dependencies | HIGH | Verified against existing codebase |
-
----
+| Existing Feature | Reuse Strategy | Modification Needed |
+|------------------|---------------|---------------------|
+| Supabase article CRUD | Keep as-is, extend schema | Add columns: `abstract`, `discipline`, `featured_image`, `status` (draft/published/archived) |
+| next-intl locale routing | Keep entirely | Add translation keys for new UI strings (nav items, filter labels, pagination) |
+| next-themes dark/light | Keep entirely | Wire new CSS variables for stone palette tokens |
+| ArticleEditor component | Extend, not replace | Add fields for abstract, discipline, featured_image. Keep markdown textarea + live preview. Add formatting toolbar |
+| Authentication (admin) | Keep entirely | No changes needed |
+| react-markdown rendering | Replace for articles, keep for admin preview | Switch to `next-mdx-remote-client` for public article pages. Keep `react-markdown` in admin live preview (simpler, faster) |
+| framer-motion animations | Keep, apply to new components | Page transitions, card hover effects, section reveals |
+| Navbar + hamburger | Rebuild with new links | New nav structure (5 sections), same responsive pattern |
+| reading-time calculation | Keep entirely | Already works, reuse on new card components |
+| gray-matter frontmatter | Keep for admin | Still useful for parsing editor content |
+| Supabase text search (fts) | Keep as backend capability | Defer UI for it. Available when needed |
 
 ## Sources
 
-### HIGH Confidence (Direct Code Analysis)
-- Current `ArticleEditor.tsx` implementation
-- Current `MarkdownRenderer.tsx` implementation
-- Existing `getCategories()` and `getAllTags()` functions in `articles.ts`
-- `next-themes` integration in codebase
-- Semantic color system CSS variables
-
-### MEDIUM Confidence (Industry Patterns)
-- Ghost Admin editor patterns (distraction-free markdown editing, side-by-side preview)
-- Sanity Studio patterns (structured content, inline validation)
-- Strapi Content Manager patterns (dropdown fields, relationship management)
-- WordPress Gutenberg patterns (block-based but relevant for toolbar UX)
-- Contentful web app patterns (field organization, validation feedback)
-
-### Project Scope (from PROJECT.md)
-- Explicit out-of-scope: image upload, versioning, concurrent editing, bulk operations, mobile admin
+- [Next.js MDX Guide](https://nextjs.org/docs/app/guides/mdx) -- official MDX integration, HIGH confidence
+- [next-mdx-remote-client](https://github.com/ipikuka/next-mdx-remote-client) -- maintained fork for App Router + Server Components, HIGH confidence
+- [Next.js Metadata and OG Images](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) -- official OG image generation with next/og, HIGH confidence
+- [Next.js Search and Pagination](https://nextjs.org/learn/dashboard-app/adding-search-and-pagination) -- URL-based pagination pattern, HIGH confidence
+- [Liveblocks Rich Text Editor Comparison 2025](https://liveblocks.io/blog/which-rich-text-editor-framework-should-you-choose-in-2025) -- evaluated Tiptap/BlockNote/Lexical, decided against for v3, MEDIUM confidence
+- [Tailwind CSS Theme Variables](https://tailwindcss.com/docs/theme) -- CSS variable design token approach, HIGH confidence
+- TURFu-Site-Livrable-v0.3.md -- design system spec, milestone structure, content, HIGH confidence (primary source)
+- PROJECT.md -- scope boundaries, out-of-scope items, existing stack, HIGH confidence (primary source)
 
 ---
-
-*Research complete: 2026-01-31*
-*Focus: Admin editor UX improvements for existing Next.js markdown CMS*
+*Feature research for: TURFu.org v3 Site Architecture and Publications*
+*Researched: 2026-03-17*

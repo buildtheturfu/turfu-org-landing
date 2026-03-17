@@ -1,765 +1,568 @@
-# Admin Article Editor UX Pitfalls
+# Pitfalls Research: v3 Site Architecture & Publications
 
-**Domain:** Admin panel article editor improvements
-**Researched:** 2026-01-31
-**Confidence:** HIGH (verified against existing codebase patterns and React/Next.js best practices)
+**Domain:** Adding MDX rendering, publication feed, design system migration, and admin rebuild to existing Next.js 14 + Supabase + Tailwind site
+**Researched:** 2026-03-17
+**Confidence:** HIGH (verified against codebase analysis, official docs, community issue reports)
 
-**Context:** Adding live markdown preview, category/tag dropdowns, form validation, and theme support to existing ArticleEditor.tsx (200 lines) that already has split-view structure.
+**Context:** The current site is a one-pager + admin CMS using Supabase (NOT Prisma), react-markdown, Inter font, zinc-based palette with CSS variables, next-themes dark mode, and next-intl i18n. v3 transforms it into a multi-page research center with MDX publications, stone palette, new typography, and rebuilt admin.
 
 ---
 
 ## Critical Pitfalls
 
-Mistakes that cause data loss, broken functionality, or major integration issues with the existing system.
+Mistakes that cause rewrites, data loss, or weeks of debugging.
 
 ---
 
-### Pitfall 1: Re-rendering MarkdownRenderer on Every Keystroke
+### Pitfall 1: next-mdx-remote RSC Mode Is Broken on Latest Versions
 
-**What goes wrong:** Live preview re-parses and re-renders markdown on every character typed, causing lag, cursor jumping, and poor editing experience.
+**What goes wrong:**
+You install next-mdx-remote 5.x expecting smooth RSC support via `next-mdx-remote/rsc`, and nothing works. Basic MDX like `# Hello` throws compilation errors. The RSC import path exists in docs but is actively broken with Next.js 14.2.x/15.x combinations.
 
-**Why it happens:** Direct binding of textarea value to MarkdownRenderer without debouncing. React-markdown with plugins (remarkGfm, rehypeSlug) has non-trivial parsing overhead.
+**Why it happens:**
+next-mdx-remote's RSC mode underwent a fundamental architecture shift (serialization + render merged into one async server component). The 5.0 release has unresolved issues with the latest Next.js versions. GitHub issue #488 documents this as of March 2025 and the situation remains unstable.
+
+**How to avoid:**
+- Use `next-mdx-remote` v4.x with the serialize/hydrate pattern (stable, well-tested)
+- OR use `next-mdx-remote-client` (community fork specifically fixing RSC issues)
+- OR compile MDX server-side with `@mdx-js/mdx` directly and render the result
+- Pin exact versions in package.json, do not use `^` for MDX-related packages
+- Test MDX compilation in a standalone script before integrating into pages
 
 **Warning signs:**
-- Cursor jumps or lags when typing
-- Noticeable delay between keystroke and character appearing
-- CPU spikes visible in DevTools during typing
-- Mobile editing becomes unusable
+- `TypeError: Cannot read properties of undefined` when importing from `next-mdx-remote/rsc`
+- Build succeeds locally but fails on Vercel
+- Custom components silently not rendering (RSC context limitation)
 
-**Consequences:**
-- Unusable editor on slower devices
-- Users lose text position and flow
-- May trigger "Maximum update depth exceeded" errors
-- Battery drain on mobile
-
-**Prevention strategy:**
-
-```tsx
-// BAD: Re-renders on every keystroke
-<MarkdownRenderer content={rawContent} />
-
-// GOOD: Debounce preview updates
-import { useDeferredValue, useState, useEffect } from 'react';
-
-function ArticleEditor() {
-  const [rawContent, setRawContent] = useState('');
-
-  // Option 1: useDeferredValue (React 18+) - lets typing remain responsive
-  const deferredContent = useDeferredValue(rawContent);
-
-  // Option 2: Manual debounce (300-500ms sweet spot)
-  const [previewContent, setPreviewContent] = useState('');
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setPreviewContent(rawContent);
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, [rawContent]);
-
-  return (
-    <>
-      <textarea
-        value={rawContent}
-        onChange={(e) => setRawContent(e.target.value)}
-      />
-      <MarkdownRenderer content={deferredContent} /> {/* or previewContent */}
-    </>
-  );
-}
-```
-
-**Which phase should address it:** Phase 1 (Live Markdown Preview) - must be baked in from the start, not retrofitted.
-
-**Existing codebase note:** The current ArticleEditor.tsx has a `showPreview` toggle but only displays raw content in `<pre>`. When adding actual MarkdownRenderer, debouncing is essential.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- must validate MDX approach in plan 1 before building article pages.
 
 ---
 
-### Pitfall 2: Losing Unsaved Changes on Navigation
+### Pitfall 2: MDX Custom Components Cannot Use React Context in RSC
 
-**What goes wrong:** User edits article, accidentally navigates away (clicks sidebar link, browser back), loses all work without warning.
+**What goes wrong:**
+You build custom MDX components (QuoteBlock, InfoBox, DiagramEmbed) that rely on React Context (e.g., theme context, locale context, UI state). They silently fail or throw when rendered server-side because RSC does not support React Context.
 
-**Why it happens:** No "unsaved changes" detection or beforeunload handler. Existing editor has no isDirty tracking.
+**Why it happens:**
+The `MDXProvider` pattern from `@mdx-js/react` uses React Context to inject custom components. RSC mode replaces this with a direct `components` prop. But if your custom components themselves consume context (useTheme, useTranslations from next-intl), they must be client components, creating a client/server boundary mismatch.
+
+**How to avoid:**
+- Pass custom components via the `components` prop directly, never via MDXProvider
+- Make MDX custom components "dumb" -- they receive all data as props, no context consumption
+- If a component needs theme/locale data, wrap only that component in `'use client'` and pass data from the server parent
+- Test each custom component both in isolation and inside MDX rendering pipeline
 
 **Warning signs:**
-- No asterisk or indicator on unsaved changes
-- No confirmation prompt when navigating away
-- Refresh loses all work
+- Components render on dev server but blank in production
+- `Error: useContext is not available in Server Components`
+- Components work when page is client-side but break after converting to RSC
 
-**Consequences:**
-- Data loss and user frustration
-- Lost productivity
-- Erodes trust in admin panel
-
-**Prevention strategy:**
-
-```tsx
-// Track dirty state
-const [initialContent, setInitialContent] = useState(initialContent);
-const isDirty = rawContent !== initialContent;
-
-// Browser beforeunload
-useEffect(() => {
-  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-    if (isDirty) {
-      e.preventDefault();
-      e.returnValue = ''; // Required for Chrome
-    }
-  };
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-}, [isDirty]);
-
-// Next.js navigation (App Router)
-import { useRouter } from 'next/navigation';
-
-// For link clicks within the app
-const handleNavigation = (href: string) => {
-  if (isDirty && !confirm('Vous avez des modifications non enregistrees. Quitter quand meme?')) {
-    return;
-  }
-  router.push(href);
-};
-
-// Visual indicator
-<h2 className="text-lg font-semibold text-foreground">
-  {articleId ? "Modifier l'article" : 'Nouvel article'}
-  {isDirty && <span className="text-turfu-accent ml-2">*</span>}
-</h2>
-```
-
-**Which phase should address it:** Phase 3 (Form Validation) - natural fit with validation state management.
-
-**Existing codebase note:** Current `onCancel` handler in ArticleEditor doesn't check for unsaved changes before calling `handleCancel` in AdminDashboard.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- custom components defined in plan 2 (article page + MDX).
 
 ---
 
-### Pitfall 3: Theme Flash in Editor When Switching Modes
+### Pitfall 3: Palette Migration Breaks Dark Mode Due to Variable Name Collision
 
-**What goes wrong:** Adding light mode support causes visible flash when editor loads or theme changes - editor briefly shows wrong colors before theme applies.
+**What goes wrong:**
+You replace the zinc-based palette with stone tokens, but the existing CSS variable names (`--surface`, `--foreground`, `--border`) overlap with the new design system tokens (`--ink`, `--paper`, `--border`). During migration, some components reference old variable names that now resolve to wrong values, causing invisible text, wrong backgrounds, or broken contrast in one mode.
 
-**Why it happens:** SSR renders with initial/system theme, client hydration applies actual theme. Without proper handling, there's a visible theme mismatch.
+**Why it happens:**
+The current codebase uses TWO color systems simultaneously:
+1. CSS variables (`--surface`, `--foreground`, `--border`, `--overlay`) in globals.css
+2. Tailwind theme extensions (`turfu.accent`, `surface.DEFAULT`, etc.) in tailwind.config.ts
+3. Some components use `bg-[var(--surface)]` directly, others use `bg-surface`
+
+The new design system introduces different semantic names (`--ink`, `--paper`, `--paper-warm`, `--paper-depth`). If you rename variables without updating every reference, components silently render with transparent/missing backgrounds.
+
+**How to avoid:**
+- Phase 1: Add new stone variables alongside old ones (both exist temporarily)
+- Phase 2: Create a mapping file documenting old-to-new: `--surface` maps to `--paper`, `--foreground` maps to `--ink`, etc.
+- Phase 3: Search and replace across ALL files (`grep -r "var(--surface"`, `grep -r "bg-surface"`, etc.)
+- Phase 4: Remove old variables only after visual regression test on every page in both themes
+- Never rename a CSS variable without running the full mapping
+
+**Current references that MUST be updated:**
+- `globals.css`: 22 variable definitions (light + dark)
+- `tailwind.config.ts`: `surface`, `foreground`, `border`, `overlay` color groups
+- `MarkdownRenderer.tsx`: 15+ direct class references (`text-foreground`, `bg-surface-muted`, etc.)
+- `ThemeToggle.tsx`: `bg-[var(--overlay-hover)]`, `text-[var(--foreground)]`
+- `globals.css` component layer: `btn-primary`, `btn-secondary` with variable references
+- Every component using `turfu-accent` (accent system changes from blue/violet gradient to amber)
 
 **Warning signs:**
-- Brief white flash on dark mode or dark flash on light mode
-- Theme toggle causes full component re-render
-- Editor colors lag behind theme toggle
+- Text invisible on one theme (same color as background)
+- Contrast ratio failures in accessibility audit
+- Dark mode "looks fine" but light mode has gray-on-gray text (or vice versa)
+- `::selection` color breaks (currently uses `rgb(var(--turfu-accent) / 0.3)` with RGB triplet format)
 
-**Consequences:**
-- Jarring visual experience
-- Unprofessional appearance
-- May trigger layout shift
-
-**Prevention strategy:**
-
-The existing codebase already uses next-themes with ThemeProvider. Key patterns:
-
-```tsx
-// Use CSS variables for theme colors (already done in globals.css)
-// Editor should use semantic color tokens, not hardcoded colors
-
-// BAD: Hardcoded dark colors
-<textarea className="bg-[#1a1a1a] text-white" />
-
-// GOOD: CSS variable tokens (already used in existing code)
-<textarea className="bg-surface text-foreground" />
-
-// For theme-aware components, handle hydration mismatch
-'use client';
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
-
-function ThemeAwareEditor() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Prevent hydration mismatch by not rendering theme-dependent content until mounted
-  if (!mounted) {
-    return <EditorSkeleton />; // Same dimensions, neutral colors
-  }
-
-  return <Editor theme={resolvedTheme} />;
-}
-```
-
-**Which phase should address it:** Phase 4 (Theme Support) - but must audit existing color classes first.
-
-**Existing codebase note:** ArticleEditor.tsx already uses semantic classes like `bg-surface`, `text-foreground`, `border-border`. This is good. The existing ThemeToggle.tsx has proper `mounted` handling as a reference pattern.
+**Phase to address:**
+Phase 8 (Design System & Layout) -- this IS the core work of this phase. Plan 1 should be palette migration alone, tested exhaustively before touching layout.
 
 ---
 
-### Pitfall 4: Category/Tag Dropdown Loading States Not Handled
+### Pitfall 4: Accent Color Format Incompatibility (RGB Triplet vs Hex)
 
-**What goes wrong:** Dropdowns for category/tag selection show empty or flash while fetching options from API. User can't tell if data is loading or if there are no options.
+**What goes wrong:**
+The current accent system uses an unusual `rgb(var(--turfu-accent) / <alpha-value>)` pattern where the CSS variable stores an RGB triplet (`29 78 216`), not a hex color. The new design system uses standard hex values (`#B45309` for amber). If you naively replace the variable values with hex, every opacity usage breaks silently.
 
-**Why it happens:** Async data fetching without loading states. Options list empty during fetch looks identical to "no categories exist."
+**Why it happens:**
+Tailwind's `<alpha-value>` pattern requires bare RGB values (without `rgb()`). The current `tailwind.config.ts` uses `'rgb(var(--turfu-accent) / <alpha-value>)'` which only works with space-separated RGB triplets. Standard hex values like `#B45309` cannot be used with this pattern.
+
+**How to avoid:**
+- Switch the new accent system to standard Tailwind color definitions (hex values in config)
+- Use Tailwind's built-in opacity modifiers (`bg-accent/25`) instead of the custom RGB pattern
+- OR convert new hex values to RGB triplets to maintain the existing pattern
+- The cleanest approach: define all new colors as standard CSS variables with hex values, and use Tailwind's `theme.colors` with direct hex values. Drop the `<alpha-value>` trick entirely -- use Tailwind opacity utilities where needed.
 
 **Warning signs:**
-- Empty dropdown appears before options load
-- User can submit form before dropdown data loads
-- No feedback during slow network conditions
+- `hover:shadow-lg hover:shadow-turfu-accent/25` renders with no shadow
+- `::selection` background becomes fully opaque or transparent
+- Gradient backgrounds (`bg-gradient-turfu`) stop working
 
-**Consequences:**
-- Confusion about available options
-- Form submission with incomplete data
-- Race conditions if user types while options load
-
-**Prevention strategy:**
-
-```tsx
-// Track loading and error states explicitly
-const [categories, setCategories] = useState<string[]>([]);
-const [loadingCategories, setLoadingCategories] = useState(true);
-const [categoryError, setCategoryError] = useState<string | null>(null);
-
-useEffect(() => {
-  async function fetchCategories() {
-    try {
-      setLoadingCategories(true);
-      const res = await fetch('/api/admin/categories');
-      if (!res.ok) throw new Error('Failed to fetch');
-      const data = await res.json();
-      setCategories(data);
-    } catch (err) {
-      setCategoryError('Impossible de charger les categories');
-    } finally {
-      setLoadingCategories(false);
-    }
-  }
-  fetchCategories();
-}, []);
-
-// Render with clear states
-<select disabled={loadingCategories || !!categoryError}>
-  {loadingCategories && <option>Chargement...</option>}
-  {categoryError && <option>{categoryError}</option>}
-  {!loadingCategories && !categoryError && (
-    <>
-      <option value="">Selectionner une categorie</option>
-      {categories.map(cat => (
-        <option key={cat} value={cat}>{cat}</option>
-      ))}
-    </>
-  )}
-</select>
-```
-
-**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - core to the feature.
-
-**Existing codebase note:** Categories currently come from ContentSidebar props (fetched at page level). For admin editor, need API endpoint or pass categories through AdminDashboard. Current ArticleEditor parses category from frontmatter text.
+**Phase to address:**
+Phase 8 (Design System & Layout) -- must be resolved in the palette migration plan before any component work.
 
 ---
 
-### Pitfall 5: Validating Frontmatter Syntax vs Content Separately
+### Pitfall 5: Font Loading Creates Cumulative Layout Shift (CLS) with Three Fonts
 
-**What goes wrong:** Validation checks field presence but not frontmatter YAML syntax. User can have valid fields but malformed YAML that breaks on save.
+**What goes wrong:**
+Loading Instrument Serif + DM Sans + JetBrains Mono (3 Google Fonts, ~6 weight variants) causes visible font swapping. The 17px body text with DM Sans has different metrics than the Inter fallback, causing text reflow and layout shift, especially in the publication feed cards where titles and abstracts are densely packed.
 
-**Why it happens:** Treating frontmatter as structured data when it's actually a text blob being parsed. Client validates fields, server parses text - mismatch.
+**Why it happens:**
+`next/font` optimizes each font independently but cannot prevent metric differences between fallback (system font) and loaded font. With 3 fonts, the chance of visible swap increases. Instrument Serif in particular is a relatively new font with no close system fallback -- the metric difference is larger than common fonts like Inter.
 
-**Warning signs:**
-- Client shows "valid" but server returns parse error
-- Quotes within values break parsing
-- Array syntax `["a", "b"]` not validated correctly
+**How to avoid:**
+- Use `next/font/google` with `display: 'swap'` (default) and configure `adjustFontFallback: true`
+- Load all fonts in the root layout, export as CSS variables, reference via Tailwind config
+- Declare font variables in `<html>` className, not per-component
+- Test with Chrome DevTools "disable cache" + throttled connection to see real swap behavior
+- Consider using `font-display: optional` for Instrument Serif if CLS is unacceptable (may not render on slow connections)
+- Pre-connect to Google Fonts origin even though next/font self-hosts (for development experience)
 
-**Consequences:**
-- False positive validation ("all fields valid" but save fails)
-- Confusing error messages from server
-- User edits frontmatter manually, bypasses field validation
+```typescript
+// Root layout pattern for 3 fonts
+import { Instrument_Serif, DM_Sans, JetBrains_Mono } from 'next/font/google';
 
-**Prevention strategy:**
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
-```tsx
-// Parse frontmatter on client to match server behavior
-import matter from 'gray-matter';
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
 
-const validateContent = (rawContent: string): ValidationResult => {
-  const errors: string[] = [];
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
-  // 1. Validate frontmatter is parseable
-  try {
-    const { data: frontmatter, content } = matter(rawContent);
-
-    // 2. Validate required fields
-    if (!frontmatter.title?.trim()) {
-      errors.push('Le titre est requis');
-    }
-
-    // 3. Validate field types
-    if (frontmatter.tags && !Array.isArray(frontmatter.tags)) {
-      errors.push('Les tags doivent etre une liste');
-    }
-
-    // 4. Validate content exists
-    if (!content.trim()) {
-      errors.push('Le contenu ne peut pas etre vide');
-    }
-
-  } catch (e) {
-    errors.push('Format frontmatter invalide (verifiez la syntaxe YAML)');
-  }
-
-  return { valid: errors.length === 0, errors };
-};
+// Apply ALL variables on <html> or <body>
+<body className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
 ```
 
-**Which phase should address it:** Phase 3 (Form Validation) - critical validation path.
+**Warning signs:**
+- Lighthouse CLS score drops below 0.1
+- Visible "flash" on page load where serif titles briefly show as sans-serif
+- Feed cards jump/reflow after font load
 
-**Existing codebase note:** Server uses `parseMarkdownWithFrontmatter` from `@/lib/articles`. Client has basic `parseFrontmatter` regex in ArticleEditor. These must match behavior or use same library.
+**Phase to address:**
+Phase 8 (Design System & Layout) -- font loading is plan 1, must be validated before any typography styling.
 
 ---
 
-### Pitfall 6: Sync Issues Between Dropdown Selection and Frontmatter Text
+### Pitfall 6: Supabase-to-Prisma Migration Corrupts Existing Data
 
-**What goes wrong:** User selects category from dropdown, but frontmatter text isn't updated. Or user edits frontmatter text, dropdown doesn't reflect change. Dual sources of truth conflict.
+**What goes wrong:**
+PROJECT.md says "Prisma + PostgreSQL" but the actual codebase uses Supabase client directly (no Prisma). Attempting to add Prisma on top of an existing Supabase database with `prisma db pull` can misinterpret Supabase's internal schemas (auth, storage, extensions), and running `prisma migrate` can conflict with Supabase's own migration system.
 
-**Why it happens:** Maintaining both raw frontmatter text (for power users) and structured form fields (for convenience) without bidirectional sync.
+**Why it happens:**
+Supabase manages its own internal tables (auth.users, storage.objects, etc.) and extensions (uuid-ossp, pgcrypto). Prisma's introspection may try to model these, and Prisma's migration system assumes it owns the schema. Running `prisma db push` or `prisma migrate dev` can reset or corrupt Supabase-managed tables.
+
+**How to avoid:**
+- **Decision first:** Choose whether to add Prisma at all. The current Supabase client works fine. Adding Prisma adds a second data access layer and complexity. For a site with one main table (articles/publications), the Supabase client is sufficient.
+- If adding Prisma: use `prisma db pull` with schema filtering to exclude Supabase internal schemas
+- NEVER run `prisma migrate reset` on a Supabase database
+- Use Prisma only for YOUR tables (public schema), not Supabase-managed ones
+- Keep separate `.env` for Prisma connection (direct connection URL, not pooled)
+- Back up the database before any Prisma operations
 
 **Warning signs:**
-- Dropdown shows "guide" but frontmatter says `category: "tutorial"`
-- Saving uses dropdown value, ignoring frontmatter edit
-- User confused about which is authoritative
+- `prisma db pull` outputs hundreds of tables you did not create
+- `prisma migrate dev` warns about drift from Supabase-managed objects
+- Auth stops working after a migration
 
-**Consequences:**
-- Data inconsistency
-- Lost edits
-- User trust erosion
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- model definition in plan 1. Must decide Supabase-only vs Prisma before implementing.
 
-**Prevention strategy:**
+---
 
-Choose ONE authoritative source:
+### Pitfall 7: Admin Panel Rebuild Breaks Authentication Mid-Migration
 
-```tsx
-// OPTION 1: Frontmatter text is authoritative (simpler, maintains power-user workflow)
-// Dropdown reads from parsed frontmatter, writes back to text
+**What goes wrong:**
+The admin panel rebuild touches routes, layouts, and API endpoints. During the rebuild, the authentication middleware, cookie handling, or session validation breaks. The admin panel becomes inaccessible, and there is no way to manage content until the rebuild is complete.
 
-const updateFrontmatterField = (field: string, value: string | string[]) => {
-  // Parse current frontmatter
-  const match = rawContent.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return;
+**Why it happens:**
+The current auth system uses bcryptjs with custom cookie-based sessions (not Supabase Auth). The admin routes at `[locale]/admin/*` and API routes at `api/admin/*` form a coupled system. Changing the admin page structure, moving routes, or updating the layout can inadvertently break the auth flow.
 
-  // Update or add field
-  let frontmatterText = match[1];
-  const fieldRegex = new RegExp(`^${field}:.*$`, 'm');
-  const newValue = Array.isArray(value)
-    ? `${field}: [${value.map(v => `"${v}"`).join(', ')}]`
-    : `${field}: "${value}"`;
+**How to avoid:**
+- Keep the existing auth routes (`api/admin/login`, `api/admin/logout`) completely untouched during admin rebuild
+- Build the new admin UI as new components alongside old ones, not as replacements
+- Test auth flow (login -> dashboard -> CRUD -> logout) after every structural change
+- Do NOT move the admin routes to a different path until the new UI is fully working
+- If the admin needs a new layout, add it as a nested layout inside `[locale]/admin/layout.tsx` without modifying the parent locale layout
 
-  if (fieldRegex.test(frontmatterText)) {
-    frontmatterText = frontmatterText.replace(fieldRegex, newValue);
-  } else {
-    frontmatterText += `\n${newValue}`;
-  }
+**Warning signs:**
+- Login redirects to wrong page after layout change
+- Cookies not set/read correctly after route restructure
+- API routes return 401 that worked before
 
-  setRawContent(rawContent.replace(match[0], `---\n${frontmatterText}\n---`));
-};
-
-// OPTION 2: Structured state is authoritative (cleaner, but loses manual frontmatter editing)
-// Reconstruct frontmatter from structured state on save
-```
-
-**Recommendation:** Option 1 preserves the existing workflow where users can manually edit frontmatter. Dropdowns become convenience helpers, not replacements.
-
-**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - fundamental architecture decision.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- admin extension for publication management. Auth must remain untouched throughout.
 
 ---
 
 ## Moderate Pitfalls
 
-Mistakes that cause poor UX but don't break core functionality.
+Mistakes that cause significant rework or poor user experience.
 
 ---
 
-### Pitfall 7: Markdown Preview Styling Doesn't Match Public Render
+### Pitfall 8: MDX Content Stored in Database Cannot Be Statically Generated
 
-**What goes wrong:** Preview in editor looks different from published article. Users surprised when article goes live.
+**What goes wrong:**
+You store MDX source in Supabase (like current articles), expecting Next.js to statically generate publication pages. But dynamic data from a database means pages cannot be statically generated at build time -- they require runtime rendering. This negates the performance benefits of static generation for content that rarely changes.
 
-**Why it happens:** Preview uses different styles or component than public MarkdownRenderer. Admin panel has own styling that doesn't include prose classes.
+**Why it happens:**
+MDX in files (the common pattern) allows `generateStaticParams` + build-time compilation. MDX in a database requires runtime compilation on every request unless you implement ISR (Incremental Static Regeneration) or manual caching.
+
+**How to avoid:**
+- Use `revalidate` in page metadata for ISR: `export const revalidate = 3600` (1 hour)
+- Cache compiled MDX output alongside raw source (add a `compiled_html` or `compiled_mdx` column)
+- OR accept dynamic rendering with aggressive caching headers
+- The current `unstable_noStore()` pattern in articles.ts explicitly disables caching -- this is fine for admin but wrong for public pages
+- For public pages, use a separate fetch function WITHOUT `noStore()` that leverages Next.js data cache
 
 **Warning signs:**
-- Different fonts, colors, or spacing in preview vs public
-- Code blocks styled differently
-- Links missing hover states in preview
+- Publication pages have TTFB > 500ms (MDX compilation happening on every request)
+- Vercel function invocations spike (no caching)
+- Pages feel slower than the old markdown rendering
 
-**Prevention strategy:**
-
-```tsx
-// GOOD: Reuse exact same renderer component
-import MarkdownRenderer from '@/components/content/MarkdownRenderer';
-
-// In ArticleEditor preview panel
-{showPreview && (
-  <div className="w-1/2 border-l border-border overflow-auto p-6">
-    <div className="prose-turfu max-w-none">
-      <MarkdownRenderer content={contentWithoutFrontmatter} />
-    </div>
-  </div>
-)}
-```
-
-**Which phase should address it:** Phase 1 (Live Markdown Preview) - use existing MarkdownRenderer.
-
-**Existing codebase note:** MarkdownRenderer.tsx in `/src/components/content/` is well-configured with remark-gfm, rehype-slug, and custom component styling. Reuse it directly.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- caching strategy in plan 1 (model + feed).
 
 ---
 
-### Pitfall 8: Form Validation Only on Submit (No Inline Feedback)
+### Pitfall 9: Publication Feed Filtering Breaks Pagination
 
-**What goes wrong:** User fills out form, clicks save, sees list of errors. Must find and fix each field without guidance during input.
+**What goes wrong:**
+You build tag/discipline filtering as client-side state, but pagination as server-side (URL-based). When a user filters by tag, the pagination resets to page 1, but the URL still says page 3. Or worse, filtering happens client-side on the current page's data only, so filtered results are incomplete.
 
-**Why it happens:** Validation logic only runs in submit handler. No real-time feedback as user types.
+**Why it happens:**
+Mixing client-side filtering with server-side pagination creates state desynchronization. The feed shows "5 results for Epistemologie" but only because page 1 has 5 -- there might be 20 more across other pages.
+
+**How to avoid:**
+- Make filtering server-side via URL search params: `/publications?tag=epistemologie&page=1`
+- When filter changes, ALWAYS reset page to 1
+- Use `useSearchParams` + `useRouter` to manage filter + pagination state in URL
+- Server component fetches from Supabase with both filter and pagination in the query
+- Consider shallow routing (no full page reload) with `router.push(url, { scroll: false })`
 
 **Warning signs:**
-- All errors appear at once after submit
-- No visual indication of invalid fields until submit
-- User not sure which fields are required
+- Filtered count doesn't match total available articles with that tag
+- Changing filter doesn't update URL (not shareable/bookmarkable)
+- Back button doesn't restore previous filter state
 
-**Prevention strategy:**
-
-```tsx
-// Field-level validation with immediate feedback
-const [errors, setErrors] = useState<Record<string, string>>({});
-const [touched, setTouched] = useState<Record<string, boolean>>({});
-
-const validateField = (field: string, value: string) => {
-  switch (field) {
-    case 'title':
-      return value.trim() ? '' : 'Le titre est requis';
-    case 'category':
-      return value ? '' : ''; // Optional field, no error
-    default:
-      return '';
-  }
-};
-
-const handleBlur = (field: string, value: string) => {
-  setTouched(prev => ({ ...prev, [field]: true }));
-  setErrors(prev => ({ ...prev, [field]: validateField(field, value) }));
-};
-
-// Show error only for touched fields
-{touched.title && errors.title && (
-  <span className="text-red-400 text-sm">{errors.title}</span>
-)}
-
-// Or use border color
-<input
-  className={`border ${touched.title && errors.title ? 'border-red-400' : 'border-border'}`}
-  onBlur={(e) => handleBlur('title', e.target.value)}
-/>
-```
-
-**Which phase should address it:** Phase 3 (Form Validation) - core validation UX.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- feed implementation in plan 1.
 
 ---
 
-### Pitfall 9: Tag Input UX - Typing Instead of Selecting
+### Pitfall 10: i18n + MDX Content Creates Impossible Routing
 
-**What goes wrong:** Tags implemented as plain text input. Users must type exact tag names, leading to typos, inconsistent casing, duplicate variations.
+**What goes wrong:**
+You try to make every publication available in all 3 locales (fr/en/tr), but most publications have a single native language. The routing expects `[locale]/publications/[slug]` but the same slug in a different locale either 404s or shows content in the wrong language.
 
-**Why it happens:** Taking the easy path with text input instead of proper tag selector.
+**Why it happens:**
+The current i18n model (next-intl with `[locale]` prefix) assumes all content exists in all locales. Publications are different -- an article written in French should be accessible at `/fr/publications/mon-article` but may not exist at `/en/publications/mon-article`.
+
+**How to avoid:**
+- Store `locale` as a field on each publication (already planned in PUB-03)
+- Do NOT translate slugs between locales
+- At `/en/publications/mon-article`, if the article is French-only: show it in French with a notice "This article is available in French" rather than 404
+- The feed at `/en/publications` should show ALL publications regardless of their native language, with a language indicator on each card
+- Use `generateStaticParams` to generate pages only for each article's native locale
+- For non-native locale access, use a fallback that serves the article in its original language with UI chrome in the user's locale
 
 **Warning signs:**
-- "React", "react", "ReactJS" all treated as different tags
-- No autocomplete for existing tags
-- Users can't see available tags
+- 404 pages for articles that exist but in a different language
+- Slug generation creates different slugs for translated titles
+- Feed shows empty for non-French locales (because no English content exists yet)
 
-**Prevention strategy:**
-
-```tsx
-// Combobox pattern for tags
-const [inputValue, setInputValue] = useState('');
-const [selectedTags, setSelectedTags] = useState<string[]>([]);
-const availableTags = ['guide', 'tutorial', 'reference', 'api', ...]; // From API
-
-const filteredTags = availableTags.filter(
-  tag => tag.toLowerCase().includes(inputValue.toLowerCase()) &&
-         !selectedTags.includes(tag)
-);
-
-const addTag = (tag: string) => {
-  if (!selectedTags.includes(tag)) {
-    setSelectedTags([...selectedTags, tag]);
-    updateFrontmatterField('tags', [...selectedTags, tag]);
-  }
-  setInputValue('');
-};
-
-const removeTag = (tag: string) => {
-  const newTags = selectedTags.filter(t => t !== tag);
-  setSelectedTags(newTags);
-  updateFrontmatterField('tags', newTags);
-};
-
-// UI: Chips for selected, dropdown for suggestions
-<div className="flex flex-wrap gap-2 p-2 border rounded">
-  {selectedTags.map(tag => (
-    <span key={tag} className="flex items-center gap-1 px-2 py-1 bg-turfu-accent/20 rounded">
-      {tag}
-      <button onClick={() => removeTag(tag)}><X size={14} /></button>
-    </span>
-  ))}
-  <input
-    value={inputValue}
-    onChange={(e) => setInputValue(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === 'Enter' && filteredTags[0]) {
-        e.preventDefault();
-        addTag(filteredTags[0]);
-      }
-    }}
-    placeholder="Ajouter un tag..."
-    className="flex-1 min-w-[100px] bg-transparent outline-none"
-  />
-</div>
-{inputValue && filteredTags.length > 0 && (
-  <div className="absolute mt-1 bg-overlay border rounded shadow-lg">
-    {filteredTags.map(tag => (
-      <button key={tag} onClick={() => addTag(tag)} className="block w-full px-3 py-2 text-left hover:bg-overlay-hover">
-        {tag}
-      </button>
-    ))}
-  </div>
-)}
-```
-
-**Which phase should address it:** Phase 2 (Category/Tag Dropdowns) - key UX improvement.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- model design in plan 1 must handle this from day 1.
 
 ---
 
-### Pitfall 10: Split View Not Responsive on Narrow Screens
+### Pitfall 11: OpenGraph Image Generation Exceeds Edge Runtime Limits
 
-**What goes wrong:** 50/50 split view works on desktop but makes both panels too narrow on tablet. Mobile is even worse.
+**What goes wrong:**
+You build dynamic OG images using `next/og` (ImageResponse) with Instrument Serif font and the new design system. The function exceeds the 500KB bundle limit or fails because custom fonts cannot be loaded via `fs` in Edge Runtime.
 
-**Why it happens:** Fixed percentage split without responsive handling. Current ArticleEditor uses `w-1/2` for preview.
+**Why it happens:**
+Edge Runtime has no filesystem access. Fonts must be fetched via `fetch()` inside the handler function, not imported at module scope. Instrument Serif font files (~50-100KB) plus the Satori rendering engine eat into the 500KB limit quickly. If you also embed the layer color system and logo, you hit the ceiling.
+
+**How to avoid:**
+- Fetch font files from a public URL or from the project's `public/` directory using `fetch(new URL(...))`
+- Use only one font weight for OG images (Instrument Serif 400 for title, system font for body)
+- Keep OG image JSX minimal -- Satori does not support CSS Grid, has limited flexbox, no pseudo-elements
+- Cache generated images aggressively: `export const revalidate = 86400` (24 hours)
+- Test OG image generation locally with `next dev` before deploying -- Vercel Edge will have stricter limits
+- Set `export const runtime = 'edge'` on the OG route
 
 **Warning signs:**
-- Text truncates or wraps excessively in narrow split
-- Preview panel unreadable on tablet
-- No way to toggle between editor and preview on mobile
+- `Error: The Edge Function size is too large` on Vercel deployment
+- Font renders as squares/boxes in OG image
+- OG image works locally but fails in production
 
-**Prevention strategy:**
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- plan 3 (OG + seed data).
 
-```tsx
-// Responsive split: side-by-side on desktop, toggle on mobile/tablet
-const [activePanel, setActivePanel] = useState<'editor' | 'preview'>('editor');
+---
 
-// Desktop: side-by-side
-// Mobile/Tablet: toggle between panels
+### Pitfall 12: next-themes `disableTransitionOnChange` Fights New Design System Transitions
 
-<div className="flex-1 flex overflow-hidden">
-  {/* Desktop: both panels */}
-  <div className={`hidden lg:flex ${showPreview ? 'lg:w-1/2' : 'lg:w-full'}`}>
-    {/* Editor */}
-  </div>
-  {showPreview && (
-    <div className="hidden lg:block lg:w-1/2">
-      {/* Preview */}
-    </div>
-  )}
+**What goes wrong:**
+The current ThemeProvider uses `disableTransitionOnChange` which strips ALL CSS transitions during theme switch. The new design system adds subtle transitions to cards, links, and hover states. When theme toggles, these transitions are forcefully removed, causing a jarring snap instead of smooth color change.
 
-  {/* Mobile/Tablet: one panel at a time */}
-  <div className="lg:hidden w-full">
-    {activePanel === 'editor' ? <Editor /> : <Preview />}
-  </div>
-</div>
+**Why it happens:**
+`disableTransitionOnChange` injects a `<style>` tag that sets `* { transition: none !important }` during theme change. This prevents the "flash" but also kills intentional transitions. With a richer design system (card hovers, link underlines, button states), this becomes noticeable.
 
-{/* Mobile panel switcher */}
-<div className="lg:hidden flex border-b">
-  <button
-    onClick={() => setActivePanel('editor')}
-    className={activePanel === 'editor' ? 'border-b-2 border-turfu-accent' : ''}
-  >
-    Editeur
-  </button>
-  <button
-    onClick={() => setActivePanel('preview')}
-    className={activePanel === 'preview' ? 'border-b-2 border-turfu-accent' : ''}
-  >
-    Apercu
-  </button>
-</div>
-```
+**How to avoid:**
+- Keep `disableTransitionOnChange` for now -- the flash prevention is more important than smooth theme transitions
+- If smooth theme switching is desired later, replace with a more targeted approach: only disable transition on `background-color` and `color`, not on `transform`, `opacity`, etc.
+- The stone palette has closer light/dark values than zinc (warm undertones in both), so the theme switch will be less jarring even without transitions
 
-**Which phase should address it:** Phase 1 (Live Markdown Preview) - affects preview architecture.
+**Warning signs:**
+- Card hover animation "jumps" during theme switch
+- Users report "glitchy" feel when toggling theme
+- Framer-motion animations interrupted during theme change
+
+**Phase to address:**
+Phase 8 (Design System & Layout) -- note during theme token migration, revisit in Phase 12 (Polish).
 
 ---
 
 ## Minor Pitfalls
 
-Mistakes that cause annoyance but are easily fixable.
+Issues that cause annoyance but are quickly fixable.
 
 ---
 
-### Pitfall 11: Save Button Doesn't Indicate Validation State
+### Pitfall 13: Instrument Serif Missing Turkish Characters
 
-**What goes wrong:** Save button always active. User clicks, validation fails, feels like button didn't work.
+**What goes wrong:**
+Instrument Serif renders correctly in French and English but Turkish characters (dotted/dotless i: I/i vs I/i, cedilla: c/s, umlauts: o/u) display as fallback font, creating a jarring mixed-font appearance on Turkish pages.
 
-**Why it happens:** Button enabled regardless of form validity. Validation happens post-click.
+**How to avoid:**
+- Verify Instrument Serif supports `latin-ext` subset (Turkish requires it)
+- Load with `subsets: ['latin', 'latin-ext']` in the next/font config
+- If Instrument Serif lacks Turkish glyphs, specify a fallback with Turkish support: `Source Serif 4`
+- Test with actual Turkish content before shipping
 
-**Prevention:**
-
-```tsx
-// Disable save when form is invalid
-const isValid = frontmatter?.title?.trim() && rawContent.trim();
-const canSave = isValid && isDirty && !saving;
-
-<button
-  onClick={handleSave}
-  disabled={!canSave}
-  className={`... ${!canSave ? 'opacity-50 cursor-not-allowed' : ''}`}
->
-  {saving ? 'Enregistrement...' : 'Enregistrer'}
-</button>
-
-// Optional: tooltip explaining why disabled
-{!canSave && !saving && (
-  <span className="text-xs text-foreground-muted">
-    {!isValid ? 'Remplissez les champs requis' : 'Aucune modification'}
-  </span>
-)}
-```
-
-**Which phase should address it:** Phase 3 (Form Validation).
+**Phase to address:**
+Phase 8 (Design System & Layout) -- font loading plan.
 
 ---
 
-### Pitfall 12: Keyboard Shortcuts Conflict with Textarea
+### Pitfall 14: react-markdown to MDX Migration Breaks Existing Articles
 
-**What goes wrong:** Adding Ctrl+S for save, but textarea already uses Ctrl shortcuts for text editing.
+**What goes wrong:**
+Switching from `react-markdown` to MDX compilation changes how edge cases in existing article content are parsed. Plain markdown that worked before (e.g., angle brackets in text, curly braces, JSX-like content) gets interpreted as JSX by the MDX compiler and throws errors.
 
-**Why it happens:** Global keyboard handlers capture events meant for text editing.
+**How to avoid:**
+- MDX is a superset of markdown, but it treats `{`, `}`, `<`, `>` as JSX delimiters
+- Existing articles with these characters in prose will fail MDX compilation
+- Audit all existing articles for MDX-incompatible syntax before switching
+- Escape problematic characters: `\{`, `\}`, `\<`, `\>`
+- Consider keeping react-markdown for EXISTING articles and only using MDX for NEW publications
+- OR add a `format` field to the article model: `"markdown"` vs `"mdx"`
 
-**Prevention:**
+**Warning signs:**
+- Build failures mentioning "Expected corresponding JSX closing tag"
+- Articles that rendered fine suddenly show compilation errors
+- Content with code examples or technical notation breaks
 
-```tsx
-// Only handle shortcut when textarea not focused, or use meta key combinations
-useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    // Ctrl/Cmd + S to save
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      if (canSave) handleSave();
-    }
-  };
-
-  window.addEventListener('keydown', handleKeyDown);
-  return () => window.removeEventListener('keydown', handleKeyDown);
-}, [canSave, handleSave]);
-
-// Note: Ctrl+S doesn't conflict with textarea (browsers don't use it for text)
-// Avoid: Ctrl+B, Ctrl+I, Ctrl+U which are text formatting shortcuts in some contexts
-```
-
-**Which phase should address it:** Phase 3 (Form Validation) - save behavior enhancement.
+**Phase to address:**
+Phase 10 (Publications Feed & Articles) -- must be handled in seed data migration (plan 3).
 
 ---
 
-### Pitfall 13: Missing Loading State When Editor First Opens
+### Pitfall 15: Publication Feed Cards Not Responsive at 720px Content Width
 
-**What goes wrong:** Editor opens with empty content, then content loads and pops in. Jarring experience.
+**What goes wrong:**
+The design system specifies 720px for prose and 1200px for grid layouts. The publication feed uses the 1200px grid, but card layouts break at tablet widths (768px-1024px) where 3-column becomes too narrow but 2-column wastes space.
 
-**Why it happens:** Component renders before article content fetched (for edit mode).
+**How to avoid:**
+- Design card grid as: 1 column mobile, 2 columns tablet, 3 columns desktop
+- Use CSS Grid with `auto-fill` and `minmax()` rather than fixed column counts
+- Card minimum width: 320px (accommodates title + abstract + meta without truncation)
+- Test at exactly 768px, 1024px, and 1200px breakpoints
 
-**Prevention:**
-
-```tsx
-// In AdminDashboard, show loading while fetching article for edit
-const handleEdit = async (article: Article) => {
-  setLoadingEdit(true); // New state
-  try {
-    const res = await fetch(...);
-    // ... fetch content
-    setEditingArticle(fullArticle);
-    setEditingContent(frontmatter);
-  } finally {
-    setLoadingEdit(false);
-  }
-};
-
-// Show skeleton while loading
-if (loadingEdit) {
-  return <ArticleEditorSkeleton />;
-}
-```
-
-**Which phase should address it:** Phase 2 or Phase 3 - general UX polish.
+**Phase to address:**
+Phase 9 (Home Page) for the "latest publications" section, Phase 10 for the full feed.
 
 ---
 
-## Phase-Specific Warnings
+## Technical Debt Patterns
 
-| Phase | Likely Pitfall | Mitigation |
-|-------|----------------|------------|
-| Live Markdown Preview | Pitfall 1 (keystroke re-render) | Use useDeferredValue or debounce from day 1 |
-| Live Markdown Preview | Pitfall 7 (style mismatch) | Reuse existing MarkdownRenderer component |
-| Live Markdown Preview | Pitfall 10 (split view) | Design responsive toggle for mobile/tablet |
-| Category/Tag Dropdowns | Pitfall 4 (loading states) | Explicit loading/error handling for async data |
-| Category/Tag Dropdowns | Pitfall 6 (sync issues) | Choose single source of truth (recommend frontmatter text) |
-| Category/Tag Dropdowns | Pitfall 9 (tag UX) | Combobox pattern, not plain text input |
-| Form Validation | Pitfall 2 (unsaved changes) | beforeunload + isDirty tracking |
-| Form Validation | Pitfall 5 (frontmatter syntax) | Client-side gray-matter parsing to match server |
-| Form Validation | Pitfall 8 (submit-only validation) | Field-level validation on blur |
-| Form Validation | Pitfall 11 (save button state) | Disable when invalid or unchanged |
-| Theme Support | Pitfall 3 (theme flash) | Use existing CSS variables, mounted check pattern |
+Shortcuts that seem reasonable but create long-term problems.
 
----
+| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
+|----------|-------------------|----------------|-----------------|
+| Keep Supabase client instead of adding Prisma | No migration complexity, faster delivery | No type-safe schema, no migration history, queries scattered across files | Acceptable for v3 -- add Prisma in v4 when schema complexity increases |
+| Store compiled MDX alongside source | Fast page loads, no runtime compilation | Stale compiled content if compilation pipeline changes, double storage | Acceptable -- add recompilation script for bulk updates |
+| Client-side tag filtering for small feeds | Simpler implementation, instant filter response | Breaks when feed exceeds one page, non-shareable filter state | Only for MVP with < 20 publications. Switch to URL-based when feed grows |
+| Hardcode OG image template instead of dynamic generation | No Edge Runtime complexity, faster deploy | Every article shares same OG image, poor social sharing | Never -- dynamic OG is table stakes for a publication site |
+| Keep react-markdown for old articles, MDX for new | No migration risk for existing content | Two rendering pipelines to maintain, inconsistent component support | Acceptable for v3 transition period. Migrate old content to MDX in v4 |
 
-## Integration Warnings for Existing System
+## Integration Gotchas
 
-The existing ArticleEditor.tsx has specific patterns to preserve:
+Specific to THIS codebase's existing integrations.
 
-1. **onSave/onCancel callbacks** - Don't break the interface expected by AdminDashboard
-2. **rawContent state** - Entire markdown blob including frontmatter; maintain this pattern
-3. **parseFrontmatter function** - Used for preview display; enhance don't replace
-4. **showPreview toggle** - Existing boolean state; extend for responsive behavior
+| Integration | Common Mistake | Correct Approach |
+|-------------|----------------|------------------|
+| Supabase + MDX | Storing raw MDX in a text column without validating it compiles | Validate MDX compilation on save (admin API), store compilation errors, reject invalid MDX |
+| next-intl + MDX pages | Using `useTranslations` inside MDX-rendered components (requires client boundary) | Pass translated strings as props from the page-level server component to MDX components |
+| next-themes + new palette | Changing CSS variable values without updating the `rgb()` triplet format used by accents | Migrate accent system to standard hex before changing values |
+| framer-motion + page transitions | Adding page transitions that conflict with Next.js App Router streaming | Use `AnimatePresence` only on explicit UI elements, not on page-level layouts |
+| react-hook-form + new admin | Rebuilding admin forms from scratch instead of extending existing validation schemas | Keep existing zod schemas, extend them for publication-specific fields (discipline, type, featured_image) |
 
-**Do NOT:**
-- Replace rawContent with structured form state (breaks existing save flow)
-- Remove frontmatter from textarea (power users expect to edit directly)
-- Change API contract (POST/PUT bodies expect `rawContent`, `locale`, `published`)
+## Performance Traps
 
----
+Patterns that work with 5 articles but fail at 100+.
 
-## Implementation Checklist
+| Trap | Symptoms | Prevention | When It Breaks |
+|------|----------|------------|----------------|
+| Runtime MDX compilation on every page view | TTFB > 1s, Vercel function timeout on long articles | ISR with revalidation, or pre-compiled MDX cache column | > 20 articles with complex MDX |
+| `noStore()` on public article fetch | Every page view hits Supabase, no caching | Use `noStore()` only in admin, let public pages use Next.js data cache with `revalidate` | Immediately visible in Vercel analytics |
+| Fetching ALL articles for feed then filtering client-side | Initial page load fetches entire corpus, slow on mobile | Server-side filtering with Supabase `.eq()` / `.contains()` before returning data | > 50 articles |
+| No image optimization on publication featured images | Large images in feed cards, slow LCP | Use `next/image` with responsive sizes, store images in Supabase Storage with transforms | First article with a 2MB hero image |
+| Reading time calculated on every fetch | CPU wasted recalculating reading time for unchanged articles | Calculate and store reading_time on article save, not on fetch | > 100 articles in feed query |
 
-Before marking admin editor improvements complete:
+## Security Mistakes
 
-- [ ] Preview updates smoothly without lag (debounced)
-- [ ] Preview styling matches published articles
-- [ ] Unsaved changes warning on navigation
-- [ ] Category/tag dropdowns show loading states
-- [ ] Dropdowns sync with frontmatter text
-- [ ] Tags use combobox pattern, not plain text
-- [ ] Validation feedback shown inline, not just on submit
-- [ ] Save button disabled when invalid
-- [ ] No theme flash when switching light/dark
-- [ ] Split view works on all screen sizes
-- [ ] Keyboard shortcuts don't break text editing
+Specific to this project's architecture.
 
----
+| Mistake | Risk | Prevention |
+|---------|------|------------|
+| MDX compilation allowing arbitrary code execution | Malicious MDX can run any JavaScript on the server during compilation | Use `next-mdx-remote` which sandboxes compilation. NEVER use `eval()` on MDX source. Whitelist allowed components explicitly. |
+| Admin API routes not validating MDX before save | Invalid MDX stored in DB crashes public pages | Compile MDX in a try/catch on the admin API save endpoint. Return 400 with error details if compilation fails. |
+| Supabase service role key exposed in client bundle | Full database access from browser | Current pattern uses `createAdminClient()` only in API routes and server functions. Verify no client component ever imports from `@/lib/supabase` directly. |
+| OG image route accepting arbitrary content | Open redirect or XSS via crafted slug parameter | Validate slug against existing publications before generating OG image. Return 404 for unknown slugs. |
+
+## UX Pitfalls
+
+User experience mistakes specific to editorial/publication sites.
+
+| Pitfall | User Impact | Better Approach |
+|---------|-------------|-----------------|
+| Empty publication feed at launch | Site feels dead, "coming soon" vibe undermines credibility | Seed with 3-5 real publications before launch. Even short analyses count. Convert existing .docx/.pdf to MDX abstracts with download links. |
+| Filter tags showing tags with 0 results | User selects "Economie", sees empty feed, feels broken | Only show tags that have at least one published article. Update tag list dynamically. |
+| No reading time or content length indicator on cards | User clicks expecting quick read, gets 8000-word thesis | Show reading time on every card (already have `reading-time` package). Add content type badge (Analysis, Note, Specification). |
+| Dark mode article images with white backgrounds | Bright white image rectangles in dark mode jarring | Add subtle border-radius and border to images. Consider `mix-blend-mode: multiply` for diagrams with white backgrounds. |
+| Language indicator missing on multilingual feed | French user confused by English article in their feed | Show language pill (FR/EN/TR) on every card. Use same pill style as discipline tags but neutral color. |
+
+## "Looks Done But Isn't" Checklist
+
+Things that appear complete but are missing critical pieces.
+
+- [ ] **Design system:** New colors render correctly -- but check `::selection`, `focus:ring`, `scrollbar`, and `placeholder` colors still use old tokens
+- [ ] **Font loading:** Fonts display correctly -- but check with throttled network (3G), verify no CLS above 0.1, test Turkish characters in Instrument Serif
+- [ ] **MDX rendering:** Article renders -- but check that curly braces, angle brackets, and code blocks with JSX don't crash the compiler
+- [ ] **Publication feed:** Cards display -- but check pagination + filter combination, empty state, and back-button behavior
+- [ ] **OG images:** Image generates -- but test with Facebook Sharing Debugger, Twitter Card Validator, and LinkedIn Post Inspector (each has different caching)
+- [ ] **Dark mode:** Pages look correct -- but check layer-colored pills (violet/teal/orange) have sufficient contrast on stone-900 background
+- [ ] **i18n:** French pages work -- but check that Turkish locale renders correctly with new serif font and that empty English content doesn't 404
+- [ ] **Admin auth:** Login works after rebuild -- but check session persistence across new routes, cookie domain, and logout cleanup
+- [ ] **Responsive:** Desktop looks good -- but check publication cards at exactly 768px where grid breakpoint lives
+- [ ] **Performance:** Pages load fast -- but check Supabase queries don't use `noStore()` on public pages (kills caching)
+
+## Recovery Strategies
+
+When pitfalls occur despite prevention, how to recover.
+
+| Pitfall | Recovery Cost | Recovery Steps |
+|---------|---------------|----------------|
+| MDX compilation breaks existing articles | LOW | Add `format: 'markdown'` field, render old articles with react-markdown, new with MDX |
+| Palette migration leaves broken dark mode | MEDIUM | Revert to old variables temporarily, re-do migration with mapping file approach |
+| Font CLS unacceptable | LOW | Switch Instrument Serif to `display: 'optional'`, accept fallback on slow connections |
+| Supabase schema corrupted by Prisma | HIGH | Restore from Supabase backup (verify backups exist BEFORE attempting migration) |
+| Admin auth broken during rebuild | MEDIUM | Keep old admin route functional at `/admin-legacy` until new one is validated |
+| OG images exceed Edge limits | LOW | Fall back to static OG image per-locale, add dynamic generation later |
+| Feed pagination + filter desync | LOW | Make all filtering URL-based from the start; if already client-side, refactor to searchParams |
+
+## Pitfall-to-Phase Mapping
+
+How roadmap phases should address these pitfalls.
+
+| Pitfall | Prevention Phase | Verification |
+|---------|------------------|--------------|
+| #1 next-mdx-remote RSC broken | Phase 10 plan 1 | Compile a test MDX file with custom component before building pages |
+| #2 MDX components + RSC context | Phase 10 plan 2 | Each custom component tested in RSC and client render |
+| #3 Palette variable name collision | Phase 8 plan 1 | Full grep of old variable names returns 0 results after migration |
+| #4 Accent RGB format incompatibility | Phase 8 plan 1 | `::selection`, gradient, and shadow-with-opacity all render correctly |
+| #5 Font CLS with 3 fonts | Phase 8 plan 1 | Lighthouse CLS < 0.1 on throttled 3G connection |
+| #6 Supabase/Prisma migration risk | Phase 10 plan 1 | Decision documented; if Prisma chosen, backup verified before any operation |
+| #7 Admin auth breaks during rebuild | Phase 10 plan 3 | Login -> create article -> edit -> delete -> logout flow works after each commit |
+| #8 MDX runtime compilation perf | Phase 10 plan 2 | Article TTFB < 300ms in production (Vercel) |
+| #9 Feed filter + pagination desync | Phase 10 plan 1 | Filter + paginate to page 2 + browser back restores correct state |
+| #10 i18n + MDX locale routing | Phase 10 plan 1 | French article accessible at `/en/publications/slug` with language notice |
+| #11 OG image Edge Runtime limits | Phase 10 plan 3 | OG image renders correctly on Vercel Edge, verified with sharing debuggers |
+| #12 disableTransitionOnChange conflicts | Phase 8 plan 2 | Theme toggle does not cause animation glitches on cards/buttons |
+| #13 Instrument Serif Turkish chars | Phase 8 plan 1 | Turkish lorem ipsum renders in serif on `/tr` pages |
+| #14 Existing articles break with MDX | Phase 10 plan 3 | All existing articles render without compilation errors |
+| #15 Feed card responsive breakpoints | Phase 9 + Phase 10 | Cards readable at 768px, 1024px, 1200px widths |
 
 ## Sources
 
 **Codebase Analysis (HIGH confidence):**
-- `/src/components/admin/ArticleEditor.tsx` - Existing editor structure
-- `/src/components/content/MarkdownRenderer.tsx` - Reusable markdown renderer
-- `/src/components/ThemeToggle.tsx` - Mounted pattern for theme handling
-- `/src/app/api/admin/articles/route.ts` - API contract for saves
+- `src/app/globals.css` -- Current CSS variable system (zinc-based, RGB triplet accents)
+- `src/app/[locale]/layout.tsx` -- Font loading pattern (Inter via next/font), ThemeProvider config
+- `tailwind.config.ts` -- Color system with `<alpha-value>` pattern
+- `src/lib/supabase.ts` -- Supabase client (NOT Prisma, despite PROJECT.md)
+- `src/lib/articles.ts` -- Data fetching with `noStore()` pattern
+- `src/components/content/MarkdownRenderer.tsx` -- Current react-markdown renderer
+- `src/components/ThemeProvider.tsx` -- next-themes wrapper
+- `src/components/ThemeToggle.tsx` -- Mounted-state hydration pattern
 
-**React Patterns (HIGH confidence):**
-- [React useDeferredValue](https://react.dev/reference/react/useDeferredValue) - For non-blocking preview updates
-- [gray-matter](https://github.com/jonschlinkert/gray-matter) - Already in package.json for frontmatter parsing
-- [next-themes](https://github.com/pacocoursey/next-themes) - Already in package.json for theme handling
+**Official Documentation (HIGH confidence):**
+- [Next.js Font Optimization](https://nextjs.org/docs/app/getting-started/fonts)
+- [Next.js MDX Guide](https://nextjs.org/docs/app/guides/mdx)
+- [Next.js OG Image Generation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
+- [Vercel OG Image Docs](https://vercel.com/docs/og-image-generation) -- 500KB bundle limit, Edge Runtime constraints
+- [Supabase Prisma Integration](https://supabase.com/docs/guides/database/prisma) -- migration warnings
 
-**UX Research (MEDIUM confidence):**
-- Form validation best practices from Nielsen Norman Group research
-- Debounce timing recommendations (300-500ms) from general web performance guidance
+**Community Issues (MEDIUM confidence):**
+- [next-mdx-remote RSC Issue #488](https://github.com/hashicorp/next-mdx-remote/issues/488) -- RSC mode broken with Next.js 15.2.x + v5.0.0
+- [next-mdx-remote-client](https://github.com/ipikuka/next-mdx-remote-client) -- Community fork fixing RSC issues
+- [Next.js OG Image Caching Discussion #62742](https://github.com/vercel/next.js/discussions/62742) -- Dynamic OG not refreshing on revalidatePath
+
+**Design System Sources (HIGH confidence):**
+- `.planning/sources/TURFu-Site-Livrable-v0.3.md` -- Stone palette, typography choices, design principles
 
 ---
-
-*Research completed: 2026-01-31*
-*Focused on: Admin article editor UX improvements*
-*Existing system constraints documented*
+*Pitfalls research for: TURFu v3 Site Architecture & Publications*
+*Researched: 2026-03-17*
+*Previous version: Admin Editor UX Pitfalls (2026-01-31, superseded)*
