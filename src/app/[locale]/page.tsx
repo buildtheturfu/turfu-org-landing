@@ -1,30 +1,29 @@
 import { setRequestLocale } from 'next-intl/server';
+import { getPublishedPublications } from '@/lib/publications';
 import Hero from '@/components/sections/Hero';
-import Problem from '@/components/sections/Problem';
-import Vision from '@/components/sections/Vision';
+import LatestPublications from '@/components/sections/LatestPublications';
 import Ecosystem from '@/components/sections/Ecosystem';
-import Architecture from '@/components/sections/Architecture';
-import Principles from '@/components/sections/Principles';
 import CTA from '@/components/sections/CTA';
-import ScrollSpy from '@/components/ScrollSpy';
 
 type Props = {
   params: { locale: string };
 };
 
-export default function Home({ params: { locale } }: Props) {
-  // Enable static rendering
+export default async function Home({ params: { locale } }: Props) {
   setRequestLocale(locale);
+
+  const { publications } = await getPublishedPublications({
+    locale,
+    limit: 3,
+  });
 
   return (
     <>
-      <ScrollSpy />
       <Hero />
-      <Problem />
-      <Vision />
+      {publications.length > 0 && (
+        <LatestPublications publications={publications} locale={locale} />
+      )}
       <Ecosystem />
-      <Architecture />
-      <Principles />
       <CTA />
     </>
   );
