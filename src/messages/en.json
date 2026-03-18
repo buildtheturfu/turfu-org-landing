@@ -6,11 +6,12 @@
   },
   "nav": {
     "vision": "Vision",
+    "publications": "Publications",
     "ecosystem": "Ecosystem",
-    "architecture": "Architecture",
-    "principles": "Principles",
-    "content": "Content",
-    "join": "Join"
+    "research": "Research",
+    "join": "Join",
+    "menu": "Menu",
+    "close": "Close"
   },
   "hero": {
     "tagline": "Infrastructure for the next paradigm",

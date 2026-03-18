@@ -6,11 +6,12 @@
   },
   "nav": {
     "vision": "Vizyon",
+    "publications": "Yayinlar",
     "ecosystem": "Ekosistem",
-    "architecture": "Mimari",
-    "principles": "İlkeler",
-    "content": "İçerik",
-    "join": "Katıl"
+    "research": "Arastirma",
+    "join": "Katil",
+    "menu": "Menu",
+    "close": "Kapat"
   },
   "hero": {
     "tagline": "Yeni paradigmanın altyapısı",

@@ -6,11 +6,12 @@
   },
   "nav": {
     "vision": "Vision",
-    "ecosystem": "Écosystème",
-    "architecture": "Architecture",
-    "principles": "Principes",
-    "content": "Contenu",
-    "join": "Rejoindre"
+    "publications": "Publications",
+    "ecosystem": "Ecosysteme",
+    "research": "Recherche",
+    "join": "Rejoindre",
+    "menu": "Menu",
+    "close": "Fermer"
   },
   "hero": {
     "tagline": "L'infrastructure du paradigme suivant",
