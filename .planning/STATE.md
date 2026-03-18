@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: completed
-stopped_at: Completed 15-02-PLAN.md
-last_updated: "2026-03-18T19:28:30.472Z"
-last_activity: 2026-03-18 — Completed 15-02 Publication Editor & Dashboard Wiring
+stopped_at: Completed 16-01-PLAN.md
+last_updated: "2026-03-18T19:47:10.072Z"
+last_activity: 2026-03-18 — Completed 16-01 Responsive & Dark Mode Polish
 progress:
   total_phases: 9
   completed_phases: 8
-  total_plans: 16
-  completed_plans: 16
-  percent: 100
+  total_plans: 18
+  completed_plans: 17
+  percent: 94
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 15 — Admin Panel Rebuild
+**Current focus:** Phase 16 — Polish & Deploy
 
 ## Current Position
 
-Phase: 15 of 16 (Admin Panel Rebuild) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 15 complete, all plans delivered
-Last activity: 2026-03-18 — Completed 15-02 Publication Editor & Dashboard Wiring
+Phase: 16 of 16 (Polish & Deploy)
+Plan: 1 of 2 in current phase -- COMPLETE
+Status: Plan 16-01 complete, responsive & dark mode polish delivered
+Last activity: 2026-03-18 — Completed 16-01 Responsive & Dark Mode Polish
 
-Progress: [██████████] 100% (16/16 plans)
+Progress: [█████████░] 94% (17/18 plans)
 
 ## Milestones
 
@@ -64,6 +64,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 14 P02 | 6min | 2 tasks | 7 files |
 | Phase 15 P01 | 5min | 2 tasks | 6 files |
 | Phase 15 P02 | 4min | 2 tasks | 2 files |
+| Phase 16 P01 | 9min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -115,6 +116,8 @@ New v3 decisions:
 - [Phase 15]: MDX preview via renderToStaticMarkup server-side, fetched client-side with AbortController
 - [Phase 15]: zodResolver cast to any for @hookform/resolvers v5 + react-hook-form v7 type compatibility with Zod .default() transforms
 - [Phase 15]: Controller wrapper pattern for custom inputs (ComboboxInput, TagInput) with react-hook-form
+- [Phase 16]: Admin dashboard status badges use semantic tokens (bg-paper-depth/text-ink-secondary) instead of hardcoded gray
+- [Phase 16]: Dynamic import for react-dom/server in API routes to fix webpack bundling
 
 ### Pending Todos
 
@@ -128,6 +131,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T19:24:19.338Z
-Stopped at: Completed 15-02-PLAN.md
+Last session: 2026-03-18T19:47:10.067Z
+Stopped at: Completed 16-01-PLAN.md
 Resume file: None
