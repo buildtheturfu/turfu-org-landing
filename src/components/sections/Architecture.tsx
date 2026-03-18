@@ -47,9 +47,9 @@ const layers: Record<LayerKey, Layer> = {
     legalStatusKey: 'layer0_legal',
     descKey: 'layer0_desc',
     roleKey: 'layer0_role',
-    gradient: 'from-[#0D1B2A]/90 to-[#0D1B2A]/70',
-    accent: 'text-amber-400',
-    accentBg: 'bg-amber-400',
+    gradient: 'from-layer-0/10 to-layer-0/5',
+    accent: 'text-layer-0',
+    accentBg: 'bg-layer-0',
     modules: [
       { id: 'ethics', nameKey: 'module_ethics', descKey: 'module_ethics_desc' },
       { id: 'funding', nameKey: 'module_funding', descKey: 'module_funding_desc' },
@@ -63,9 +63,9 @@ const layers: Record<LayerKey, Layer> = {
     legalStatusKey: 'layer1_legal',
     descKey: 'layer1_desc',
     roleKey: 'layer1_role',
-    gradient: 'from-[#1B3A4B]/90 to-[#1B3A4B]/70',
-    accent: 'text-cyan-400',
-    accentBg: 'bg-cyan-400',
+    gradient: 'from-layer-1/10 to-layer-1/5',
+    accent: 'text-layer-1',
+    accentBg: 'bg-layer-1',
     modules: [
       { id: 'incubation', nameKey: 'module_incubation', descKey: 'module_incubation_desc' },
       { id: 'toolkits', nameKey: 'module_toolkits', descKey: 'module_toolkits_desc' },
@@ -79,9 +79,9 @@ const layers: Record<LayerKey, Layer> = {
     legalStatusKey: 'layer2_legal',
     descKey: 'layer2_desc',
     roleKey: 'layer2_role',
-    gradient: 'from-[#2D5A6B]/90 to-[#2D5A6B]/70',
-    accent: 'text-rose-400',
-    accentBg: 'bg-rose-400',
+    gradient: 'from-layer-2/10 to-layer-2/5',
+    accent: 'text-layer-2',
+    accentBg: 'bg-layer-2',
     modules: [
       { id: 'open-science', nameKey: 'module_open_science', descKey: 'module_open_science_desc' },
       { id: 'memo', nameKey: 'module_memo', descKey: 'module_memo_desc' },
@@ -92,9 +92,9 @@ const layers: Record<LayerKey, Layer> = {
 };
 
 const accentColors: Record<LayerKey, string> = {
-  layer0: 'rgb(251 191 36)',
-  layer1: 'rgb(34 211 238)',
-  layer2: 'rgb(251 113 133)',
+  layer0: 'var(--layer-0)',
+  layer1: 'var(--layer-1)',
+  layer2: 'var(--layer-2)',
 };
 
 export default function Architecture() {
@@ -120,12 +120,12 @@ export default function Architecture() {
   ];
 
   return (
-    <section id="architecture" className="dark section relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1B3A4B 50%, #2D5A6B 100%)' }}>
+    <section id="architecture" className="dark section relative overflow-hidden bg-paper-depth">
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-amber-500/[0.08] rounded-full blur-3xl" />
-        <div className="absolute top-[20%] right-[20%] w-[500px] h-[500px] bg-cyan-500/[0.08] rounded-full blur-3xl" />
-        <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-rose-500/[0.05] rounded-full blur-3xl" />
+        <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-layer-0/[0.08] rounded-full blur-3xl" />
+        <div className="absolute top-[20%] right-[20%] w-[500px] h-[500px] bg-layer-1/[0.08] rounded-full blur-3xl" />
+        <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-layer-2/[0.05] rounded-full blur-3xl" />
       </div>
 
       {/* Grid overlay */}
@@ -145,18 +145,18 @@ export default function Architecture() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <span className="inline-block px-6 py-2 bg-amber-400/15 border border-amber-400/30 rounded-full text-sm text-amber-400 uppercase tracking-widest mb-6">
+          <span className="inline-block px-6 py-2 bg-layer-0/15 border border-layer-0/30 rounded-full text-sm text-layer-0 uppercase tracking-widest mb-6">
             {t('badge')}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-4">
-            <span className="bg-gradient-to-r from-white via-amber-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-layer-0 to-layer-1 bg-clip-text text-transparent">
               {t('title')}
             </span>
           </h2>
           <p className="text-lg text-ink-secondary max-w-3xl mx-auto leading-relaxed">
             {t('subtitle')}
             <br />
-            <span className="text-amber-400 font-medium">{t('subtitle_highlight')}</span>
+            <span className="text-layer-0 font-medium">{t('subtitle_highlight')}</span>
           </p>
         </motion.div>
 
@@ -169,18 +169,20 @@ export default function Architecture() {
         >
           <span className="text-sm text-ink-tertiary mr-2">{t('equation_label')}</span>
           {[
-            { nameKey: 'eq_foundation', subtitleKey: 'eq_foundation_sub', icon: '🏛️', color: 'amber' },
-            { nameKey: 'eq_dao', subtitleKey: 'eq_dao_sub', icon: '🌐', color: 'cyan' },
-            { nameKey: 'eq_projects', subtitleKey: 'eq_projects_sub', icon: '⚙️', color: 'rose' },
+            { nameKey: 'eq_foundation', subtitleKey: 'eq_foundation_sub', icon: '🏛️', layerKey: 'layer0' as LayerKey },
+            { nameKey: 'eq_dao', subtitleKey: 'eq_dao_sub', icon: '🌐', layerKey: 'layer1' as LayerKey },
+            { nameKey: 'eq_projects', subtitleKey: 'eq_projects_sub', icon: '⚙️', layerKey: 'layer2' as LayerKey },
           ].map((item, i) => (
             <React.Fragment key={item.nameKey}>
-              <div className={`bg-${item.color}-400/15 border border-${item.color}-400/40 rounded-xl px-5 py-3 text-center min-w-[140px]`}
+              <div className="rounded-xl px-5 py-3 text-center min-w-[140px]"
                    style={{
-                     background: item.color === 'amber' ? 'rgba(251,191,36,0.15)' : item.color === 'cyan' ? 'rgba(34,211,238,0.15)' : 'rgba(251,113,133,0.15)',
-                     borderColor: item.color === 'amber' ? 'rgba(251,191,36,0.4)' : item.color === 'cyan' ? 'rgba(34,211,238,0.4)' : 'rgba(251,113,133,0.4)'
+                     background: `color-mix(in srgb, ${accentColors[item.layerKey]} 15%, transparent)`,
+                     borderColor: `color-mix(in srgb, ${accentColors[item.layerKey]} 40%, transparent)`,
+                     borderWidth: '1px',
+                     borderStyle: 'solid'
                    }}>
                 <span className="text-2xl block mb-1">{item.icon}</span>
-                <span className={`text-sm font-semibold block ${item.color === 'amber' ? 'text-amber-400' : item.color === 'cyan' ? 'text-cyan-400' : 'text-rose-400'}`}>
+                <span className={`text-sm font-semibold block ${layers[item.layerKey].accent}`}>
                   {t(item.nameKey)}
                 </span>
                 <span className="text-xs text-ink-tertiary">{t(item.subtitleKey)}</span>
@@ -188,10 +190,10 @@ export default function Architecture() {
               {i < 2 && <span className="text-2xl text-ink/30">+</span>}
             </React.Fragment>
           ))}
-          <span className="text-2xl text-cyan-400 mx-2">=</span>
-          <div className="bg-gradient-to-r from-amber-400/20 to-cyan-400/20 border-2 border-amber-400/50 rounded-xl px-6 py-3 text-center">
+          <span className="text-2xl text-layer-1 mx-2">=</span>
+          <div className="bg-gradient-to-r from-layer-0/20 to-layer-1/20 border-2 border-layer-0/50 rounded-xl px-6 py-3 text-center">
             <span className="text-2xl block mb-1">🌍</span>
-            <span className="text-sm font-bold text-amber-400">{t('eq_result')}</span>
+            <span className="text-sm font-bold text-layer-0">{t('eq_result')}</span>
           </div>
         </motion.div>
 
@@ -215,7 +217,7 @@ export default function Architecture() {
                   style={{
                     borderColor: isActive ? accentColor : 'rgba(255,255,255,0.1)',
                     transform: isActive ? 'scale(1.01)' : 'scale(1)',
-                    boxShadow: isActive ? `0 20px 60px ${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.2)')}` : '0 10px 40px rgba(0,0,0,0.3)'
+                    boxShadow: isActive ? `0 20px 60px color-mix(in srgb, ${accentColor} 20%, transparent)` : '0 10px 40px rgba(0,0,0,0.3)'
                   }}
                   onClick={() => setActiveLayer(isActive ? null : layerKey)}
                 >
@@ -235,7 +237,7 @@ export default function Architecture() {
                         <div className="flex flex-wrap items-center gap-3 mb-2">
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${layer.accent}`}
-                            style={{ background: `${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.2)')}` }}
+                            style={{ background: `color-mix(in srgb, ${accentColor} 20%, transparent)` }}
                           >
                             {layerKey.toUpperCase().replace('LAYER', 'LAYER ')}
                           </span>
@@ -251,8 +253,8 @@ export default function Architecture() {
                       <div
                         className={`px-4 py-2 rounded-xl text-sm font-medium ${layer.accent}`}
                         style={{
-                          background: `${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.15)')}`,
-                          border: `1px solid ${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.3)')}`
+                          background: `color-mix(in srgb, ${accentColor} 15%, transparent)`,
+                          border: `1px solid color-mix(in srgb, ${accentColor} 30%, transparent)`
                         }}
                       >
                         {t(layer.roleKey)}
@@ -277,7 +279,7 @@ export default function Architecture() {
                             className="p-4 rounded-xl border transition-all cursor-pointer"
                             style={{
                               background: isModuleActive
-                                ? `linear-gradient(135deg, ${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.2)')}, ${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.05)')})`
+                                ? `linear-gradient(135deg, color-mix(in srgb, ${accentColor} 20%, transparent), color-mix(in srgb, ${accentColor} 5%, transparent))`
                                 : 'rgba(255,255,255,0.03)',
                               borderColor: isModuleActive ? accentColor : 'rgba(255,255,255,0.08)'
                             }}
@@ -290,7 +292,7 @@ export default function Architecture() {
                             <div className="flex items-center gap-3 mb-3">
                               <div
                                 className={`w-10 h-10 rounded-lg flex items-center justify-center ${layer.accent}`}
-                                style={{ background: `${accentColor.replace('rgb', 'rgba').replace(')', ' / 0.15)')}` }}
+                                style={{ background: `color-mix(in srgb, ${accentColor} 15%, transparent)` }}
                               >
                                 {iconMap[module.id]}
                               </div>
@@ -320,14 +322,14 @@ export default function Architecture() {
           viewport={{ once: true }}
         >
           <div className="flex flex-wrap justify-between items-center gap-3 mb-5">
-            <h3 className="text-lg font-semibold text-amber-400">
+            <h3 className="text-lg font-semibold text-layer-0">
               {t('flow_title')}
             </h3>
             <button
               onClick={() => setShowFlows(!showFlows)}
               className={`px-4 py-2 rounded-full text-sm cursor-pointer transition-all ${
                 showFlows
-                  ? 'bg-amber-400/20 border border-amber-400/40 text-amber-400'
+                  ? 'bg-layer-0/20 border border-layer-0/40 text-layer-0'
                   : 'bg-paper-depth border border-border text-ink-secondary'
               }`}
             >
@@ -347,7 +349,7 @@ export default function Architecture() {
                     <span
                       className="px-2 py-1 rounded-full text-xs font-semibold"
                       style={{
-                        background: `${accentColors[flow.from].replace('rgb', 'rgba').replace(')', ' / 0.2)')}`,
+                        background: `color-mix(in srgb, ${accentColors[flow.from]} 20%, transparent)`,
                         color: accentColors[flow.from]
                       }}
                     >
@@ -363,7 +365,7 @@ export default function Architecture() {
                     <span
                       className="px-2 py-1 rounded-full text-xs font-semibold"
                       style={{
-                        background: `${accentColors[flow.to].replace('rgb', 'rgba').replace(')', ' / 0.2)')}`,
+                        background: `color-mix(in srgb, ${accentColors[flow.to]} 20%, transparent)`,
                         color: accentColors[flow.to]
                       }}
                     >
@@ -385,8 +387,8 @@ export default function Architecture() {
         >
           {concepts.map((concept, i) => (
             <div key={i} className="p-6 bg-white/[0.03] rounded-2xl border border-white/10">
-              <div className="text-amber-400 mb-4">{concept.icon}</div>
-              <h4 className="text-base font-semibold text-amber-400 mb-2">{t(concept.titleKey)}</h4>
+              <div className="text-layer-0 mb-4">{concept.icon}</div>
+              <h4 className="text-base font-semibold text-layer-0 mb-2">{t(concept.titleKey)}</h4>
               <p className="text-sm text-ink-secondary leading-relaxed">{t(concept.descKey)}</p>
             </div>
           ))}
@@ -402,7 +404,7 @@ export default function Architecture() {
           <p className="text-base text-ink-tertiary italic max-w-3xl mx-auto mb-3">
             &ldquo;{t('quote')}&rdquo;
           </p>
-          <p className="text-sm text-amber-400">— R. Buckminster Fuller</p>
+          <p className="text-sm text-layer-0">— R. Buckminster Fuller</p>
           <p className="mt-5 text-xs text-ink/40">{t('version')}</p>
         </motion.footer>
       </div>
