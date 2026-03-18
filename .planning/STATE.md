@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: completed
-stopped_at: Completed 11-02-PLAN.md (Article Detail Page)
-last_updated: "2026-03-18T05:01:54.203Z"
-last_activity: 2026-03-18 — Completed 11-02 Article Detail Page
+stopped_at: Completed 12-01-PLAN.md (OpenGraph & Metadata)
+last_updated: "2026-03-18T06:17:34.059Z"
+last_activity: 2026-03-18 — Completed 12-01 OpenGraph & Metadata
 progress:
   total_phases: 9
-  completed_phases: 4
-  total_plans: 9
-  completed_plans: 9
+  completed_phases: 5
+  total_plans: 10
+  completed_plans: 10
   percent: 100
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 11 — Publication Feed & Article Pages
+**Current focus:** Phase 12 — OpenGraph & Metadata
 
 ## Current Position
 
-Phase: 11 of 16 (Publication Feed & Article Pages) -- COMPLETE
-Plan: 2 of 2 in current phase
+Phase: 12 of 16 (OpenGraph & Metadata) -- COMPLETE
+Plan: 1 of 1 in current phase
 Status: Phase Complete
-Last activity: 2026-03-18 — Completed 11-02 Article Detail Page
+Last activity: 2026-03-18 — Completed 12-01 OpenGraph & Metadata
 
-Progress: [██████████] 100% (9/9 plans)
+Progress: [██████████] 100% (10/10 plans)
 
 ## Milestones
 
@@ -58,6 +58,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 10 P01 | 1 | 5 min | 5 min |
 | Phase 11 P01 | 1 | 6 min | 6 min |
 | Phase 11 P02 | 1 | 4 min | 4 min |
+| Phase 12 P01 | 2 min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,9 @@ New v3 decisions:
 - [Phase 11]: next/image Image component for publication featured images
 - [Phase 11]: Filter changes reset page param to avoid empty pages after narrowing results
 - [Phase 11]: Adjacent publications query uses published_at with fallback to created_at
+- [Phase 12]: Duplicated generateSlug in publications.ts to avoid Edge-incompatible imports from articles.ts
+- [Phase 12]: Next.js file-convention OG images (no manual openGraph.images array in page metadata)
+- [Phase 12]: Font loaded via fetch + import.meta.url pattern for Edge runtime OG rendering
 
 ### Pending Todos
 
@@ -106,6 +110,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T04:57:21Z
-Stopped at: Completed 11-02-PLAN.md (Article Detail Page)
+Last session: 2026-03-18T06:17:34.048Z
+Stopped at: Completed 12-01-PLAN.md (OpenGraph & Metadata)
 Resume file: None

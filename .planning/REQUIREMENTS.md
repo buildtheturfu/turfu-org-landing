@@ -37,7 +37,7 @@ Requirements for site redesign. Each maps to roadmap phases.
 - [x] **PUB-03**: Publication model in Supabase (title, slug, abstract, body_mdx, author, tags, discipline, type, status, featured_image, locale, published_at)
 - [x] **PUB-04**: Tag/discipline filtering on feed page
 - [x] **PUB-05**: Pagination on feed page
-- [ ] **PUB-06**: Dynamic OpenGraph meta tags per article (title, abstract, image)
+- [x] **PUB-06**: Dynamic OpenGraph meta tags per article (title, abstract, image)
 
 ### Static Pages
 
@@ -119,7 +119,7 @@ Deferred to future release.
 | PUB-03 | Phase 10 | Complete |
 | PUB-04 | Phase 11 | Complete |
 | PUB-05 | Phase 11 | Complete |
-| PUB-06 | Phase 12 | Pending |
+| PUB-06 | Phase 12 | Complete |
 | PAGES-01 | Phase 14 | Pending |
 | PAGES-02 | Phase 14 | Pending |
 | PAGES-03 | Phase 14 | Pending |
