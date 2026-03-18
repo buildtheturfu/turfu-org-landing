@@ -38,16 +38,17 @@
     "layer2_desc": "PICKR, MEMO, TURFu Labs, TCP, TURFurxiv — acik arastirma icin somut araclar."
   },
   "cta": {
-    "title": "Harekete katıl",
-    "contributor": "Katkıda bulunan",
-    "contributor_desc": "Discord'a katılın, Manifesto'ya katkıda bulunun.",
-    "contributor_btn": "Discord",
-    "builder": "İnşa eden",
-    "builder_desc": "OZAM aracılığıyla uyumlu bir proje önerin.",
-    "builder_btn": "Öner",
-    "partner": "Ortak / Fon sağlayıcı",
-    "partner_desc": "İşbirliği için bizimle iletişime geçin.",
-    "partner_btn": "İletişim"
+    "title": "Katki saglayin",
+    "intro": "TURFu acik bir projedir. Arastirmaci, gelistirici, filozof veya sadece merakli olun — katki saglamak icin bir yer var.",
+    "publish": "Yayinla",
+    "publish_desc": "Bir makale, analiz veya arastirma belgesi onerin.",
+    "publish_btn": "Oner",
+    "build": "Insa et",
+    "build_desc": "Koda, araclara ve EPIS protokolune katki saglayin.",
+    "build_btn": "GitHub",
+    "join": "Katilin",
+    "join_desc": "Tartismalara ve kolektif dusunceye katilin.",
+    "join_btn": "Discord"
   },
   "footer": {
     "nav_title": "Navigasyon",

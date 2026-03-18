@@ -38,16 +38,17 @@
     "layer2_desc": "PICKR, MEMO, TURFu Labs, TCP, TURFurxiv — concrete tools for open research."
   },
   "cta": {
-    "title": "Join the movement",
-    "contributor": "Contributor",
-    "contributor_desc": "Join Discord, contribute to the Manifesto.",
-    "contributor_btn": "Discord",
-    "builder": "Builder",
-    "builder_desc": "Propose an aligned project via OZAM.",
-    "builder_btn": "Propose",
-    "partner": "Partner / Funder",
-    "partner_desc": "Contact us to collaborate.",
-    "partner_btn": "Contact"
+    "title": "Contribute",
+    "intro": "TURFu is an open project. Whether you are a researcher, developer, philosopher, or simply curious — there is a place to contribute.",
+    "publish": "Publish",
+    "publish_desc": "Propose an article, an analysis, or a research document.",
+    "publish_btn": "Propose",
+    "build": "Build",
+    "build_desc": "Contribute to the code, tools, and the EPIS protocol.",
+    "build_btn": "GitHub",
+    "join": "Join",
+    "join_desc": "Participate in discussions and collective thinking.",
+    "join_btn": "Discord"
   },
   "footer": {
     "nav_title": "Navigation",
