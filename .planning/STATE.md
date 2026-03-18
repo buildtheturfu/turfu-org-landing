@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: completed
-stopped_at: Completed 08-03-PLAN.md (Layer Token Gap Closure) -- Phase 08 complete
-last_updated: "2026-03-18T02:34:04.773Z"
-last_activity: 2026-03-18 — Completed 08-03 Layer Token Gap Closure
+status: executing
+stopped_at: Completed 09-02-PLAN.md (Footer & Layout Components)
+last_updated: "2026-03-18T03:01:51.931Z"
+last_activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
 progress:
   total_phases: 9
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  completed_phases: 2
+  total_plans: 5
+  completed_plans: 5
+  percent: 80
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 8 — Design System Foundation
+**Current focus:** Phase 9 — Layout & Navigation
 
 ## Current Position
 
-Phase: 8 of 16 (Design System Foundation)
-Plan: 3 of 3 in current phase (PHASE COMPLETE)
-Status: Phase Complete
-Last activity: 2026-03-18 — Completed 08-03 Layer Token Gap Closure
+Phase: 9 of 16 (Layout & Navigation)
+Plan: 2 of 2 in current phase
+Status: In Progress
+Last activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
 
-Progress: [██████████] 100% (3/3 plans)
+Progress: [████████░░] 80% (4/5 plans)
 
 ## Milestones
 
@@ -43,15 +43,16 @@ See: .planning/MILESTONES.md for full history
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 5
 - Average duration: 6 min
-- Total execution time: 0.3 hours
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 08 Design System Foundation | 3 | 18 min | 6 min |
+| 09 Layout & Navigation | 2 | 12 min | 6 min |
 
 *Updated after each plan completion*
 
@@ -79,6 +80,8 @@ New v3 decisions:
 - [Phase 08]: All 28 components verified clean -- token migration completed alongside foundation setup
 - [Phase 08]: color-mix(in srgb) pattern for CSS variable opacity in inline styles
 - [Phase 08]: Architecture section bg-paper-depth replaces hardcoded dark hex gradient
+- [Phase 09]: Footer uses max-w-layout (1200px) container matching GridLayout
+- [Phase 09]: Layout components (ProseLayout, GridLayout) are server components for RSC compatibility
 
 ### Pending Todos
 
@@ -93,5 +96,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-18
-Stopped at: Completed 08-03-PLAN.md (Layer Token Gap Closure) -- Phase 08 complete
+Stopped at: Completed 09-02-PLAN.md (Footer & Layout Components)
 Resume file: None

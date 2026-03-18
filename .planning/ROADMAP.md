@@ -31,7 +31,7 @@ Live markdown preview, smart metadata inputs, form validation with inline errors
 - Decimal phases (8.1, 8.2): Urgent insertions (marked with INSERTED)
 
 - [ ] **Phase 8: Design System Foundation** - Stone palette, three-font system, layer-coded accents, dark mode
-- [ ] **Phase 9: Layout & Navigation** - Header rebuild, footer, ProseLayout/GridLayout wrappers
+- [x] **Phase 9: Layout & Navigation** - Header rebuild, footer, ProseLayout/GridLayout wrappers (completed 2026-03-18)
 - [ ] **Phase 10: Publication Data & MDX Pipeline** - Supabase publications table, MDX compilation, custom components
 - [ ] **Phase 11: Publication Feed & Article Pages** - Feed index with filtering/pagination, MDX article rendering
 - [ ] **Phase 12: OpenGraph & Metadata** - Dynamic per-article OG images, generateMetadata
@@ -188,7 +188,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 8. Design System Foundation | v3.0 | 2/3 | Gap closure | - |
-| 9. Layout & Navigation | v3.0 | 0/2 | Not started | - |
+| 9. Layout & Navigation | 2/2 | Complete   | 2026-03-18 | - |
 | 10. Publication Data & MDX Pipeline | v3.0 | 0/2 | Not started | - |
 | 11. Publication Feed & Article Pages | v3.0 | 0/2 | Not started | - |
 | 12. OpenGraph & Metadata | v3.0 | 0/1 | Not started | - |
