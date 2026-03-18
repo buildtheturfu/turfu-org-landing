@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getAuthCookieName } from '@/lib/auth';
-import AdminDashboard from '@/components/admin/AdminDashboard';
+import PublicationDashboard from '@/components/admin/PublicationDashboard';
 
 interface Props {
   params: { locale: string };
@@ -15,7 +15,7 @@ export default function AdminPage({ params: { locale } }: Props) {
     redirect(`/${locale}/admin/login`);
   }
 
-  return <AdminDashboard locale={locale} />;
+  return <PublicationDashboard locale={locale} />;
 }
 
 export const metadata = {
