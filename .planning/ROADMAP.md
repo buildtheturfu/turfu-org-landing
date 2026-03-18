@@ -177,8 +177,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 16-01: Responsive, dark mode, and i18n audit with fixes
-- [ ] 16-02: Performance optimization, legacy cleanup, and DNS deployment
+- [ ] 16-01-PLAN.md — Responsive audit and dark mode consistency fixes (DEPLOY-01, DEPLOY-02)
+- [ ] 16-02-PLAN.md — i18n completion, legacy cleanup, Lighthouse optimization, DNS docs (DEPLOY-03, DEPLOY-04, DEPLOY-05)
 
 ## Progress
 
