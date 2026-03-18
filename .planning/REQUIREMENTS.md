@@ -26,8 +26,8 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 - [x] **HOME-01**: Hero section with editorial accroche (Instrument Serif), subtitle, 2 CTAs
 - [x] **HOME-02**: "Publications récentes" section showing 3-4 latest publication cards
-- [ ] **HOME-03**: Ecosystem section with compact Layer 0/1/2 schema and product cards
-- [ ] **HOME-04**: CTA section (Contribuer — publier, construire, rejoindre)
+- [x] **HOME-03**: Ecosystem section with compact Layer 0/1/2 schema and product cards
+- [x] **HOME-04**: CTA section (Contribuer — publier, construire, rejoindre)
 - [x] **HOME-05**: Current one-pager sections removed (flux inter-couches, redundant ecosystem, dead CTAs)
 
 ### Publications
@@ -111,8 +111,8 @@ Deferred to future release.
 | NAV-04 | Phase 9 | Complete |
 | HOME-01 | Phase 13 | Complete |
 | HOME-02 | Phase 13 | Complete |
-| HOME-03 | Phase 13 | Pending |
-| HOME-04 | Phase 13 | Pending |
+| HOME-03 | Phase 13 | Complete |
+| HOME-04 | Phase 13 | Complete |
 | HOME-05 | Phase 13 | Complete |
 | PUB-01 | Phase 11 | Complete |
 | PUB-02 | Phase 11 | Complete |

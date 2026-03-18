@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: executing
-stopped_at: Completed 13-01-PLAN.md
-last_updated: "2026-03-18T07:16:13.485Z"
-last_activity: 2026-03-18 — Completed 13-01 Hero + Latest Publications
+stopped_at: Completed 13-02-PLAN.md
+last_updated: "2026-03-18T07:21:57.645Z"
+last_activity: 2026-03-18 — Completed 13-02 Ecosystem & CTA Sections
 progress:
   total_phases: 9
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 12
-  completed_plans: 11
-  percent: 92
+  completed_plans: 12
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 
 ## Current Position
 
-Phase: 13 of 16 (Home Page Redesign)
-Plan: 2 of 2 in current phase
-Status: In Progress
-Last activity: 2026-03-18 — Completed 13-01 Hero + Latest Publications
+Phase: 13 of 16 (Home Page Redesign) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 13 Complete
+Last activity: 2026-03-18 — Completed 13-02 Ecosystem & CTA Sections
 
-Progress: [█████████░] 92% (11/12 plans)
+Progress: [██████████] 100% (12/12 plans)
 
 ## Milestones
 
@@ -60,6 +60,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 11 P02 | 1 | 4 min | 4 min |
 | Phase 12 P01 | 2 min | 2 tasks | 4 files |
 | Phase 13 P01 | 6min | 2 tasks | 10 files |
+| Phase 13 P02 | 3min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,8 @@ New v3 decisions:
 - [Phase 12]: Font loaded via fetch + import.meta.url pattern for Edge runtime OG rendering
 - [Phase 13]: Hero H1 rendered in text-ink instead of text-accent for editorial feel
 - [Phase 13]: LatestPublications conditionally hidden when 0 publications exist (no placeholder)
+- [Phase 13]: Section background rhythm: hero bg-paper, publications bg-paper-warm, ecosystem bg-paper, CTA bg-paper-warm
+- [Phase 13]: CTA actions reordered to publish/build/join with BookOpen icon replacing Handshake
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T07:16:13.470Z
-Stopped at: Completed 13-01-PLAN.md
+Last session: 2026-03-18T07:21:57.630Z
+Stopped at: Completed 13-02-PLAN.md
 Resume file: None
