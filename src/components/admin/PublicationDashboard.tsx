@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import type { Publication } from '@/lib/types';
+import PublicationEditor from './PublicationEditor';
 
 type StatusFilter = 'all' | 'draft' | 'published' | 'archived';
 
@@ -114,31 +115,29 @@ export default function PublicationDashboard({ locale }: PublicationDashboardPro
       ? publications.length
       : publications.filter((p) => p.status === s).length;
 
-  // Editor placeholder (Plan 15-02 will create PublicationEditor)
-  if (isCreating || editingId) {
+  // Render PublicationEditor for create/edit flows
+  if (isCreating) {
     return (
-      <div className="min-h-screen bg-paper p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-ink">
-              {isCreating ? 'Nouvelle publication' : 'Modifier publication'}
-            </h1>
-            <button
-              onClick={() => {
-                setEditingId(null);
-                setIsCreating(false);
-              }}
-              className="px-4 py-2 text-ink-secondary hover:text-ink transition-colors"
-            >
-              Retour
-            </button>
-          </div>
-          <div className="p-8 bg-paper-depth rounded-lg text-ink-secondary text-center">
-            Editor placeholder - publication {editingId || 'new'}
-          </div>
-        </div>
-      </div>
+      <PublicationEditor
+        locale={locale}
+        onSaved={() => { setIsCreating(false); fetchPublications(); }}
+        onCancel={() => setIsCreating(false)}
+      />
     );
+  }
+
+  if (editingId) {
+    const editingPublication = publications.find((p) => p.id === editingId);
+    if (editingPublication) {
+      return (
+        <PublicationEditor
+          locale={locale}
+          publication={editingPublication}
+          onSaved={() => { setEditingId(null); fetchPublications(); }}
+          onCancel={() => setEditingId(null)}
+        />
+      );
+    }
   }
 
   return (
