@@ -14,7 +14,7 @@ export default function CTA() {
   ];
 
   return (
-    <section id="cta" className="section bg-paper-warm">
+    <section id="cta" className="py-20 bg-paper-warm">
       <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
           className="text-3xl md:text-4xl font-display font-bold text-center mb-6"
