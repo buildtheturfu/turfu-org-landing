@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://turfu.org';
 
   return {
-    rules: { userAgent: '*', allow: '/' },
+    rules: { userAgent: '*', allow: '/', disallow: '/admin' },
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
