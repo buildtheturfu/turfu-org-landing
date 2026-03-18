@@ -95,6 +95,10 @@ export default async function VisionPage({ params: { locale } }: Props) {
           {t('foundations_intro')}
         </p>
         <p className="text-body text-ink-secondary leading-relaxed mb-6">
+          <strong>{t('foundations_cybernetics').split(' — ')[0]}</strong> —{' '}
+          {t('foundations_cybernetics').split(' — ').slice(1).join(' — ')}
+        </p>
+        <p className="text-body text-ink-secondary leading-relaxed mb-6">
           <strong>
             {t('foundations_transdisciplinarity').split(' — ')[0]}
           </strong>{' '}
