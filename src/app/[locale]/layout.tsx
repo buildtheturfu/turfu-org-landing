@@ -6,6 +6,7 @@ import { Instrument_Serif, DM_Sans, JetBrains_Mono } from 'next/font/google';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 
 const instrumentSerif = Instrument_Serif({
@@ -112,6 +113,7 @@ export default async function LocaleLayout({
             <main className="pt-16">
               {children}
             </main>
+            <Footer />
             <BackToTop />
           </NextIntlClientProvider>
         </ThemeProvider>
