@@ -146,7 +146,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 14-01: Vision and Research pages (/vision longform MDX, /research document index)
+- [ ] 14-01: Vision and Research pages (/vision longform i18n content, /research empty state placeholder)
 - [ ] 14-02: Ecosystem and Join pages (/ecosystem with layer diagram and product cards, /ecosystem/[slug], /join CTAs)
 
 ### Phase 15: Admin Panel Rebuild
