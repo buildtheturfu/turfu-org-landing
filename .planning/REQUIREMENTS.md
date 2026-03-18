@@ -33,7 +33,7 @@ Requirements for site redesign. Each maps to roadmap phases.
 ### Publications
 
 - [x] **PUB-01**: /publications feed page with cards (title, abstract, author, tags, date, image)
-- [ ] **PUB-02**: /publications/[slug] renders MDX articles with custom components (QuoteBlock, InfoBox, DiagramEmbed)
+- [x] **PUB-02**: /publications/[slug] renders MDX articles with custom components (QuoteBlock, InfoBox, DiagramEmbed)
 - [x] **PUB-03**: Publication model in Supabase (title, slug, abstract, body_mdx, author, tags, discipline, type, status, featured_image, locale, published_at)
 - [x] **PUB-04**: Tag/discipline filtering on feed page
 - [x] **PUB-05**: Pagination on feed page
@@ -115,7 +115,7 @@ Deferred to future release.
 | HOME-04 | Phase 13 | Pending |
 | HOME-05 | Phase 13 | Pending |
 | PUB-01 | Phase 11 | Complete |
-| PUB-02 | Phase 11 | Pending |
+| PUB-02 | Phase 11 | Complete |
 | PUB-03 | Phase 10 | Complete |
 | PUB-04 | Phase 11 | Complete |
 | PUB-05 | Phase 11 | Complete |
