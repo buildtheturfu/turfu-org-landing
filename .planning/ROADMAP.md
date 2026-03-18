@@ -36,7 +36,7 @@ Live markdown preview, smart metadata inputs, form validation with inline errors
 - [x] **Phase 11: Publication Feed & Article Pages** - Feed index with filtering/pagination, MDX article rendering (completed 2026-03-18)
 - [x] **Phase 12: OpenGraph & Metadata** - Dynamic per-article OG images, generateMetadata (completed 2026-03-18)
 - [x] **Phase 13: Home Page Redesign** - Hero, latest publications, ecosystem preview, CTA (completed 2026-03-18)
-- [ ] **Phase 14: Static Pages** - Vision, Research, Ecosystem, Join
+- [x] **Phase 14: Static Pages** - Vision, Research, Ecosystem, Join (completed 2026-03-18)
 - [ ] **Phase 15: Admin Panel Rebuild** - Structured publication editor, dashboard, CRUD
 - [ ] **Phase 16: Polish & Deploy** - Responsive audit, i18n completion, Lighthouse, DNS
 
@@ -193,7 +193,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 | 11. Publication Feed & Article Pages | 2/2 | Complete    | 2026-03-18 | - |
 | 12. OpenGraph & Metadata | 1/1 | Complete    | 2026-03-18 | - |
 | 13. Home Page Redesign | 2/2 | Complete    | 2026-03-18 | - |
-| 14. Static Pages | 1/2 | In Progress|  | - |
+| 14. Static Pages | 2/2 | Complete   | 2026-03-18 | - |
 | 15. Admin Panel Rebuild | v3.0 | 0/2 | Not started | - |
 | 16. Polish & Deploy | v3.0 | 0/2 | Not started | - |
 

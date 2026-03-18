@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: executing
-stopped_at: Completed 14-01-PLAN.md
-last_updated: "2026-03-18T07:45:19.080Z"
+stopped_at: Completed 14-02-PLAN.md
+last_updated: "2026-03-18T07:52:55.339Z"
 last_activity: 2026-03-18 — Completed 14-01 Vision & Research Pages
 progress:
   total_phases: 9
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 14
-  completed_plans: 13
-  percent: 93
+  completed_plans: 14
+  percent: 100
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 ## Current Position
 
 Phase: 14 of 16 (Static Pages)
-Plan: 1 of 2 in current phase -- COMPLETE
-Status: Phase 14 in progress
-Last activity: 2026-03-18 — Completed 14-01 Vision & Research Pages
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 14 complete
+Last activity: 2026-03-18 — Completed 14-02 Ecosystem & Join Pages
 
-Progress: [█████████░] 93% (13/14 plans)
+Progress: [██████████] 100% (14/14 plans)
 
 ## Milestones
 
@@ -61,6 +61,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 12 P01 | 2 min | 2 tasks | 4 files |
 | Phase 13 P01 | 6min | 2 tasks | 10 files |
 | Phase 13 P02 | 3min | 2 tasks | 5 files |
+| Phase 14 P02 | 6min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,8 @@ New v3 decisions:
 - [Phase 13]: CTA actions reordered to publish/build/join with BookOpen icon replacing Handshake
 - [Phase 14]: Vision text uses exact accented French from livrable section 3.2
 - [Phase 14]: Bold lead text in vision sections via string split on delimiter pattern
+- [Phase 14]: Product data stored as static TypeScript file, not Supabase
+- [Phase 14]: Separate ecosystemPage/joinPage i18n namespaces to avoid collision with home section ecosystem/cta namespaces
 
 ### Pending Todos
 
@@ -118,6 +121,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T07:45:19.075Z
-Stopped at: Completed 14-01-PLAN.md
+Last session: 2026-03-18T07:52:55.334Z
+Stopped at: Completed 14-02-PLAN.md
 Resume file: None

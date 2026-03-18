@@ -43,9 +43,9 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 - [x] **PAGES-01**: /vision page with long-form content in ProseLayout
 - [x] **PAGES-02**: /research page listing formal documents with abstracts
-- [ ] **PAGES-03**: /ecosystem overview with Layer 0/1/2 schema + product cards linking to /ecosystem/[slug]
-- [ ] **PAGES-04**: /ecosystem/[slug] product pages (problem, solution, status, stack, link)
-- [ ] **PAGES-05**: /join page with contribution CTAs (publish, build, join)
+- [x] **PAGES-03**: /ecosystem overview with Layer 0/1/2 schema + product cards linking to /ecosystem/[slug]
+- [x] **PAGES-04**: /ecosystem/[slug] product pages (problem, solution, status, stack, link)
+- [x] **PAGES-05**: /join page with contribution CTAs (publish, build, join)
 
 ### Admin Panel
 
@@ -122,9 +122,9 @@ Deferred to future release.
 | PUB-06 | Phase 12 | Complete |
 | PAGES-01 | Phase 14 | Complete |
 | PAGES-02 | Phase 14 | Complete |
-| PAGES-03 | Phase 14 | Pending |
-| PAGES-04 | Phase 14 | Pending |
-| PAGES-05 | Phase 14 | Pending |
+| PAGES-03 | Phase 14 | Complete |
+| PAGES-04 | Phase 14 | Complete |
+| PAGES-05 | Phase 14 | Complete |
 | ADMIN-01 | Phase 15 | Pending |
 | ADMIN-02 | Phase 15 | Pending |
 | ADMIN-03 | Phase 15 | Pending |
