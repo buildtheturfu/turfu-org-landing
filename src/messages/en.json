@@ -172,6 +172,11 @@
     "filterByDiscipline": "Discipline",
     "filterByTag": "Tags"
   },
+  "article": {
+    "previousArticle": "Previous article",
+    "nextArticle": "Next article",
+    "backToFeed": "All publications"
+  },
   "content": {
     "title": "Content",
     "subtitle": "Documentation, guides and resources",

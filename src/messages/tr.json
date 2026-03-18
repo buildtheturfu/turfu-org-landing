@@ -172,6 +172,11 @@
     "filterByDiscipline": "Disiplin",
     "filterByTag": "Etiketler"
   },
+  "article": {
+    "previousArticle": "Onceki makale",
+    "nextArticle": "Sonraki makale",
+    "backToFeed": "Tum yayinlar"
+  },
   "content": {
     "title": "İçerik",
     "subtitle": "Belgeler, kılavuzlar ve kaynaklar",
