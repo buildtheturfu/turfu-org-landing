@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: executing
-stopped_at: Completed 08-02-PLAN.md (Component Token Migration)
-last_updated: "2026-03-17T23:40:08Z"
-last_activity: 2026-03-17 — Completed 08-02 Component Token Migration
+status: completed
+stopped_at: Completed 08-03-PLAN.md (Layer Token Gap Closure) -- Phase 08 complete
+last_updated: "2026-03-18T02:29:51.586Z"
+last_activity: 2026-03-18 — Completed 08-03 Layer Token Gap Closure
 progress:
   total_phases: 9
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 3
+  completed_plans: 3
   percent: 100
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 ## Current Position
 
 Phase: 8 of 16 (Design System Foundation)
-Plan: 2 of 2 in current phase (PHASE COMPLETE)
+Plan: 3 of 3 in current phase (PHASE COMPLETE)
 Status: Phase Complete
-Last activity: 2026-03-17 — Completed 08-02 Component Token Migration
+Last activity: 2026-03-18 — Completed 08-03 Layer Token Gap Closure
 
-Progress: [██████████] 100% (2/2 plans)
+Progress: [██████████] 100% (3/3 plans)
 
 ## Milestones
 
@@ -43,15 +43,15 @@ See: .planning/MILESTONES.md for full history
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 3 min
-- Total execution time: 0.1 hours
+- Total plans completed: 3
+- Average duration: 6 min
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 08 Design System Foundation | 2 | 6 min | 3 min |
+| 08 Design System Foundation | 3 | 18 min | 6 min |
 
 *Updated after each plan completion*
 
@@ -77,6 +77,8 @@ New v3 decisions:
 - [Phase 08]: Layer accent colors stay identical in dark mode — only ink/paper/border swap
 - [Phase 08]: DM Sans default body font at 17px for readability
 - [Phase 08]: All 28 components verified clean -- token migration completed alongside foundation setup
+- [Phase 08]: color-mix(in srgb) pattern for CSS variable opacity in inline styles
+- [Phase 08]: Architecture section bg-paper-depth replaces hardcoded dark hex gradient
 
 ### Pending Todos
 
@@ -90,6 +92,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17
-Stopped at: Completed 08-02-PLAN.md (Component Token Migration) -- Phase 08 complete
+Last session: 2026-03-18
+Stopped at: Completed 08-03-PLAN.md (Layer Token Gap Closure) -- Phase 08 complete
 Resume file: None
