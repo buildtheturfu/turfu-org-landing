@@ -1,102 +1,119 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import LanguageSwitcher from './LanguageSwitcher';
+
+const navKeys = ['vision', 'publications', 'ecosystem', 'research', 'join'] as const;
+
+function InlineThemeToggle() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="w-[34px] h-[34px]" aria-hidden="true" />;
+  }
+
+  const isDark = resolvedTheme === 'dark';
+
+  return (
+    <button
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      className="p-2 rounded-lg text-ink-secondary hover:text-ink hover:bg-paper-warm transition-colors"
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+    </button>
+  );
+}
 
 export default function Navbar() {
   const t = useTranslations('nav');
   const locale = useLocale();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const navLinks = [
-    { href: `/${locale}#problem`, label: t('vision') },
-    { href: `/${locale}#ecosystem`, label: t('ecosystem') },
-    { href: `/${locale}#architecture`, label: t('architecture') },
-    { href: `/${locale}#principles`, label: t('principles') },
-    { href: `/${locale}/content`, label: t('content'), isLink: true },
-  ];
+  const navLinks = navKeys.map((key) => ({
+    href: `/${locale}/${key}`,
+    label: t(key),
+    key,
+  }));
+
+  const isActive = (href: string) => pathname.startsWith(href);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-paper/80 backdrop-blur-lg border-b border-border">
       <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-accent">
-              TURFu
-            </span>
+          {/* Logo */}
+          <Link href={`/${locale}`} className="flex items-center gap-2">
+            <span className="text-xl font-bold text-accent">TURFu</span>
           </Link>
 
+          {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.isLink ? (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-ink-secondary hover:text-ink transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-ink-secondary hover:text-ink transition-colors"
-                >
-                  {link.label}
-                </a>
-              )
+              <Link
+                key={link.key}
+                href={link.href}
+                className={`text-body-sm transition-colors ${
+                  isActive(link.href)
+                    ? 'text-ink font-medium'
+                    : 'text-ink-secondary hover:text-ink'
+                }`}
+              >
+                {link.label}
+              </Link>
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop controls */}
+          <div className="hidden md:flex items-center gap-3">
             <LanguageSwitcher />
-            <a href={`/${locale}#cta`} className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors text-sm">
-              {t('join')}
-            </a>
+            <InlineThemeToggle />
           </div>
 
+          {/* Mobile hamburger */}
           <button
             className="md:hidden p-2 text-ink"
             onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
+            aria-label={isOpen ? t('close') : t('menu')}
             aria-expanded={isOpen}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
+        {/* Mobile menu */}
         {isOpen && (
           <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
               {navLinks.map((link) => (
-                link.isLink ? (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-ink-secondary hover:text-ink transition-colors"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="text-ink-secondary hover:text-ink transition-colors"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                )
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  className={`py-3 text-lg transition-colors ${
+                    isActive(link.href)
+                      ? 'text-ink font-medium'
+                      : 'text-ink-secondary hover:text-ink'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </Link>
               ))}
-              <div className="pt-4 border-t border-border flex items-center justify-between">
+              <div className="border-t border-border my-4" />
+              <div className="flex items-center gap-3">
                 <LanguageSwitcher />
-                <a href={`/${locale}#cta`} className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors text-sm" onClick={() => setIsOpen(false)}>
-                  {t('join')}
-                </a>
+                <InlineThemeToggle />
               </div>
             </div>
           </div>

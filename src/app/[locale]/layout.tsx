@@ -5,7 +5,7 @@ import { locales, type Locale } from '@/i18n';
 import { Instrument_Serif, DM_Sans, JetBrains_Mono } from 'next/font/google';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import ThemeToggle from '@/components/ThemeToggle';
+import Navbar from '@/components/Navbar';
 import BackToTop from '@/components/BackToTop';
 
 const instrumentSerif = Instrument_Serif({
@@ -108,8 +108,10 @@ export default async function LocaleLayout({
       <body className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-body`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <NextIntlClientProvider messages={messages}>
-            {children}
-            <ThemeToggle />
+            <Navbar />
+            <main className="pt-16">
+              {children}
+            </main>
             <BackToTop />
           </NextIntlClientProvider>
         </ThemeProvider>
