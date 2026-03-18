@@ -70,9 +70,24 @@
     "partner_btn": "İletişim"
   },
   "footer": {
-    "manifeste": "Manifesto",
-    "lightpaper": "Lightpaper",
-    "copyright": "© 2026 TURFu ORG. Açık Kaynak."
+    "nav_title": "Navigasyon",
+    "vision": "Vizyon",
+    "publications": "Yayinlar",
+    "ecosystem": "Ekosistem",
+    "research": "Arastirma",
+    "join": "Katil",
+    "sites_title": "TURFu Ekosistemi",
+    "epis_network": "EPIS Network",
+    "epis_desc": "Epistemik altyapi",
+    "ozam": "OZAM",
+    "ozam_desc": "Merkezi olmayan inkubator",
+    "github": "GitHub",
+    "github_desc": "Acik kaynak kod",
+    "legal_title": "Yasal",
+    "legal_notice": "Yasal bildirim",
+    "privacy": "Gizlilik politikasi",
+    "copyright": "2026 TURFu ORG. Open Source.",
+    "tagline": "Disiplinlerarasi acik bilim arastirma merkezi"
   },
   "architecture": {
     "badge": "Mimari 2025 — Çok Katmanlı Meta-Yapı",

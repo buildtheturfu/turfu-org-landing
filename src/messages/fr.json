@@ -70,9 +70,24 @@
     "partner_btn": "Contact"
   },
   "footer": {
-    "manifeste": "Manifeste",
-    "lightpaper": "Lightpaper",
-    "copyright": "© 2026 TURFu ORG. Open Source."
+    "nav_title": "Navigation",
+    "vision": "Vision",
+    "publications": "Publications",
+    "ecosystem": "Ecosysteme",
+    "research": "Recherche",
+    "join": "Rejoindre",
+    "sites_title": "Ecosysteme TURFu",
+    "epis_network": "EPIS Network",
+    "epis_desc": "Infrastructure epistemique",
+    "ozam": "OZAM",
+    "ozam_desc": "Incubateur decentralise",
+    "github": "GitHub",
+    "github_desc": "Code open source",
+    "legal_title": "Legal",
+    "legal_notice": "Mentions legales",
+    "privacy": "Politique de confidentialite",
+    "copyright": "2026 TURFu ORG. Open Source.",
+    "tagline": "Centre de recherche transdisciplinaire open science"
   },
   "architecture": {
     "badge": "Architecture 2025 — Metastructure Multi-Couches",
