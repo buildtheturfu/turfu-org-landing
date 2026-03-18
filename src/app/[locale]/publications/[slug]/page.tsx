@@ -5,7 +5,7 @@ import { getPublishedPublication, getAdjacentPublications } from '@/lib/publicat
 import { MDXRenderer } from '@/components/publications/MDXRenderer';
 import { ArticleHeader } from '@/components/publications/ArticleHeader';
 import { PublicationNav } from '@/components/publications/PublicationNav';
-import ProseLayout from '@/components/layout/ProseLayout';
+import { TableOfContents } from '@/components/publications/TableOfContents';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -31,20 +31,23 @@ export default async function PublicationArticlePage({
   );
 
   return (
-    <ProseLayout className="py-16">
-      <ArticleHeader publication={publication} locale={locale} />
-      <MDXRenderer body={publication.body} />
-      <PublicationNav
-        prev={prev}
-        next={next}
-        locale={locale}
-        translations={{
-          previousArticle: t('previousArticle'),
-          nextArticle: t('nextArticle'),
-          backToFeed: t('backToFeed'),
-        }}
-      />
-    </ProseLayout>
+    <div className="relative">
+      <article className="max-w-prose mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <ArticleHeader publication={publication} locale={locale} />
+        <MDXRenderer body={publication.body} />
+        <PublicationNav
+          prev={prev}
+          next={next}
+          locale={locale}
+          translations={{
+            previousArticle: t('previousArticle'),
+            nextArticle: t('nextArticle'),
+            backToFeed: t('backToFeed'),
+          }}
+        />
+      </article>
+      <TableOfContents />
+    </div>
   );
 }
 
