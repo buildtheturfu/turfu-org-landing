@@ -17,7 +17,7 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 ### Layout & Navigation
 
-- [ ] **NAV-01**: Header shows 5-section nav (Vision | Publications | Ecosystem | Research | Join) + language switch + dark mode toggle
+- [x] **NAV-01**: Header shows 5-section nav (Vision | Publications | Ecosystem | Research | Join) + language switch + dark mode toggle
 - [x] **NAV-02**: Footer rebuilt with complete links, inter-sites references, legal
 - [x] **NAV-03**: ProseLayout wrapper (720px max-width) used for long-form content pages
 - [x] **NAV-04**: GridLayout wrapper (1200px max-width) used for feed and multi-column pages
@@ -105,7 +105,7 @@ Deferred to future release.
 | DS-03 | Phase 8 | Complete |
 | DS-04 | Phase 8 | Complete |
 | DS-05 | Phase 8 | Complete |
-| NAV-01 | Phase 9 | Pending |
+| NAV-01 | Phase 9 | Complete |
 | NAV-02 | Phase 9 | Complete |
 | NAV-03 | Phase 9 | Complete |
 | NAV-04 | Phase 9 | Complete |

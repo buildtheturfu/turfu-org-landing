@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: executing
-stopped_at: Completed 09-02-PLAN.md (Footer & Layout Components)
-last_updated: "2026-03-18T03:01:51.931Z"
+stopped_at: Completed 09-01-PLAN.md (Header & Navigation)
+last_updated: "2026-03-18T03:02:06.410Z"
 last_activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
 progress:
   total_phases: 9
@@ -82,6 +82,8 @@ New v3 decisions:
 - [Phase 08]: Architecture section bg-paper-depth replaces hardcoded dark hex gradient
 - [Phase 09]: Footer uses max-w-layout (1200px) container matching GridLayout
 - [Phase 09]: Layout components (ProseLayout, GridLayout) are server components for RSC compatibility
+- [Phase 09]: Inline theme toggle in Navbar replaces floating ThemeToggle component
+- [Phase 09]: Route-based nav links (/${locale}/${section}) with active link detection via pathname
 
 ### Pending Todos
 
@@ -95,6 +97,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18
-Stopped at: Completed 09-02-PLAN.md (Footer & Layout Components)
+Last session: 2026-03-18T03:02:06.402Z
+Stopped at: Completed 09-01-PLAN.md (Header & Navigation)
 Resume file: None
