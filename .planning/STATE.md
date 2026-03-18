@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: executing
-stopped_at: Completed 10-02-PLAN.md (MDX Compilation Pipeline)
+stopped_at: Completed 10-01-PLAN.md (Publication Data Layer)
 last_updated: "2026-03-18T03:48:29.381Z"
 last_activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
 progress:
   total_phases: 9
   completed_phases: 2
   total_plans: 7
-  completed_plans: 6
-  percent: 80
+  completed_plans: 7
+  percent: 100
 ---
 
 # Project State
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 
 Phase: 10 of 16 (Publication Data & MDX Pipeline)
 Plan: 2 of 2 in current phase
-Status: In Progress
-Last activity: 2026-03-18 — Completed 10-02 MDX Compilation Pipeline
+Status: Phase Complete
+Last activity: 2026-03-18 — Completed 10-01 Publication Data Layer
 
-Progress: [█████████░] 86% (6/7 plans)
+Progress: [██████████] 100% (7/7 plans)
 
 ## Milestones
 
@@ -86,6 +86,7 @@ New v3 decisions:
 - [Phase 09]: Inline theme toggle in Navbar replaces floating ThemeToggle component
 - [Phase 09]: Route-based nav links (/${locale}/${section}) with active link detection via pathname
 - [Phase 10]: next-mdx-remote@5.0.0 validation spike passed on Next.js 14.2.15 + React 18.3 (146B static output)
+- [Phase 10]: Publications CRUD reuses generateSlug from articles.ts; auto-sets published_at on status transition
 
 ### Pending Todos
 
@@ -99,6 +100,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T03:48:29.333Z
-Stopped at: Completed 10-02-PLAN.md (MDX Compilation Pipeline)
+Last session: 2026-03-18T04:00:00Z
+Stopped at: Completed 10-01-PLAN.md (Publication Data Layer) — Phase 10 fully complete
 Resume file: None

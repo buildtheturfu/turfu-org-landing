@@ -32,7 +32,7 @@ Live markdown preview, smart metadata inputs, form validation with inline errors
 
 - [ ] **Phase 8: Design System Foundation** - Stone palette, three-font system, layer-coded accents, dark mode
 - [x] **Phase 9: Layout & Navigation** - Header rebuild, footer, ProseLayout/GridLayout wrappers (completed 2026-03-18)
-- [ ] **Phase 10: Publication Data & MDX Pipeline** - Supabase publications table, MDX compilation, custom components
+- [x] **Phase 10: Publication Data & MDX Pipeline** - Supabase publications table, MDX compilation, custom components (completed 2026-03-18)
 - [ ] **Phase 11: Publication Feed & Article Pages** - Feed index with filtering/pagination, MDX article rendering
 - [ ] **Phase 12: OpenGraph & Metadata** - Dynamic per-article OG images, generateMetadata
 - [ ] **Phase 13: Home Page Redesign** - Hero, latest publications, ecosystem preview, CTA
@@ -87,8 +87,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 10-01: Publication data layer (Supabase table, lib/publications.ts queries, Zod schema, API routes)
-- [ ] 10-02: MDX pipeline (next-mdx-remote@5 validation spike, lib/mdx.ts, MDXComponents, MDXRenderer)
+- [x] 10-01: Publication data layer (Supabase table, lib/publications.ts queries, Zod schema, API routes)
+- [x] 10-02: MDX pipeline (next-mdx-remote@5 validation spike, lib/mdx.ts, MDXComponents, MDXRenderer)
 
 ### Phase 11: Publication Feed & Article Pages
 **Goal**: Visitors can browse a publication feed and read full articles rendered from MDX
@@ -189,7 +189,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 |-------|-----------|----------------|--------|-----------|
 | 8. Design System Foundation | v3.0 | 2/3 | Gap closure | - |
 | 9. Layout & Navigation | 2/2 | Complete   | 2026-03-18 | - |
-| 10. Publication Data & MDX Pipeline | 1/2 | In Progress|  | - |
+| 10. Publication Data & MDX Pipeline | v3.0 | 2/2 | Complete | 2026-03-18 |
 | 11. Publication Feed & Article Pages | v3.0 | 0/2 | Not started | - |
 | 12. OpenGraph & Metadata | v3.0 | 0/1 | Not started | - |
 | 13. Home Page Redesign | v3.0 | 0/2 | Not started | - |
