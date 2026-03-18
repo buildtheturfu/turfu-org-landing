@@ -14,8 +14,8 @@
     "close": "Fermer"
   },
   "hero": {
-    "tagline": "Un centre de recherche ouvert pour repenser comment l'humanite valide, partage et gouverne le savoir.",
-    "subtitle": "TURFu est un projet de recherche transdisciplinaire. Nous produisons des analyses, construisons des outils et publions en open science — a l'intersection de l'epistemologie, de l'ethique, de l'IA et des technologies decentralisees.",
+    "tagline": "Recherche transdisciplinaire, ethique des technologies emergentes et nouveaux modeles de coordination humaine.",
+    "subtitle": "TURFu est un centre de recherche ouvert a l'intersection de l'anthropologie de la technique, de la meta-ethique, de la cybernetique et de la gouvernance. Nous publions en open science, construisons des outils et explorons les conditions d'une transition paradigmatique — ecologique, epistemique et organisationnelle.",
     "cta_primary": "Lire nos publications",
     "cta_secondary": "Decouvrir la vision"
   },
@@ -26,10 +26,10 @@
   },
   "ecosystem": {
     "title": "Ce qu'on construit",
-    "intro": "TURFu opere sur trois niveaux. Un cadre de recherche (Layer 0) produit les fondations ethiques et epistemiques. Un incubateur (Layer 1) transforme ces fondations en infrastructure technique. Des applications concretes (Layer 2) mettent le tout entre les mains des utilisateurs.",
+    "intro": "TURFu opere sur trois niveaux. Un cadre de recherche (Layer 0) pose les fondations meta-ethiques et epistemiques — anthropologie de la technique, cybernetique, gouvernance. Un incubateur (Layer 1) transforme ces fondations en infrastructure technique. Des applications concretes (Layer 2) mettent le tout entre les mains des utilisateurs.",
     "layer0_name": "TURFu ORG",
-    "layer0_role": "Layer 0 — Recherche",
-    "layer0_desc": "Cadre metaethique, recherche transdisciplinaire, publications open science. Continuite du CIRET avec les outils du XXIe siecle.",
+    "layer0_role": "Layer 0 — Recherche & Meta-ethique",
+    "layer0_desc": "Recherche transdisciplinaire, anthropologie de la technique, enjeux meta-ethiques des technologies emergentes (IA, Web3, P2P). Heritier du CIRET, ancre dans la cybernetique et la gouvernance des communs. Publications open science.",
     "layer1_name": "OZAM",
     "layer1_role": "Layer 1 — Incubateur",
     "layer1_desc": "Incubateur et lab. Protocole EPIS (infrastructure epistemique on-chain), SDK, pipelines IA, standards.",

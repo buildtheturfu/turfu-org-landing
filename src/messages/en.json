@@ -14,8 +14,8 @@
     "close": "Close"
   },
   "hero": {
-    "tagline": "An open research center rethinking how humanity validates, shares, and governs knowledge.",
-    "subtitle": "TURFu is a transdisciplinary research project. We produce analyses, build tools, and publish in open science — at the intersection of epistemology, ethics, AI, and decentralized technologies.",
+    "tagline": "Transdisciplinary research, ethics of emerging technologies, and new models of human coordination.",
+    "subtitle": "TURFu is an open research center at the intersection of the anthropology of technology, meta-ethics, cybernetics, and governance. We publish in open science, build tools, and explore the conditions for a paradigmatic transition — ecological, epistemic, and organizational.",
     "cta_primary": "Read our publications",
     "cta_secondary": "Discover the vision"
   },
@@ -26,10 +26,10 @@
   },
   "ecosystem": {
     "title": "What we build",
-    "intro": "TURFu operates on three levels. A research framework (Layer 0) produces ethical and epistemic foundations. An incubator (Layer 1) transforms those foundations into technical infrastructure. Concrete applications (Layer 2) put it all in users' hands.",
+    "intro": "TURFu operates on three levels. A research framework (Layer 0) lays the meta-ethical and epistemic foundations — anthropology of technology, cybernetics, governance. An incubator (Layer 1) transforms those foundations into technical infrastructure. Concrete applications (Layer 2) put it all in users' hands.",
     "layer0_name": "TURFu ORG",
-    "layer0_role": "Layer 0 — Research",
-    "layer0_desc": "Metaethical framework, transdisciplinary research, open science publications. Continuing the CIRET with 21st century tools.",
+    "layer0_role": "Layer 0 — Research & Meta-ethics",
+    "layer0_desc": "Transdisciplinary research, anthropology of technology, meta-ethical stakes of emerging technologies (AI, Web3, P2P). Heir to the CIRET, grounded in cybernetics and commons governance. Open science publications.",
     "layer1_name": "OZAM",
     "layer1_role": "Layer 1 — Incubator",
     "layer1_desc": "Incubator and lab. EPIS protocol (on-chain epistemic infrastructure), SDK, AI pipelines, standards.",
