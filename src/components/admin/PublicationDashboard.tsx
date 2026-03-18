@@ -141,11 +141,11 @@ export default function PublicationDashboard({ locale }: PublicationDashboardPro
   }
 
   return (
-    <div className="min-h-screen bg-paper p-8">
+    <div className="min-h-screen bg-paper px-4 py-6 sm:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-ink">Admin - Publications</h1>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-ink">Admin - Publications</h1>
           <div className="flex items-center gap-2">
             <Link
               href={`/${locale}`}
@@ -178,8 +178,8 @@ export default function PublicationDashboard({ locale }: PublicationDashboardPro
         </div>
 
         {/* Status filter tabs */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-1 p-1 bg-paper-depth rounded-lg">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-1 p-1 bg-paper-depth rounded-lg overflow-x-auto">
             {(['all', 'draft', 'published', 'archived'] as StatusFilter[]).map((s) => (
               <button
                 key={s}
@@ -228,8 +228,8 @@ export default function PublicationDashboard({ locale }: PublicationDashboardPro
               : 'Aucune publication pour ce filtre.'}
           </div>
         ) : (
-          <div className="bg-paper-depth rounded-lg overflow-hidden">
-            <table className="w-full">
+          <div className="bg-paper-depth rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[640px]">
               <thead>
                 <tr className="border-b border-border">
                   <th className="text-left p-4 text-sm font-medium text-ink-secondary">

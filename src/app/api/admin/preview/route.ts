@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -34,6 +33,7 @@ export const POST = withErrorHandler(async (request: Request) => {
       components: mdxComponents,
     });
 
+    const { renderToStaticMarkup } = await import('react-dom/server');
     const html = renderToStaticMarkup(content);
     return NextResponse.json({ html });
   } catch {

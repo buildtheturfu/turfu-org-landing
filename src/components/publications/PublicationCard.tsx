@@ -40,7 +40,7 @@ export function PublicationCard({ publication, locale }: PublicationCardProps) {
           </div>
         )}
 
-        <h3 className="font-body font-medium text-[20px] leading-tight text-ink line-clamp-2">
+        <h3 className="font-body font-medium text-lg sm:text-[20px] leading-tight text-ink line-clamp-2">
           {publication.title}
         </h3>
 
