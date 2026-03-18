@@ -144,5 +144,95 @@
     "subtitle": "Research documents, technical specifications, and formal analyses.",
     "comingSoon": "Coming soon",
     "comingSoonDesc": "Formal research documents will be published here. Our regular publications are available on the Publications page."
+  },
+  "ecosystemPage": {
+    "title": "The TURFu Ecosystem",
+    "metaDescription": "TURFu Layer 0/1/2 architecture: research, infrastructure, and applications for epistemic coordination.",
+    "subtitle": "TURFu operates on three levels. A research framework produces the foundations. An incubator transforms them into infrastructure. Concrete applications put them in users' hands.",
+    "layers": {
+      "0": "Layer 0 — Research",
+      "1": "Layer 1 — Infrastructure",
+      "2": "Layer 2 — Applications"
+    },
+    "layerDescriptions": {
+      "0": "Metaethical framework, transdisciplinary research, open science publications. Continuing the CIRET with 21st century tools.",
+      "1": "Incubator and lab. EPIS protocol (on-chain epistemic infrastructure), SDK, AI pipelines, standards.",
+      "2": "Concrete tools for open research, collaborative curation, and content processing."
+    },
+    "status": {
+      "concept": "Concept",
+      "development": "In development",
+      "beta": "Beta",
+      "live": "Live"
+    },
+    "productDetail": {
+      "problem": "Problem",
+      "solution": "Solution",
+      "status": "Status",
+      "stack": "Tech stack",
+      "visit": "Visit",
+      "backToEcosystem": "Back to ecosystem"
+    },
+    "products": {
+      "turfu-org": {
+        "name": "TURFu ORG",
+        "tagline": "Transdisciplinary open science research center",
+        "problem": "Traditional research institutions are siloed by discipline and poorly accessible to the public.",
+        "solution": "An open research center that publishes analyses, audits, and specifications freely, continuing the CIRET with 21st century tools."
+      },
+      "epis-protocol": {
+        "name": "EPIS Protocol",
+        "tagline": "On-chain epistemic infrastructure",
+        "problem": "Knowledge validation relies on opaque, slow, and manipulable systems (traditional peer review, informal reputation).",
+        "solution": "A decentralized protocol where every review, vote, and challenge is verifiable, transparent, and resistant to manipulation. Infrastructure for epistemic social networks."
+      },
+      "pickr": {
+        "name": "PICKR",
+        "tagline": "Epistemic URL reviews",
+        "problem": "Online content lacks structured evaluation — social comments do not distinguish opinion from analysis.",
+        "solution": "Any URL on the web can be submitted to specialized AI agent analysis, with results visible alongside human social commentary."
+      },
+      "memo": {
+        "name": "MEMO",
+        "tagline": "Collaborative curation",
+        "problem": "Content curation is fragmented across platforms and lacks epistemic methodology.",
+        "solution": "A collaborative curation tool anchored on the EPIS protocol, enabling collecting, annotating, and sharing content with rigor."
+      },
+      "turfu-labs": {
+        "name": "TURFu Labs",
+        "tagline": "Open source civilizational R&D",
+        "problem": "R&D on civilizational problems is dispersed and poorly coordinated.",
+        "solution": "Open action-research programs covering governance, coordination, applied epistemology. Code and results are public."
+      },
+      "tcp": {
+        "name": "TCP",
+        "tagline": "AI pipeline content processing",
+        "problem": "The volume of content exceeds human capacity for analysis and categorization.",
+        "solution": "Pipeline of specialized AI agents to analyze, categorize, and enrich content according to epistemic criteria."
+      },
+      "turfurxiv": {
+        "name": "TURFurxiv",
+        "tagline": "Open science preprints",
+        "problem": "Preprints lack a transparent and decentralized review system.",
+        "solution": "A preprint platform anchored on the EPIS protocol, combining open publication and structured review."
+      }
+    }
+  },
+  "joinPage": {
+    "title": "Join TURFu",
+    "metaDescription": "Contribute to TURFu: publish, build, or join the transdisciplinary research community.",
+    "subtitle": "TURFu is an open project. Whether you are a researcher, developer, philosopher, or simply curious — there is a place to contribute.",
+    "publish_title": "Publish",
+    "publish_desc": "Propose an article, an analysis, a protocol audit, or a research document. Our corpus is public, versioned, and open to criticism. We seek transdisciplinary contributions at the intersection of epistemology, ethics, AI, and decentralized technologies.",
+    "publish_cta": "Propose a publication",
+    "build_title": "Build",
+    "build_desc": "Contribute to the code, tools, and the EPIS protocol. Our repos are open source and we welcome technical contributions — from frontend to smart contracts, from AI pipelines to SDKs.",
+    "build_cta": "TURFu GitHub",
+    "join_title": "Join",
+    "join_desc": "Participate in discussions, collective thinking, and structured debates. Our Discord is the space where the TURFu community coordinates daily.",
+    "join_cta": "TURFu Discord",
+    "contact_label": "Other questions?",
+    "contact_desc": "Write to us directly.",
+    "contact_cta": "contact@turfu.org"
   }
 }
