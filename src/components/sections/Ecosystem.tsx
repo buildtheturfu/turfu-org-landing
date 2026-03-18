@@ -8,9 +8,9 @@ export default function Ecosystem() {
   const t = useTranslations('ecosystem');
 
   const layers = [
-    { key: 'layer0', icon: Shield, color: 'from-violet-500 to-purple-600' },
-    { key: 'layer1', icon: Rocket, color: 'from-cyan-500 to-blue-600' },
-    { key: 'layer2', icon: Boxes, color: 'from-emerald-500 to-teal-600' },
+    { key: 'layer0', icon: Shield, color: 'bg-layer-0' },
+    { key: 'layer1', icon: Rocket, color: 'bg-layer-1' },
+    { key: 'layer2', icon: Boxes, color: 'bg-layer-2' },
   ];
 
   return (
@@ -36,12 +36,12 @@ export default function Ecosystem() {
               transition={{ delay: index * 0.1 }}
             >
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${layer.color} opacity-0 group-hover:opacity-10 transition-opacity`}
+                className={`absolute inset-0 ${layer.color} opacity-0 group-hover:opacity-10 transition-opacity`}
               />
 
               <div className="relative z-10">
                 <div
-                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${layer.color} flex items-center justify-center mb-6`}
+                  className={`w-14 h-14 rounded-xl ${layer.color} flex items-center justify-center mb-6`}
                 >
                   <layer.icon size={28} className="text-white" />
                 </div>
