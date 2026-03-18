@@ -158,6 +158,20 @@
     "quote": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete.",
     "version": "TURFU Architecture v2.0 — Multi-Layer Metastructure 2025"
   },
+  "publications": {
+    "title": "Publications",
+    "subtitle": "Analyses, audits, specifications — our research is public.",
+    "allDisciplines": "All",
+    "allTags": "All",
+    "clearFilters": "Clear filters",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {current} of {total}",
+    "noResults": "No publications found.",
+    "noResultsFiltered": "No publications match the selected filters.",
+    "filterByDiscipline": "Discipline",
+    "filterByTag": "Tags"
+  },
   "content": {
     "title": "Content",
     "subtitle": "Documentation, guides and resources",

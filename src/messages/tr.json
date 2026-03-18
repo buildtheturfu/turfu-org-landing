@@ -158,6 +158,20 @@
     "quote": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete.",
     "version": "TURFU Mimari v2.0 — Çok Katmanlı Meta-Yapı 2025"
   },
+  "publications": {
+    "title": "Yayinlar",
+    "subtitle": "Analizler, denetimler, spesifikasyonlar — arastirmamiz halka aciktir.",
+    "allDisciplines": "Tumunu",
+    "allTags": "Tumunu",
+    "clearFilters": "Filtreleri temizle",
+    "previous": "Onceki",
+    "next": "Sonraki",
+    "pageOf": "Sayfa {current} / {total}",
+    "noResults": "Yayin bulunamadi.",
+    "noResultsFiltered": "Secilen filtrelere uyan yayin bulunamadi.",
+    "filterByDiscipline": "Disiplin",
+    "filterByTag": "Etiketler"
+  },
   "content": {
     "title": "İçerik",
     "subtitle": "Belgeler, kılavuzlar ve kaynaklar",
