@@ -1,9 +1,18 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { createAdminClient } from './supabase';
 import type { Publication, PublicationMeta } from './types';
-import { generateSlug } from './articles';
 import { logger } from './logger';
 import type { PublicationFormData } from './schemas/publication';
+
+/** Generate a URL-safe slug from a title (duplicated from articles.ts to avoid Edge-incompatible imports) */
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 // Meta columns selected for list queries (no body)
 const META_COLUMNS =
