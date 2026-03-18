@@ -1,11 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   const t = useTranslations('hero');
+  const locale = useLocale();
 
   return (
     <section className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
@@ -18,29 +21,29 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6 leading-tight text-display-1">
-            <span className="text-accent">
-              {t('tagline')}
-            </span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6 leading-tight text-ink">
+            {t('tagline')}
           </h1>
 
-          <p className="text-lg sm:text-xl text-ink-secondary mb-8 tracking-wide">
+          <p className="text-lg sm:text-xl text-ink-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
             {t('subtitle')}
           </p>
 
-          <p className="text-base sm:text-lg text-ink-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
-            {t('description')}
-          </p>
-
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="#" className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors">
-              <FileText size={18} className="mr-2" />
+            <Link
+              href={`/${locale}/publications`}
+              className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
+            >
+              <BookOpen size={18} className="mr-2" />
               {t('cta_primary')}
-            </a>
-            <a href="#cta" className="inline-flex items-center justify-center px-6 py-3 border border-border hover:border-ink-tertiary text-ink font-medium rounded-lg transition-colors">
+            </Link>
+            <Link
+              href={`/${locale}/vision`}
+              className="inline-flex items-center justify-center px-6 py-3 border border-border hover:border-ink-tertiary text-ink font-medium rounded-lg transition-colors"
+            >
               {t('cta_secondary')}
               <ArrowRight size={18} className="ml-2" />
-            </a>
+            </Link>
           </div>
         </motion.div>
 
