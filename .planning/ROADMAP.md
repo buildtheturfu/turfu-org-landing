@@ -52,11 +52,12 @@ Live markdown preview, smart metadata inputs, form validation with inline errors
   3. Layer-coded accent colors (violet L0, teal L1, orange L2) are available as Tailwind utilities and render correctly
   4. Dark mode toggles cleanly with no flash, no invisible text, no broken accent colors
   5. Old zinc/gray/RGB-triplet tokens are fully removed (zero references in codebase)
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [ ] 08-01: Palette and typography tokens (CSS variables, Tailwind config, font loading, typographic scale)
 - [ ] 08-02: Token migration (global find-replace old classes, verify dark mode, remove old tokens)
+- [ ] 08-03: Gap closure — Migrate Architecture.tsx and Ecosystem.tsx to layer tokens (DS-04)
 
 ### Phase 9: Layout & Navigation
 **Goal**: Site has a multi-page navigation structure with layout primitives ready for all downstream pages
@@ -186,7 +187,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 8. Design System Foundation | v3.0 | 0/2 | Not started | - |
+| 8. Design System Foundation | v3.0 | 2/3 | Gap closure | - |
 | 9. Layout & Navigation | v3.0 | 0/2 | Not started | - |
 | 10. Publication Data & MDX Pipeline | v3.0 | 0/2 | Not started | - |
 | 11. Publication Feed & Article Pages | v3.0 | 0/2 | Not started | - |
