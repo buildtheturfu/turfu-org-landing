@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: completed
-stopped_at: Completed 13-02-PLAN.md
-last_updated: "2026-03-18T07:25:35.250Z"
-last_activity: 2026-03-18 — Completed 13-02 Ecosystem & CTA Sections
+status: executing
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-03-18T07:45:19.080Z"
+last_activity: 2026-03-18 — Completed 14-01 Vision & Research Pages
 progress:
   total_phases: 9
   completed_phases: 6
-  total_plans: 12
-  completed_plans: 12
-  percent: 100
+  total_plans: 14
+  completed_plans: 13
+  percent: 93
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 13 — Home Page Redesign
+**Current focus:** Phase 14 — Static Pages
 
 ## Current Position
 
-Phase: 13 of 16 (Home Page Redesign) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 13 Complete
-Last activity: 2026-03-18 — Completed 13-02 Ecosystem & CTA Sections
+Phase: 14 of 16 (Static Pages)
+Plan: 1 of 2 in current phase -- COMPLETE
+Status: Phase 14 in progress
+Last activity: 2026-03-18 — Completed 14-01 Vision & Research Pages
 
-Progress: [██████████] 100% (12/12 plans)
+Progress: [█████████░] 93% (13/14 plans)
 
 ## Milestones
 
@@ -103,6 +103,8 @@ New v3 decisions:
 - [Phase 13]: LatestPublications conditionally hidden when 0 publications exist (no placeholder)
 - [Phase 13]: Section background rhythm: hero bg-paper, publications bg-paper-warm, ecosystem bg-paper, CTA bg-paper-warm
 - [Phase 13]: CTA actions reordered to publish/build/join with BookOpen icon replacing Handshake
+- [Phase 14]: Vision text uses exact accented French from livrable section 3.2
+- [Phase 14]: Bold lead text in vision sections via string split on delimiter pattern
 
 ### Pending Todos
 
@@ -116,6 +118,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T07:21:57.630Z
-Stopped at: Completed 13-02-PLAN.md
+Last session: 2026-03-18T07:45:19.075Z
+Stopped at: Completed 14-01-PLAN.md
 Resume file: None
