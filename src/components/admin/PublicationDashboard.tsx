@@ -25,7 +25,7 @@ interface PublicationDashboardProps {
 }
 
 const STATUS_BADGE: Record<Publication['status'], string> = {
-  draft: 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+  draft: 'bg-paper-depth text-ink-secondary',
   published: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
   archived: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300',
 };
