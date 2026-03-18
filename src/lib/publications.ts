@@ -171,6 +171,44 @@ export async function deletePublication(id: string) {
 }
 
 /**
+ * Get adjacent (prev/next) publications for navigation
+ */
+export async function getAdjacentPublications(
+  locale: string,
+  publishedAt: string
+): Promise<{ prev: PublicationMeta | null; next: PublicationMeta | null }> {
+  noStore();
+  const adminClient = createAdminClient();
+
+  // Previous = most recent article published BEFORE this one
+  const { data: prevData } = await adminClient
+    .from('publications')
+    .select(META_COLUMNS)
+    .eq('locale', locale)
+    .eq('status', 'published')
+    .lt('published_at', publishedAt)
+    .order('published_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  // Next = oldest article published AFTER this one
+  const { data: nextData } = await adminClient
+    .from('publications')
+    .select(META_COLUMNS)
+    .eq('locale', locale)
+    .eq('status', 'published')
+    .gt('published_at', publishedAt)
+    .order('published_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  return {
+    prev: (prevData as PublicationMeta) || null,
+    next: (nextData as PublicationMeta) || null,
+  };
+}
+
+/**
  * Get unique disciplines for published publications in a locale
  */
 export async function getPublicationDisciplines(locale: string): Promise<string[]> {
