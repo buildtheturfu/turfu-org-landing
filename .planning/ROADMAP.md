@@ -38,7 +38,7 @@ Live markdown preview, smart metadata inputs, form validation with inline errors
 - [x] **Phase 13: Home Page Redesign** - Hero, latest publications, ecosystem preview, CTA (completed 2026-03-18)
 - [x] **Phase 14: Static Pages** - Vision, Research, Ecosystem, Join (completed 2026-03-18)
 - [x] **Phase 15: Admin Panel Rebuild** - Structured publication editor, dashboard, CRUD (completed 2026-03-18)
-- [ ] **Phase 16: Polish & Deploy** - Responsive audit, i18n completion, Lighthouse, DNS
+- [x] **Phase 16: Polish & Deploy** - Responsive audit, i18n completion, Lighthouse, DNS (completed 2026-03-18)
 
 ## Phase Details
 
@@ -195,7 +195,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 | 13. Home Page Redesign | 2/2 | Complete    | 2026-03-18 | - |
 | 14. Static Pages | 2/2 | Complete    | 2026-03-18 | - |
 | 15. Admin Panel Rebuild | 2/2 | Complete    | 2026-03-18 | - |
-| 16. Polish & Deploy | 1/2 | In Progress|  | - |
+| 16. Polish & Deploy | 2/2 | Complete   | 2026-03-18 | - |
 
 ---
 *Roadmap created: 2026-03-17*

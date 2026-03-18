@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: completed
-stopped_at: Completed 16-01-PLAN.md
-last_updated: "2026-03-18T19:47:10.072Z"
-last_activity: 2026-03-18 — Completed 16-01 Responsive & Dark Mode Polish
+stopped_at: Completed 16-02-PLAN.md
+last_updated: "2026-03-18T19:55:12.902Z"
+last_activity: 2026-03-18 — Completed 16-02 i18n, Legacy Cleanup & DNS Documentation
 progress:
   total_phases: 9
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 18
-  completed_plans: 17
-  percent: 94
+  completed_plans: 18
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 
 ## Current Position
 
-Phase: 16 of 16 (Polish & Deploy)
-Plan: 1 of 2 in current phase -- COMPLETE
-Status: Plan 16-01 complete, responsive & dark mode polish delivered
-Last activity: 2026-03-18 — Completed 16-01 Responsive & Dark Mode Polish
+Phase: 16 of 16 (Polish & Deploy) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: All plans complete. v3.0 milestone delivered.
+Last activity: 2026-03-18 — Completed 16-02 i18n, Legacy Cleanup & DNS Documentation
 
-Progress: [█████████░] 94% (17/18 plans)
+Progress: [██████████] 100% (18/18 plans)
 
 ## Milestones
 
@@ -65,6 +65,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 15 P01 | 5min | 2 tasks | 6 files |
 | Phase 15 P02 | 4min | 2 tasks | 2 files |
 | Phase 16 P01 | 9min | 2 tasks | 3 files |
+| Phase 16 P02 | 6min | 3 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,7 @@ New v3 decisions:
 - [Phase 15]: Controller wrapper pattern for custom inputs (ComboboxInput, TagInput) with react-hook-form
 - [Phase 16]: Admin dashboard status badges use semantic tokens (bg-paper-depth/text-ink-secondary) instead of hardcoded gray
 - [Phase 16]: Dynamic import for react-dom/server in API routes to fix webpack bundling
+- [Phase 16]: TR long-form content kept in French (acceptable per user); TR UI strings properly translated to Turkish
 
 ### Pending Todos
 
@@ -131,6 +133,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T19:47:10.067Z
-Stopped at: Completed 16-01-PLAN.md
+Last session: 2026-03-18T19:55:12.892Z
+Stopped at: Completed 16-02-PLAN.md
 Resume file: None

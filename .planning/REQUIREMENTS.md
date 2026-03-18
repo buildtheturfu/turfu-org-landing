@@ -58,9 +58,9 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 - [x] **DEPLOY-01**: Responsive audit passes on mobile 375px, tablet, desktop
 - [x] **DEPLOY-02**: Dark mode consistent across all pages
-- [ ] **DEPLOY-03**: FR/EN/TR i18n complete on all pages
-- [ ] **DEPLOY-04**: Lighthouse score > 90 on mobile
-- [ ] **DEPLOY-05**: turfu.org DNS pointed to Vercel (when validated)
+- [x] **DEPLOY-03**: FR/EN/TR i18n complete on all pages
+- [x] **DEPLOY-04**: Lighthouse score > 90 on mobile
+- [x] **DEPLOY-05**: turfu.org DNS pointed to Vercel (when validated)
 
 ## v4 Requirements
 
@@ -131,9 +131,9 @@ Deferred to future release.
 | ADMIN-04 | Phase 15 | Complete |
 | DEPLOY-01 | Phase 16 | Complete |
 | DEPLOY-02 | Phase 16 | Complete |
-| DEPLOY-03 | Phase 16 | Pending |
-| DEPLOY-04 | Phase 16 | Pending |
-| DEPLOY-05 | Phase 16 | Pending |
+| DEPLOY-03 | Phase 16 | Complete |
+| DEPLOY-04 | Phase 16 | Complete |
+| DEPLOY-05 | Phase 16 | Complete |
 
 **Coverage:**
 - v3.0 requirements: 34 total
