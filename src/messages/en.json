@@ -25,16 +25,17 @@
     "viewAll": "All publications"
   },
   "ecosystem": {
-    "title": "Multi-layer architecture",
-    "layer0_name": "Layer 0 — TURFu ORG",
-    "layer0_role": "Metaethical guardian",
-    "layer0_desc": "Charter, standards, coherence, arbitration of value conflicts.",
-    "layer1_name": "Layer 1 — OZAM",
-    "layer1_role": "Incubator & Lab",
-    "layer1_desc": "Acceleration of aligned projects, transparent allocation, shared tech infrastructure (SDK).",
-    "layer2_name": "Layer 2 — Projects",
-    "layer2_role": "Apps, DAOs, Experiments",
-    "layer2_desc": "Concrete implementation: communities, services, third places, open science."
+    "title": "What we build",
+    "intro": "TURFu operates on three levels. A research framework (Layer 0) produces ethical and epistemic foundations. An incubator (Layer 1) transforms those foundations into technical infrastructure. Concrete applications (Layer 2) put it all in users' hands.",
+    "layer0_name": "TURFu ORG",
+    "layer0_role": "Layer 0 — Research",
+    "layer0_desc": "Metaethical framework, transdisciplinary research, open science publications. Continuing the CIRET with 21st century tools.",
+    "layer1_name": "OZAM",
+    "layer1_role": "Layer 1 — Incubator",
+    "layer1_desc": "Incubator and lab. EPIS protocol (on-chain epistemic infrastructure), SDK, AI pipelines, standards.",
+    "layer2_name": "Products",
+    "layer2_role": "Layer 2 — Applications",
+    "layer2_desc": "PICKR, MEMO, TURFu Labs, TCP, TURFurxiv — concrete tools for open research."
   },
   "cta": {
     "title": "Join the movement",

@@ -25,16 +25,17 @@
     "viewAll": "Tum yayinlar"
   },
   "ecosystem": {
-    "title": "Çok katmanlı mimari",
-    "layer0_name": "Katman 0 — TURFu ORG",
-    "layer0_role": "Metaetik koruyucu",
-    "layer0_desc": "Tüzük, standartlar, tutarlılık, değer çatışmalarının hakemliği.",
-    "layer1_name": "Katman 1 — OZAM",
-    "layer1_role": "Kuluçka & Lab",
-    "layer1_desc": "Uyumlu projelerin hızlandırılması, şeffaf tahsis, paylaşılan teknoloji altyapısı (SDK).",
-    "layer2_name": "Katman 2 — Projeler",
-    "layer2_role": "Uygulamalar, DAO'lar, Deneyler",
-    "layer2_desc": "Somut uygulama: topluluklar, hizmetler, üçüncü mekanlar, açık bilim."
+    "title": "Ne insa ediyoruz",
+    "intro": "TURFu uc seviyede faaliyet gosteriyor. Bir arastirma cercevesi (Katman 0) etik ve epistemik temelleri uretiyor. Bir kulucka (Katman 1) bu temelleri teknik altyapiya donusturuyor. Somut uygulamalar (Katman 2) hepsini kullanicilarin eline veriyor.",
+    "layer0_name": "TURFu ORG",
+    "layer0_role": "Katman 0 — Arastirma",
+    "layer0_desc": "Metaetik cerceve, disiplinlerarasi arastirma, acik bilim yayinlari. CIRET'in 21. yuzyil araclariyla devami.",
+    "layer1_name": "OZAM",
+    "layer1_role": "Katman 1 — Kulucka",
+    "layer1_desc": "Kulucka ve lab. EPIS protokolu (zincir uzerinde epistemik altyapi), SDK, YZ islem hatlari, standartlar.",
+    "layer2_name": "Urunler",
+    "layer2_role": "Katman 2 — Uygulamalar",
+    "layer2_desc": "PICKR, MEMO, TURFu Labs, TCP, TURFurxiv — acik arastirma icin somut araclar."
   },
   "cta": {
     "title": "Harekete katıl",

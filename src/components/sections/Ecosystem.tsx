@@ -14,10 +14,10 @@ export default function Ecosystem() {
   ];
 
   return (
-    <section id="ecosystem" className="section bg-paper-depth">
+    <section id="ecosystem" className="section bg-paper">
       <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
-          className="text-3xl md:text-4xl font-display font-bold text-center mb-16"
+          className="text-3xl md:text-4xl font-display font-bold text-center mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -25,11 +25,20 @@ export default function Ecosystem() {
           {t('title')}
         </motion.h2>
 
+        <motion.p
+          className="text-lg text-ink-secondary text-center max-w-3xl mx-auto mb-16 leading-relaxed"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          {t('intro')}
+        </motion.p>
+
         <div className="grid md:grid-cols-3 gap-6">
           {layers.map((layer, index) => (
             <motion.div
               key={layer.key}
-              className="relative p-8 rounded-2xl bg-paper-depth border border-border overflow-hidden group"
+              className="relative p-8 rounded-2xl bg-paper border border-border overflow-hidden group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -62,16 +71,6 @@ export default function Ecosystem() {
               </div>
             </motion.div>
           ))}
-        </div>
-
-        <div className="hidden md:flex justify-center mt-8">
-          <div className="flex items-center gap-4 text-ink-secondary text-sm">
-            <span>Layer 0</span>
-            <div className="w-16 h-px bg-accent" />
-            <span>Layer 1</span>
-            <div className="w-16 h-px bg-accent" />
-            <span>Layer 2</span>
-          </div>
         </div>
       </div>
     </section>
