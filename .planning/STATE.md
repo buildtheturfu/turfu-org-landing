@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
 status: executing
-stopped_at: Completed 09-01-PLAN.md (Header & Navigation)
-last_updated: "2026-03-18T03:08:00.070Z"
+stopped_at: Completed 10-02-PLAN.md (MDX Compilation Pipeline)
+last_updated: "2026-03-18T03:48:29.381Z"
 last_activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
 progress:
   total_phases: 9
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 6
   percent: 80
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 9 — Layout & Navigation
+**Current focus:** Phase 10 — Publication Data & MDX Pipeline
 
 ## Current Position
 
-Phase: 9 of 16 (Layout & Navigation)
+Phase: 10 of 16 (Publication Data & MDX Pipeline)
 Plan: 2 of 2 in current phase
 Status: In Progress
-Last activity: 2026-03-18 — Completed 09-02 Footer & Layout Components
+Last activity: 2026-03-18 — Completed 10-02 MDX Compilation Pipeline
 
-Progress: [████████░░] 80% (4/5 plans)
+Progress: [█████████░] 86% (6/7 plans)
 
 ## Milestones
 
@@ -55,6 +55,7 @@ See: .planning/MILESTONES.md for full history
 | 09 Layout & Navigation | 2 | 12 min | 6 min |
 
 *Updated after each plan completion*
+| Phase 10 P02 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,7 @@ New v3 decisions:
 - [Phase 09]: Layout components (ProseLayout, GridLayout) are server components for RSC compatibility
 - [Phase 09]: Inline theme toggle in Navbar replaces floating ThemeToggle component
 - [Phase 09]: Route-based nav links (/${locale}/${section}) with active link detection via pathname
+- [Phase 10]: next-mdx-remote@5.0.0 validation spike passed on Next.js 14.2.15 + React 18.3 (146B static output)
 
 ### Pending Todos
 
@@ -97,6 +99,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T03:02:06.402Z
-Stopped at: Completed 09-01-PLAN.md (Header & Navigation)
+Last session: 2026-03-18T03:48:29.333Z
+Stopped at: Completed 10-02-PLAN.md (MDX Compilation Pipeline)
 Resume file: None

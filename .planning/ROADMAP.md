@@ -189,7 +189,7 @@ Phases execute in numeric order: 8 → 9 → 10 → 11 → 12 → 13 → 14 → 
 |-------|-----------|----------------|--------|-----------|
 | 8. Design System Foundation | v3.0 | 2/3 | Gap closure | - |
 | 9. Layout & Navigation | 2/2 | Complete   | 2026-03-18 | - |
-| 10. Publication Data & MDX Pipeline | v3.0 | 0/2 | Not started | - |
+| 10. Publication Data & MDX Pipeline | 1/2 | In Progress|  | - |
 | 11. Publication Feed & Article Pages | v3.0 | 0/2 | Not started | - |
 | 12. OpenGraph & Metadata | v3.0 | 0/1 | Not started | - |
 | 13. Home Page Redesign | v3.0 | 0/2 | Not started | - |
