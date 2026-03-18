@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: completed
-stopped_at: Completed 14-02-PLAN.md
-last_updated: "2026-03-18T07:56:30.697Z"
-last_activity: 2026-03-18 — Completed 14-02 Ecosystem & Join Pages
+status: in-progress
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-03-18T19:17:46.918Z"
+last_activity: 2026-03-18 — Completed 15-01 Publication Dashboard & MDX Preview
 progress:
   total_phases: 9
   completed_phases: 7
-  total_plans: 14
-  completed_plans: 14
-  percent: 100
+  total_plans: 16
+  completed_plans: 15
+  percent: 94
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 14 — Static Pages
+**Current focus:** Phase 15 — Admin Panel Rebuild
 
 ## Current Position
 
-Phase: 14 of 16 (Static Pages)
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 14 complete
-Last activity: 2026-03-18 — Completed 14-02 Ecosystem & Join Pages
+Phase: 15 of 16 (Admin Panel Rebuild)
+Plan: 1 of 2 in current phase -- COMPLETE
+Status: Plan 15-01 complete, 15-02 remaining
+Last activity: 2026-03-18 — Completed 15-01 Publication Dashboard & MDX Preview
 
-Progress: [██████████] 100% (14/14 plans)
+Progress: [█████████░] 94% (15/16 plans)
 
 ## Milestones
 
@@ -62,6 +62,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 13 P01 | 6min | 2 tasks | 10 files |
 | Phase 13 P02 | 3min | 2 tasks | 5 files |
 | Phase 14 P02 | 6min | 2 tasks | 7 files |
+| Phase 15 P01 | 5min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -108,6 +109,9 @@ New v3 decisions:
 - [Phase 14]: Bold lead text in vision sections via string split on delimiter pattern
 - [Phase 14]: Product data stored as static TypeScript file, not Supabase
 - [Phase 14]: Separate ecosystemPage/joinPage i18n namespaces to avoid collision with home section ecosystem/cta namespaces
+- [Phase 15]: Editor placeholder in PublicationDashboard for Plan 15-02 to replace
+- [Phase 15]: Client-side status filtering with tab counts for instant UX
+- [Phase 15]: MDX preview via renderToStaticMarkup server-side, fetched client-side with AbortController
 
 ### Pending Todos
 
@@ -121,6 +125,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T07:52:55.334Z
-Stopped at: Completed 14-02-PLAN.md
+Last session: 2026-03-18T19:17:00Z
+Stopped at: Completed 15-01-PLAN.md
 Resume file: None
