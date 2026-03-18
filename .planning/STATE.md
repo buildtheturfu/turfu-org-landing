@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: in-progress
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-03-18T19:17:46.918Z"
+status: completed
+stopped_at: Completed 15-02-PLAN.md
+last_updated: "2026-03-18T19:24:19.354Z"
 last_activity: 2026-03-18 — Completed 15-01 Publication Dashboard & MDX Preview
 progress:
   total_phases: 9
-  completed_phases: 7
+  completed_phases: 8
   total_plans: 16
-  completed_plans: 15
+  completed_plans: 16
   percent: 94
 ---
 
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 
 ## Current Position
 
-Phase: 15 of 16 (Admin Panel Rebuild)
-Plan: 1 of 2 in current phase -- COMPLETE
-Status: Plan 15-01 complete, 15-02 remaining
-Last activity: 2026-03-18 — Completed 15-01 Publication Dashboard & MDX Preview
+Phase: 15 of 16 (Admin Panel Rebuild) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 15 complete, all plans delivered
+Last activity: 2026-03-18 — Completed 15-02 Publication Editor & Dashboard Wiring
 
-Progress: [█████████░] 94% (15/16 plans)
+Progress: [██████████] 100% (16/16 plans)
 
 ## Milestones
 
@@ -63,6 +63,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 13 P02 | 3min | 2 tasks | 5 files |
 | Phase 14 P02 | 6min | 2 tasks | 7 files |
 | Phase 15 P01 | 5min | 2 tasks | 6 files |
+| Phase 15 P02 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -112,6 +113,8 @@ New v3 decisions:
 - [Phase 15]: Editor placeholder in PublicationDashboard for Plan 15-02 to replace
 - [Phase 15]: Client-side status filtering with tab counts for instant UX
 - [Phase 15]: MDX preview via renderToStaticMarkup server-side, fetched client-side with AbortController
+- [Phase 15]: zodResolver cast to any for @hookform/resolvers v5 + react-hook-form v7 type compatibility with Zod .default() transforms
+- [Phase 15]: Controller wrapper pattern for custom inputs (ComboboxInput, TagInput) with react-hook-form
 
 ### Pending Todos
 
@@ -125,6 +128,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T19:17:00Z
-Stopped at: Completed 15-01-PLAN.md
+Last session: 2026-03-18T19:24:19.338Z
+Stopped at: Completed 15-02-PLAN.md
 Resume file: None

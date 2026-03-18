@@ -49,8 +49,8 @@ Requirements for site redesign. Each maps to roadmap phases.
 
 ### Admin Panel
 
-- [ ] **ADMIN-01**: Publication editor with structured form fields (title, abstract, discipline, tags, type, status, featured_image)
-- [ ] **ADMIN-02**: MDX body editor with live preview
+- [x] **ADMIN-01**: Publication editor with structured form fields (title, abstract, discipline, tags, type, status, featured_image)
+- [x] **ADMIN-02**: MDX body editor with live preview
 - [x] **ADMIN-03**: Publication list/management (create, edit, delete, draft/published toggle)
 - [x] **ADMIN-04**: Existing auth system preserved and working
 
@@ -125,8 +125,8 @@ Deferred to future release.
 | PAGES-03 | Phase 14 | Complete |
 | PAGES-04 | Phase 14 | Complete |
 | PAGES-05 | Phase 14 | Complete |
-| ADMIN-01 | Phase 15 | Pending |
-| ADMIN-02 | Phase 15 | Pending |
+| ADMIN-01 | Phase 15 | Complete |
+| ADMIN-02 | Phase 15 | Complete |
 | ADMIN-03 | Phase 15 | Complete |
 | ADMIN-04 | Phase 15 | Complete |
 | DEPLOY-01 | Phase 16 | Pending |
