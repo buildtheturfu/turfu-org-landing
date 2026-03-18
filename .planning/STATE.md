@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Site Architecture & Publications
-status: completed
-stopped_at: Phase 13 context gathered
-last_updated: "2026-03-18T06:44:59.596Z"
-last_activity: 2026-03-18 — Completed 12-01 OpenGraph & Metadata
+status: executing
+stopped_at: Completed 13-01-PLAN.md
+last_updated: "2026-03-18T07:16:13.485Z"
+last_activity: 2026-03-18 — Completed 13-01 Hero + Latest Publications
 progress:
   total_phases: 9
   completed_phases: 5
-  total_plans: 10
-  completed_plans: 10
-  percent: 100
+  total_plans: 12
+  completed_plans: 11
+  percent: 92
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-17)
 
 **Core value:** Visitors discover TURFu through its published thinking — articles, analyses, research — and navigate toward the vision, ecosystem, and tools.
-**Current focus:** Phase 12 — OpenGraph & Metadata
+**Current focus:** Phase 13 — Home Page Redesign
 
 ## Current Position
 
-Phase: 12 of 16 (OpenGraph & Metadata) -- COMPLETE
-Plan: 1 of 1 in current phase
-Status: Phase Complete
-Last activity: 2026-03-18 — Completed 12-01 OpenGraph & Metadata
+Phase: 13 of 16 (Home Page Redesign)
+Plan: 2 of 2 in current phase
+Status: In Progress
+Last activity: 2026-03-18 — Completed 13-01 Hero + Latest Publications
 
-Progress: [██████████] 100% (10/10 plans)
+Progress: [█████████░] 92% (11/12 plans)
 
 ## Milestones
 
@@ -59,6 +59,7 @@ See: .planning/MILESTONES.md for full history
 | Phase 11 P01 | 1 | 6 min | 6 min |
 | Phase 11 P02 | 1 | 4 min | 4 min |
 | Phase 12 P01 | 2 min | 2 tasks | 4 files |
+| Phase 13 P01 | 6min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,8 @@ New v3 decisions:
 - [Phase 12]: Duplicated generateSlug in publications.ts to avoid Edge-incompatible imports from articles.ts
 - [Phase 12]: Next.js file-convention OG images (no manual openGraph.images array in page metadata)
 - [Phase 12]: Font loaded via fetch + import.meta.url pattern for Edge runtime OG rendering
+- [Phase 13]: Hero H1 rendered in text-ink instead of text-accent for editorial feel
+- [Phase 13]: LatestPublications conditionally hidden when 0 publications exist (no placeholder)
 
 ### Pending Todos
 
@@ -110,6 +113,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T06:44:59.590Z
-Stopped at: Phase 13 context gathered
-Resume file: .planning/phases/13-home-page-redesign/13-CONTEXT.md
+Last session: 2026-03-18T07:16:13.470Z
+Stopped at: Completed 13-01-PLAN.md
+Resume file: None
