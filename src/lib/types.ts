@@ -33,3 +33,37 @@ export interface ParsedFrontmatter {
   tags?: string[];
   author?: string;
 }
+
+export interface Publication {
+  id: string;
+  slug: string;
+  locale: string;
+  title: string;
+  abstract: string | null;
+  body: string;
+  author: string | null;
+  discipline: string | null;
+  type: string | null;
+  layer: number | null;
+  tags: string[];
+  featured_image: string | null;
+  status: 'draft' | 'published' | 'archived';
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PublicationMeta {
+  id: string;
+  slug: string;
+  locale: string;
+  title: string;
+  abstract: string | null;
+  author: string | null;
+  discipline: string | null;
+  type: string | null;
+  layer: number | null;
+  tags: string[];
+  featured_image: string | null;
+  published_at: string | null;
+}
