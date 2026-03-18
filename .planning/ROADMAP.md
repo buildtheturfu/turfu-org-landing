@@ -66,7 +66,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Header shows 5-section navigation (Vision | Publications | Ecosystem | Research | Join) with working links, language switch, and dark mode toggle
   2. Footer displays complete links, inter-sites references, and legal information
-  3. A 720px max-width ProseLayout wrapper is available and used on at least one page
+  3. A 720px max-width ProseLayout wrapper is available for long-form content pages
   4. A 1200px max-width GridLayout wrapper is available for feed/multi-column pages
   5. Navigation is responsive with hamburger menu on mobile
 **Plans**: 2 plans
