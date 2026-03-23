@@ -31,6 +31,13 @@ export const products: Product[] = [
   },
   { slug: 'tcp', layer: 2, status: 'development', stack: ['AI Agents', 'LLM Pipeline'] },
   { slug: 'turfurxiv', layer: 2, status: 'concept' },
+  {
+    slug: 'nlex',
+    layer: 2,
+    status: 'live',
+    externalUrl: 'https://nlaw.vercel.app',
+    stack: ['Next.js', 'Claude Opus', 'Category Theory'],
+  },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {

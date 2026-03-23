@@ -140,11 +140,34 @@
     "closing": "TURFu is not a narrative. It is an infrastructure of maturation — at the intersection of the anthropology of technology, cybernetics, and transdisciplinary research."
   },
   "researchPage": {
-    "title": "Research",
-    "metaDescription": "Formal research documents published by TURFu.",
-    "subtitle": "Research documents, technical specifications, and formal analyses.",
-    "comingSoon": "Coming soon",
-    "comingSoonDesc": "Formal research documents will be published here. Our regular publications are available on the Publications page."
+    "title": "Research Programme",
+    "metaDescription": "TURFu research programme: categorical formalization of viability, political philosophy, open science with adversarial AI verification.",
+    "subtitle": "Open science, adversarial verification, public versioning. Our research is transparent from end to end.",
+    "programmeIntro": "The TURFu research programme explores the structural conditions of viability in cooperative systems — from theoretical biology to political philosophy, through category theory. Each research object is developed publicly, subjected to cross-audits by AI agents and human peers, and versioned from initial intuition to academic submission.",
+    "methodologyTitle": "Methodology",
+    "method_art_title": "A.R.T. (Action / Research / Transformation)",
+    "method_art_desc": "Three inseparable dimensions: fieldwork debates, formal research with peer review, and impact on the commons.",
+    "method_stigmergic_title": "Stigmergic AI coordination",
+    "method_stigmergic_desc": "AI agents (Claude Opus) function as transparent research collaborators with public attribution and versioning.",
+    "method_adversarial_title": "Iterative adversarial verification",
+    "method_adversarial_desc": "Systematic refutation by competing AI agents, domain experts, and peers. Falsification processes documented version by version.",
+    "method_versioning_title": "Public versioning of research objects",
+    "method_versioning_desc": "The complete history — from draft to submission — is publicly accessible. Radical open science.",
+    "nlexTitle": "NLEX Context — Natural Law Debates Explorer",
+    "nlexDesc": "The NLEX initiative systematically confronts major natural law traditions: classical natural law, Austrian school, Doolittle's operationalism, and Habermas's pragmatic-transcendentalism. Structured debates (thesis/antithesis/synthesis) revealed recurring patterns — terminological equivocations, unjustified inferential leaps, incompatible implicit premises — which generated the formal work presented here.",
+    "nlexLink": "Explore NLEX",
+    "papersTitle": "Research papers",
+    "publicationsLink": "Publications",
+    "publicationsLinkDesc": "TURFu's regular publications — analyses, protocol audits, transdisciplinary essays — are available in the publications feed.",
+    "viewPublications": "View all publications"
+  },
+  "researchDetail": {
+    "backToResearch": "Research programme",
+    "versionsTitle": "Version history",
+    "auditsTitle": "Audits and evaluations",
+    "viewOnNLEX": "View full dossier on NLEX",
+    "fullDossier": "The complete dossier — genesis, reading guide, downloadable documents, discussions — is available on NLEX.",
+    "openNLEX": "Open on NLEX"
   },
   "ecosystemPage": {
     "title": "The TURFu Ecosystem",
@@ -216,6 +239,12 @@
         "tagline": "Open science preprints",
         "problem": "Preprints lack a transparent and decentralized review system.",
         "solution": "A preprint platform anchored on the EPIS protocol, combining open publication and structured review."
+      },
+      "nlex": {
+        "name": "NLEX",
+        "tagline": "Natural Law Debates Explorer",
+        "problem": "Natural law debates remain fragmented across incompatible traditions (classical natural law, Austrian school, Doolittle's operationalism, Habermas's pragmatic-transcendentalism) without a systematic confrontation tool.",
+        "solution": "A structured exploration platform for natural law debates. Thesis/antithesis/synthesis format, adversarial verification by AI agents, public versioning of every research object. Generated two formal research papers submitted to academic journals."
       }
     }
   },

@@ -140,11 +140,34 @@
     "closing": "TURFu n'est pas un récit. C'est une infrastructure de maturation — à l'intersection de l'anthropologie de la technique, de la cybernétique et de la recherche transdisciplinaire."
   },
   "researchPage": {
-    "title": "Arastirma",
-    "metaDescription": "TURFu tarafindan yayinlanan resmi arastirma belgeleri.",
-    "subtitle": "Arastirma belgeleri, teknik spesifikasyonlar ve resmi analizler.",
-    "comingSoon": "Yakinda",
-    "comingSoonDesc": "Resmi arastirma belgeleri burada yayinlanacaktir. Duzenli yayinlarimiz Yayinlar sayfasinda mevcuttur."
+    "title": "Arastirma Programi",
+    "metaDescription": "TURFu arastirma programi: viabilite kategorik formalizasyonu, siyaset felsefesi, YZ dogrulamali acik bilim.",
+    "subtitle": "Acik bilim, cekismeli dogrulama, kamusal versiyonlama. Arastirmamiz bastan sona seffaftir.",
+    "programmeIntro": "TURFu arastirma programi, isbirlikci sistemlerin yapisal yasanabilirlik kosullarini arastiriyor — teorik biyolojiden siyaset felsefesine, kategori teorisine kadar.",
+    "methodologyTitle": "Metodoloji",
+    "method_art_title": "A.R.T. (Eylem / Arastirma / Donusum)",
+    "method_art_desc": "Uc ayrilmaz boyut: alan tartismalari, hakemli resmi arastirma ve ortaklar uzerindeki etki.",
+    "method_stigmergic_title": "Stigmerjik YZ koordinasyonu",
+    "method_stigmergic_desc": "YZ ajanlari (Claude Opus) kamusal atif ve versiyonlama ile seffaf arastirma isbirligi yapar.",
+    "method_adversarial_title": "Yinelemeli cekismeli dogrulama",
+    "method_adversarial_desc": "Rakip YZ ajanlari, alan uzmanlari ve akranlar tarafindan sistematik curuma. Versiyon versiyon belgelenmis falsifikasyon surecleri.",
+    "method_versioning_title": "Arastirma nesnelerinin kamusal versiyonlamasi",
+    "method_versioning_desc": "Taslaktan gonderiye kadar tam gecmis kamuya aciktir. Radikal acik bilim.",
+    "nlexTitle": "NLEX Baglami — Natural Law Debates Explorer",
+    "nlexDesc": "NLEX girisimi, buyuk dogal hukuk geleneklerini sistematik olarak karsilastirir: klasik dogal hukuk, Avusturya okulu, Doolittle operasyonalizmi ve Habermas'in pragmatik-transandantalizmi.",
+    "nlexLink": "NLEX'i Kesfet",
+    "papersTitle": "Arastirma makaleleri",
+    "publicationsLink": "Yayinlar",
+    "publicationsLinkDesc": "TURFu'nun duzenli yayinlari — analizler, protokol denetimleri, disiplinlerarasi denemeler — yayinlar akisinda mevcuttur.",
+    "viewPublications": "Tum yayinlari gor"
+  },
+  "researchDetail": {
+    "backToResearch": "Arastirma programi",
+    "versionsTitle": "Versiyon gecmisi",
+    "auditsTitle": "Denetimler ve degerlendirmeler",
+    "viewOnNLEX": "NLEX'te tam dosyayi gor",
+    "fullDossier": "Tam dosya — genesis, okuma rehberi, indirilebilir belgeler, tartismalar — NLEX'te mevcuttur.",
+    "openNLEX": "NLEX'te ac"
   },
   "ecosystemPage": {
     "title": "TURFu Ekosistemi",
@@ -216,6 +239,12 @@
         "tagline": "Preprints open science",
         "problem": "Les preprints manquent d'un systeme de review transparent et decentralise.",
         "solution": "Plateforme de preprints ancree sur le protocole EPIS, combinant publication ouverte et review structuree."
+      },
+      "nlex": {
+        "name": "NLEX",
+        "tagline": "Natural Law Debates Explorer",
+        "problem": "Les debats sur le droit naturel restent fragmentes entre traditions incompatibles sans outil systematique de confrontation.",
+        "solution": "Plateforme d'exploration structuree des debats en droit naturel. Format these/antithese/synthese, verification adversariale par agents IA, versionnement public."
       }
     }
   },

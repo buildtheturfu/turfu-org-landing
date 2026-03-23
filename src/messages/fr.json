@@ -140,11 +140,34 @@
     "closing": "TURFu n'est pas un récit. C'est une infrastructure de maturation — à l'intersection de l'anthropologie de la technique, de la cybernétique et de la recherche transdisciplinaire."
   },
   "researchPage": {
-    "title": "Recherche",
-    "metaDescription": "Documents de recherche formels publiés par TURFu.",
-    "subtitle": "Documents de recherche, spécifications techniques et analyses formelles.",
-    "comingSoon": "Prochainement",
-    "comingSoonDesc": "Les documents de recherche formels seront publiés ici. Nos publications régulières sont disponibles sur la page Publications."
+    "title": "Programme de Recherche",
+    "metaDescription": "Programme de recherche TURFu : formalisation categorielle de la viabilite, philosophie politique, open science avec verification adversariale par IA.",
+    "subtitle": "Open science, verification adversariale, versionnement public. Notre recherche est transparente de bout en bout.",
+    "programmeIntro": "Le programme de recherche TURFu explore les conditions structurelles de la viabilite des systemes cooperatifs — de la biologie theorique a la philosophie politique, en passant par la theorie des categories. Chaque objet de recherche est developpe publiquement, soumis a des audits croises par agents IA et pairs humains, et versionne de la premiere intuition a la soumission academique.",
+    "methodologyTitle": "Methodologie",
+    "method_art_title": "A.R.T. (Action / Recherche / Transformation)",
+    "method_art_desc": "Trois dimensions inseparables : debats de terrain, recherche formelle avec peer review, et impact sur les communs.",
+    "method_stigmergic_title": "Coordination IA stigmergique",
+    "method_stigmergic_desc": "Les agents IA (Claude Opus) fonctionnent comme collaborateurs de recherche transparents, avec attribution et versionnement publics.",
+    "method_adversarial_title": "Verification adversariale iterative",
+    "method_adversarial_desc": "Refutation systematique par agents IA concurrents, experts de domaine et pairs. Processus de falsification documente version par version.",
+    "method_versioning_title": "Versionnement public des objets de recherche",
+    "method_versioning_desc": "L'historique complet — du brouillon a la soumission — est publiquement accessible. Open science radicale.",
+    "nlexTitle": "Contexte NLEX — Natural Law Debates Explorer",
+    "nlexDesc": "L'initiative NLEX confronte systematiquement les grandes traditions du droit naturel : droit naturel classique, ecole autrichienne, operationnalisme de Doolittle, pragmatique transcendantale de Habermas. Les debats structures (these/antithese/synthese) ont revele des patterns recurrents — equivocations terminologiques, sauts inferentiels injustifies, premisses implicites incompatibles — qui ont genere les travaux formels presentes ici.",
+    "nlexLink": "Explorer NLEX",
+    "papersTitle": "Articles de recherche",
+    "publicationsLink": "Publications",
+    "publicationsLinkDesc": "Les publications regulieres de TURFu — analyses, audits de protocoles, essais transdisciplinaires — sont disponibles dans le flux de publications.",
+    "viewPublications": "Voir toutes les publications"
+  },
+  "researchDetail": {
+    "backToResearch": "Programme de recherche",
+    "versionsTitle": "Historique des versions",
+    "auditsTitle": "Audits et evaluations",
+    "viewOnNLEX": "Voir le dossier complet sur NLEX",
+    "fullDossier": "Le dossier complet — genese, guide de lecture, documents telechargeables, discussions — est disponible sur NLEX.",
+    "openNLEX": "Ouvrir sur NLEX"
   },
   "ecosystemPage": {
     "title": "L'ecosysteme TURFu",
@@ -216,6 +239,12 @@
         "tagline": "Preprints open science",
         "problem": "Les preprints manquent d'un systeme de review transparent et decentralise.",
         "solution": "Plateforme de preprints ancree sur le protocole EPIS, combinant publication ouverte et review structuree."
+      },
+      "nlex": {
+        "name": "NLEX",
+        "tagline": "Natural Law Debates Explorer",
+        "problem": "Les debats sur le droit naturel restent fragmentes entre traditions incompatibles (droit naturel classique, ecole autrichienne, operationnalisme de Doolittle, pragmatique transcendantale de Habermas) sans outil systematique de confrontation.",
+        "solution": "Plateforme d'exploration structuree des debats en droit naturel. Format these/antithese/synthese, verification adversariale par agents IA, versionnement public de chaque objet de recherche. A genere deux articles de recherche formels soumis a des journaux academiques."
       }
     }
   },
