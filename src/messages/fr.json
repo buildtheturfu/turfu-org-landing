@@ -7,39 +7,39 @@
   "nav": {
     "vision": "Vision",
     "publications": "Publications",
-    "ecosystem": "Ecosysteme",
+    "ecosystem": "Écosystème",
     "research": "Recherche",
     "join": "Rejoindre",
     "menu": "Menu",
     "close": "Fermer"
   },
   "hero": {
-    "tagline": "Recherche transdisciplinaire, ethique des technologies emergentes et nouveaux modeles de coordination humaine.",
-    "subtitle": "TURFu est un centre de recherche ouvert a l'intersection de l'anthropologie de la technique, de la meta-ethique, de la cybernetique et de la gouvernance. Nous publions en open science, construisons des outils et explorons les conditions d'une transition paradigmatique — ecologique, epistemique et organisationnelle.",
+    "tagline": "Recherche transdisciplinaire, éthique des technologies émergentes et nouveaux modèles de coordination humaine.",
+    "subtitle": "TURFu est un centre de recherche ouvert à l'intersection de l'anthropologie de la technique, de la méta-éthique, de la cybernétique et de la gouvernance. Nous publions en open science, construisons des outils et explorons les conditions d'une transition paradigmatique — écologique, épistémique et organisationnelle.",
     "cta_primary": "Lire nos publications",
-    "cta_secondary": "Decouvrir la vision"
+    "cta_secondary": "Découvrir la vision"
   },
   "latestPublications": {
-    "title": "Publications recentes",
-    "subtitle": "Analyses, audits, specifications — notre recherche est publique.",
+    "title": "Publications récentes",
+    "subtitle": "Analyses, audits, spécifications — notre recherche est publique.",
     "viewAll": "Toutes les publications"
   },
   "ecosystem": {
     "title": "Ce qu'on construit",
-    "intro": "TURFu opere sur trois niveaux. Un cadre de recherche (Layer 0) pose les fondations meta-ethiques et epistemiques — anthropologie de la technique, cybernetique, gouvernance. Un incubateur (Layer 1) transforme ces fondations en infrastructure technique. Des applications concretes (Layer 2) mettent le tout entre les mains des utilisateurs.",
+    "intro": "TURFu opère sur trois niveaux. Un cadre de recherche (Layer 0) pose les fondations méta-éthiques et épistémiques — anthropologie de la technique, cybernétique, gouvernance. Un incubateur (Layer 1) transforme ces fondations en infrastructure technique. Des applications concrètes (Layer 2) mettent le tout entre les mains des utilisateurs.",
     "layer0_name": "TURFu ORG",
-    "layer0_role": "Layer 0 — Recherche & Meta-ethique",
-    "layer0_desc": "Recherche transdisciplinaire, anthropologie de la technique, enjeux meta-ethiques des technologies emergentes (IA, Web3, P2P). Heritier du CIRET, ancre dans la cybernetique et la gouvernance des communs. Publications open science.",
+    "layer0_role": "Layer 0 — Recherche & Méta-éthique",
+    "layer0_desc": "Recherche transdisciplinaire, anthropologie de la technique, enjeux méta-éthiques des technologies émergentes (IA, Web3, P2P). Héritier du CIRET, ancré dans la cybernétique et la gouvernance des communs. Publications open science.",
     "layer1_name": "OZAM",
     "layer1_role": "Layer 1 — Incubateur",
-    "layer1_desc": "Incubateur et lab. Protocole EPIS (infrastructure epistemique on-chain), SDK, pipelines IA, standards.",
+    "layer1_desc": "Incubateur et lab. Protocole EPIS (infrastructure épistémique on-chain), SDK, pipelines IA, standards.",
     "layer2_name": "Produits",
     "layer2_role": "Layer 2 — Applications",
     "layer2_desc": "PICKR, MEMO, TURFu Labs, TCP, TURFurxiv — des outils concrets pour la recherche ouverte."
   },
   "cta": {
     "title": "Contribuer",
-    "intro": "TURFu est un projet ouvert. Que vous soyez chercheur, developpeur, philosophe ou simplement curieux — il y a une place pour contribuer.",
+    "intro": "TURFu est un projet ouvert. Que vous soyez chercheur, développeur, philosophe ou simplement curieux — il y a une place pour contribuer.",
     "publish": "Publier",
     "publish_desc": "Proposez un article, une analyse ou un document de recherche.",
     "publish_btn": "Proposer",
@@ -47,45 +47,45 @@
     "build_desc": "Contribuez au code, aux outils, au protocole EPIS.",
     "build_btn": "GitHub",
     "join": "Rejoindre",
-    "join_desc": "Participez aux discussions et a la reflexion collective.",
+    "join_desc": "Participez aux discussions et à la réflexion collective.",
     "join_btn": "Discord"
   },
   "footer": {
     "nav_title": "Navigation",
     "vision": "Vision",
     "publications": "Publications",
-    "ecosystem": "Ecosysteme",
+    "ecosystem": "Écosystème",
     "research": "Recherche",
     "join": "Rejoindre",
-    "sites_title": "Ecosysteme TURFu",
+    "sites_title": "Écosystème TURFu",
     "epis_network": "EPIS Network",
-    "epis_desc": "Infrastructure epistemique",
+    "epis_desc": "Infrastructure épistémique",
     "ozam": "OZAM",
-    "ozam_desc": "Incubateur decentralise",
+    "ozam_desc": "Incubateur décentralisé",
     "github": "GitHub",
     "github_desc": "Code open source",
-    "legal_title": "Legal",
-    "legal_notice": "Mentions legales",
-    "privacy": "Politique de confidentialite",
+    "legal_title": "Légal",
+    "legal_notice": "Mentions légales",
+    "privacy": "Politique de confidentialité",
     "copyright": "2026 TURFu ORG. Open Source.",
     "tagline": "Centre de recherche transdisciplinaire open science"
   },
   "publications": {
     "title": "Publications",
-    "subtitle": "Analyses, audits, specifications — notre recherche est publique.",
+    "subtitle": "Analyses, audits, spécifications — notre recherche est publique.",
     "allDisciplines": "Toutes",
     "allTags": "Tous",
     "clearFilters": "Effacer les filtres",
-    "previous": "Precedent",
+    "previous": "Précédent",
     "next": "Suivant",
     "pageOf": "Page {current} sur {total}",
-    "noResults": "Aucune publication trouvee.",
-    "noResultsFiltered": "Aucune publication ne correspond aux filtres selectionnes.",
+    "noResults": "Aucune publication trouvée.",
+    "noResultsFiltered": "Aucune publication ne correspond aux filtres sélectionnés.",
     "filterByDiscipline": "Discipline",
     "filterByTag": "Tags"
   },
   "article": {
-    "previousArticle": "Article precedent",
+    "previousArticle": "Article précédent",
     "nextArticle": "Article suivant",
     "backToFeed": "Toutes les publications"
   },
@@ -141,128 +141,128 @@
   },
   "researchPage": {
     "title": "Programme de Recherche",
-    "metaDescription": "Programme de recherche TURFu : formalisation categorielle de la viabilite, philosophie politique, open science avec verification adversariale par IA.",
-    "subtitle": "Open science, verification adversariale, versionnement public. Notre recherche est transparente de bout en bout.",
-    "programmeIntro": "Le programme de recherche TURFu explore les conditions structurelles de la viabilite des systemes cooperatifs — de la biologie theorique a la philosophie politique, en passant par la theorie des categories. Chaque objet de recherche est developpe publiquement, soumis a des audits croises par agents IA et pairs humains, et versionne de la premiere intuition a la soumission academique.",
-    "methodologyTitle": "Methodologie",
+    "metaDescription": "Programme de recherche TURFu : formalisation catégorielle de la viabilité, philosophie politique, open science avec vérification adversariale par IA.",
+    "subtitle": "Open science, vérification adversariale, versionnement public. Notre recherche est transparente de bout en bout.",
+    "programmeIntro": "Le programme de recherche TURFu explore les conditions structurelles de la viabilité des systèmes coopératifs — de la biologie théorique à la philosophie politique, en passant par la théorie des catégories. Chaque objet de recherche est développé publiquement, soumis à des audits croisés par agents IA et pairs humains, et versionné de la première intuition à la soumission académique.",
+    "methodologyTitle": "Méthodologie",
     "method_art_title": "A.R.T. (Action / Recherche / Transformation)",
-    "method_art_desc": "Trois dimensions inseparables : debats de terrain, recherche formelle avec peer review, et impact sur les communs.",
+    "method_art_desc": "Trois dimensions inséparables : débats de terrain, recherche formelle avec peer review, et impact sur les communs.",
     "method_stigmergic_title": "Coordination IA stigmergique",
     "method_stigmergic_desc": "Les agents IA (Claude Opus) fonctionnent comme collaborateurs de recherche transparents, avec attribution et versionnement publics.",
-    "method_adversarial_title": "Verification adversariale iterative",
-    "method_adversarial_desc": "Refutation systematique par agents IA concurrents, experts de domaine et pairs. Processus de falsification documente version par version.",
+    "method_adversarial_title": "Vérification adversariale itérative",
+    "method_adversarial_desc": "Réfutation systématique par agents IA concurrents, experts de domaine et pairs. Processus de falsification documenté version par version.",
     "method_versioning_title": "Versionnement public des objets de recherche",
-    "method_versioning_desc": "L'historique complet — du brouillon a la soumission — est publiquement accessible. Open science radicale.",
+    "method_versioning_desc": "L'historique complet — du brouillon à la soumission — est publiquement accessible. Open science radicale.",
     "nlexTitle": "Contexte NLEX — Natural Law Debates Explorer",
-    "nlexDesc": "L'initiative NLEX confronte systematiquement les grandes traditions du droit naturel : droit naturel classique, ecole autrichienne, operationnalisme de Doolittle, pragmatique transcendantale de Habermas. Les debats structures (these/antithese/synthese) ont revele des patterns recurrents — equivocations terminologiques, sauts inferentiels injustifies, premisses implicites incompatibles — qui ont genere les travaux formels presentes ici.",
+    "nlexDesc": "L'initiative NLEX confronte systématiquement les grandes traditions du droit naturel : droit naturel classique, école autrichienne, opérationnalisme de Doolittle, pragmatique transcendantale de Habermas. Les débats structurés (thèse/antithèse/synthèse) ont révélé des patterns récurrents — équivocations terminologiques, sauts inférentiels injustifiés, prémisses implicites incompatibles — qui ont généré les travaux formels présentés ici.",
     "nlexLink": "Explorer NLEX",
     "papersTitle": "Articles de recherche",
     "publicationsLink": "Publications",
-    "publicationsLinkDesc": "Les publications regulieres de TURFu — analyses, audits de protocoles, essais transdisciplinaires — sont disponibles dans le flux de publications.",
+    "publicationsLinkDesc": "Les publications régulières de TURFu — analyses, audits de protocoles, essais transdisciplinaires — sont disponibles dans le flux de publications.",
     "viewPublications": "Voir toutes les publications"
   },
   "researchDetail": {
     "backToResearch": "Programme de recherche",
     "versionsTitle": "Historique des versions",
-    "auditsTitle": "Audits et evaluations",
+    "auditsTitle": "Audits et évaluations",
     "viewOnNLEX": "Voir le dossier complet sur NLEX",
-    "fullDossier": "Le dossier complet — genese, guide de lecture, documents telechargeables, discussions — est disponible sur NLEX.",
+    "fullDossier": "Le dossier complet — genèse, guide de lecture, documents téléchargeables, discussions — est disponible sur NLEX.",
     "openNLEX": "Ouvrir sur NLEX"
   },
   "ecosystemPage": {
-    "title": "L'ecosysteme TURFu",
-    "metaDescription": "Architecture Layer 0/1/2 de TURFu : recherche, infrastructure et applications pour la coordination epistemique.",
-    "subtitle": "TURFu opere sur trois niveaux. Un cadre de recherche produit les fondations. Un incubateur les transforme en infrastructure. Des applications concretes les mettent entre les mains des utilisateurs.",
+    "title": "L'écosystème TURFu",
+    "metaDescription": "Architecture Layer 0/1/2 de TURFu : recherche, infrastructure et applications pour la coordination épistémique.",
+    "subtitle": "TURFu opère sur trois niveaux. Un cadre de recherche produit les fondations. Un incubateur les transforme en infrastructure. Des applications concrètes les mettent entre les mains des utilisateurs.",
     "layers": {
       "0": "Layer 0 — Recherche",
       "1": "Layer 1 — Infrastructure",
       "2": "Layer 2 — Applications"
     },
     "layerDescriptions": {
-      "0": "Cadre metaethique, recherche transdisciplinaire, publications open science. Continuite du CIRET avec les outils du XXIe siecle.",
-      "1": "Incubateur et lab. Protocole EPIS (infrastructure epistemique on-chain), SDK, pipelines IA, standards.",
+      "0": "Cadre métaéthique, recherche transdisciplinaire, publications open science. Continuité du CIRET avec les outils du XXIe siècle.",
+      "1": "Incubateur et lab. Protocole EPIS (infrastructure épistémique on-chain), SDK, pipelines IA, standards.",
       "2": "Des outils concrets pour la recherche ouverte, la curation collaborative et le traitement de contenu."
     },
     "status": {
       "concept": "Concept",
-      "development": "En developpement",
+      "development": "En développement",
       "beta": "Beta",
       "live": "En production"
     },
     "productDetail": {
-      "problem": "Probleme",
+      "problem": "Problème",
       "solution": "Solution",
       "status": "Statut",
       "stack": "Stack technique",
       "visit": "Visiter",
-      "backToEcosystem": "Retour a l'ecosysteme"
+      "backToEcosystem": "Retour à l'écosystème"
     },
     "products": {
       "turfu-org": {
         "name": "TURFu ORG",
         "tagline": "Centre de recherche transdisciplinaire open science",
-        "problem": "Les institutions de recherche traditionnelles sont cloisonnees par discipline et peu accessibles au public.",
-        "solution": "Un centre de recherche ouvert qui publie analyses, audits et specifications en acces libre, heritier du CIRET avec les outils du XXIe siecle."
+        "problem": "Les institutions de recherche traditionnelles sont cloisonnées par discipline et peu accessibles au public.",
+        "solution": "Un centre de recherche ouvert qui publie analyses, audits et spécifications en accès libre, héritier du CIRET avec les outils du XXIe siècle."
       },
       "epis-protocol": {
         "name": "Protocole EPIS",
-        "tagline": "Infrastructure epistemique on-chain",
-        "problem": "La validation du savoir repose sur des systemes opaques, lents et manipulables (peer-review traditionnel, reputation informelle).",
-        "solution": "Un protocole decentralise ou chaque review, vote et challenge est verifiable, transparent et resistant a la manipulation. Infrastructure pour des reseaux sociaux epistemiques."
+        "tagline": "Infrastructure épistémique on-chain",
+        "problem": "La validation du savoir repose sur des systèmes opaques, lents et manipulables (peer-review traditionnel, réputation informelle).",
+        "solution": "Un protocole décentralisé où chaque review, vote et challenge est vérifiable, transparent et résistant à la manipulation. Infrastructure pour des réseaux sociaux épistémiques."
       },
       "pickr": {
         "name": "PICKR",
-        "tagline": "Reviews epistemiques d'URL",
-        "problem": "Le contenu en ligne manque d'evaluation structuree — les commentaires sociaux ne distinguent pas opinion et analyse.",
-        "solution": "N'importe quelle URL du web peut etre soumise a l'analyse d'agents IA specialises, avec des resultats visibles a cote du commentaire social humain."
+        "tagline": "Reviews épistémiques d'URL",
+        "problem": "Le contenu en ligne manque d'évaluation structurée — les commentaires sociaux ne distinguent pas opinion et analyse.",
+        "solution": "N'importe quelle URL du web peut être soumise à l'analyse d'agents IA spécialisés, avec des résultats visibles à côté du commentaire social humain."
       },
       "memo": {
         "name": "MEMO",
         "tagline": "Curation collaborative",
-        "problem": "La curation de contenu est fragmentee entre plateformes et manque de methode epistemique.",
-        "solution": "Un outil de curation collaborative ancre sur le protocole EPIS, permettant de collecter, annoter et partager du contenu avec rigueur."
+        "problem": "La curation de contenu est fragmentée entre plateformes et manque de méthode épistémique.",
+        "solution": "Un outil de curation collaborative ancré sur le protocole EPIS, permettant de collecter, annoter et partager du contenu avec rigueur."
       },
       "turfu-labs": {
         "name": "TURFu Labs",
         "tagline": "R&D civilisationnelle open source",
-        "problem": "La R&D sur les problemes civilisationnels est dispersee et peu coordonnee.",
-        "solution": "Programmes de recherche-action ouverts couvrant gouvernance, coordination, epistemologie appliquee. Code et resultats publics."
+        "problem": "La R&D sur les problèmes civilisationnels est dispersée et peu coordonnée.",
+        "solution": "Programmes de recherche-action ouverts couvrant gouvernance, coordination, épistémologie appliquée. Code et résultats publics."
       },
       "tcp": {
         "name": "TCP",
         "tagline": "Traitement de contenu par pipeline IA",
-        "problem": "Le volume de contenu depasse la capacite humaine d'analyse et de categorisation.",
-        "solution": "Pipeline d'agents IA specialises pour analyser, categoriser et enrichir du contenu selon des criteres epistemiques."
+        "problem": "Le volume de contenu dépasse la capacité humaine d'analyse et de catégorisation.",
+        "solution": "Pipeline d'agents IA spécialisés pour analyser, catégoriser et enrichir du contenu selon des critères épistémiques."
       },
       "turfurxiv": {
         "name": "TURFurxiv",
         "tagline": "Preprints open science",
-        "problem": "Les preprints manquent d'un systeme de review transparent et decentralise.",
-        "solution": "Plateforme de preprints ancree sur le protocole EPIS, combinant publication ouverte et review structuree."
+        "problem": "Les preprints manquent d'un système de review transparent et décentralisé.",
+        "solution": "Plateforme de preprints ancrée sur le protocole EPIS, combinant publication ouverte et review structurée."
       },
       "nlex": {
         "name": "NLEX",
         "tagline": "Natural Law Debates Explorer",
-        "problem": "Les debats sur le droit naturel restent fragmentes entre traditions incompatibles (droit naturel classique, ecole autrichienne, operationnalisme de Doolittle, pragmatique transcendantale de Habermas) sans outil systematique de confrontation.",
-        "solution": "Plateforme d'exploration structuree des debats en droit naturel. Format these/antithese/synthese, verification adversariale par agents IA, versionnement public de chaque objet de recherche. A genere deux articles de recherche formels soumis a des journaux academiques."
+        "problem": "Les débats sur le droit naturel restent fragmentés entre traditions incompatibles (droit naturel classique, école autrichienne, opérationnalisme de Doolittle, pragmatique transcendantale de Habermas) sans outil systématique de confrontation.",
+        "solution": "Plateforme d'exploration structurée des débats en droit naturel. Format thèse/antithèse/synthèse, vérification adversariale par agents IA, versionnement public de chaque objet de recherche. A généré deux articles de recherche formels soumis à des journaux académiques."
       }
     }
   },
   "joinPage": {
     "title": "Rejoindre TURFu",
-    "metaDescription": "Contribuez a TURFu : publiez, construisez ou rejoignez la communaute de recherche transdisciplinaire.",
-    "subtitle": "TURFu est un projet ouvert. Que vous soyez chercheur, developpeur, philosophe ou simplement curieux — il y a une place pour contribuer.",
+    "metaDescription": "Contribuez à TURFu : publiez, construisez ou rejoignez la communauté de recherche transdisciplinaire.",
+    "subtitle": "TURFu est un projet ouvert. Que vous soyez chercheur, développeur, philosophe ou simplement curieux — il y a une place pour contribuer.",
     "publish_title": "Publier",
-    "publish_desc": "Proposez un article, une analyse, un audit de protocole ou un document de recherche. Notre corpus est public, versionne et ouvert a la critique. Nous recherchons des contributions transdisciplinaires qui croisent epistemologie, ethique, IA et technologies decentralisees.",
+    "publish_desc": "Proposez un article, une analyse, un audit de protocole ou un document de recherche. Notre corpus est public, versionné et ouvert à la critique. Nous recherchons des contributions transdisciplinaires qui croisent épistémologie, éthique, IA et technologies décentralisées.",
     "publish_cta": "Proposer une publication",
     "build_title": "Construire",
     "build_desc": "Contribuez au code, aux outils, au protocole EPIS. Nos repos sont open source et nous accueillons les contributions techniques — du frontend au smart contract, des pipelines IA aux SDK.",
     "build_cta": "GitHub TURFu",
     "join_title": "Rejoindre",
-    "join_desc": "Participez aux discussions, a la reflexion collective et aux debats structures. Notre Discord est l'espace ou la communaute TURFu se coordonne au quotidien.",
+    "join_desc": "Participez aux discussions, à la réflexion collective et aux débats structurés. Notre Discord est l'espace où la communauté TURFu se coordonne au quotidien.",
     "join_cta": "Discord TURFu",
     "contact_label": "Autre question ?",
-    "contact_desc": "Ecrivez-nous directement.",
+    "contact_desc": "Écrivez-nous directement.",
     "contact_cta": "contact@turfu.org"
   }
 }
