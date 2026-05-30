@@ -86,10 +86,15 @@ export function getResearchContent(
     paperSlug,
     section,
     title: deriveTitle(match, parsed.content, parsed.data.title),
-    body: parsed.content,
+    body: stripFirstHeading(parsed.content),
     frontmatter: parsed.data,
     fileName: match,
   };
+}
+
+function stripFirstHeading(content: string): string {
+  // Remove the first H1 (used as page title) to avoid duplicate render
+  return content.replace(/^#\s+.+\n+/, '');
 }
 
 export function listOpenScienceDocs(): ContentMeta[] {
@@ -125,7 +130,7 @@ export function getOpenScienceDoc(contentSlug: string): ResearchContent | null {
     paperSlug: '_open-science',
     section: 'narrative',
     title: deriveTitle(match, parsed.content, parsed.data.title),
-    body: parsed.content,
+    body: stripFirstHeading(parsed.content),
     frontmatter: parsed.data,
     fileName: match,
   };
