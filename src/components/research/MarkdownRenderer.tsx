@@ -70,7 +70,10 @@ const components: Components = {
     </h4>
   ),
   p: ({ children, ...props }) => (
-    <p {...clean(props)} className="text-body text-ink-secondary leading-relaxed my-4">
+    <p
+      {...clean(props)}
+      className="text-body text-ink-secondary leading-relaxed my-4 break-words"
+    >
       {children}
     </p>
   ),
@@ -89,7 +92,7 @@ const components: Components = {
     const isExternal = href?.startsWith('http');
     const isAnchor = href?.startsWith('#');
     const classes =
-      'text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent transition-colors';
+      'text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent transition-colors break-words [overflow-wrap:anywhere]';
     if (isExternal) {
       return (
         <a {...cleaned} href={href} target="_blank" rel="noopener noreferrer" className={classes}>
@@ -147,7 +150,7 @@ const components: Components = {
       return (
         <code
           {...cleaned}
-          className="px-1.5 py-0.5 bg-paper-warm text-ink rounded text-code font-mono border border-border"
+          className="px-1.5 py-0.5 bg-paper-warm text-ink rounded text-code font-mono border border-border break-words [overflow-wrap:anywhere]"
         >
           {children}
         </code>
@@ -162,13 +165,13 @@ const components: Components = {
   pre: ({ children, ...props }) => (
     <pre
       {...clean(props)}
-      className="bg-paper-warm border border-border rounded-lg p-4 my-6 overflow-x-auto text-code leading-relaxed"
+      className="bg-paper-warm border border-border rounded-lg p-4 my-6 max-w-full overflow-x-auto text-code leading-relaxed"
     >
       {children}
     </pre>
   ),
   table: ({ children, ...props }) => (
-    <div className="my-6 overflow-x-auto rounded-lg border border-border">
+    <div className="my-6 max-w-full overflow-x-auto rounded-lg border border-border -mx-4 sm:mx-0">
       <table {...clean(props)} className="w-full text-body-sm">
         {children}
       </table>
@@ -216,7 +219,7 @@ const components: Components = {
 
 export default function MarkdownRenderer({ content }: { content: string }) {
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose min-w-0 w-full">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {content}
       </ReactMarkdown>
