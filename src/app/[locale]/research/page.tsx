@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import GridLayout from '@/components/layout/GridLayout';
 import { researchPapers } from '@/data/research';
 import Link from 'next/link';
-import { ArrowRight, ExternalLink, BookOpen, FlaskConical, Download, Package, FileText } from 'lucide-react';
+import { ArrowRight, BookOpen, Package } from 'lucide-react';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -37,11 +37,38 @@ export default async function ResearchPage({ params: { locale } }: Props) {
   return (
     <GridLayout className="py-16">
       {/* Header */}
-      <div className="max-w-3xl mb-16">
-        <h1 className="font-display text-4xl md:text-5xl text-ink mb-4">{t('title')}</h1>
+      <div className="max-w-3xl mb-12">
+        <div className="text-caption font-mono uppercase tracking-widest text-accent mb-3">
+          {t('programmeBadge')}
+        </div>
+        <h1 className="font-display text-4xl md:text-5xl text-ink mb-4 leading-tight">{t('title')}</h1>
         <p className="text-lg text-ink-secondary leading-relaxed mb-6">{t('subtitle')}</p>
         <p className="text-body text-ink-secondary leading-relaxed">{t('programmeIntro')}</p>
       </div>
+
+      {/* At-a-glance metrics */}
+      <section className="mb-16 grid sm:grid-cols-4 gap-3">
+        {[
+          { metric: '1', label: t('metricPublished'), accent: true },
+          { metric: '1', label: t('metricSubmitted') },
+          { metric: '5', label: t('metricAIRoles') },
+          { metric: '37', label: t('metricRefs') },
+        ].map((m) => (
+          <div
+            key={m.label}
+            className={`p-4 rounded-xl border text-center ${
+              m.accent ? 'border-accent/40 bg-accent-light/30' : 'border-border bg-paper-warm'
+            }`}
+          >
+            <div className={`font-display text-3xl ${m.accent ? 'text-accent' : 'text-ink'}`}>
+              {m.metric}
+            </div>
+            <div className="text-caption text-ink-tertiary uppercase tracking-wider mt-1">
+              {m.label}
+            </div>
+          </div>
+        ))}
+      </section>
 
       {/* Methodology */}
       <section className="mb-16">
@@ -56,90 +83,29 @@ export default async function ResearchPage({ params: { locale } }: Props) {
         </div>
       </section>
 
-      {/* Open Science Pack */}
-      <section className="mb-16 p-6 rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent-light/30 to-paper">
-        <div className="flex items-start gap-4 mb-5">
-          <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
-            <Package size={20} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-caption uppercase tracking-wider font-mono text-accent font-semibold">{t('packBadge')}</span>
-              <span className="text-caption text-ink-tertiary">2026-05-30</span>
-            </div>
-            <h2 className="font-display text-2xl text-ink mb-2">{t('packTitle')}</h2>
-            <p className="text-body text-ink-secondary leading-relaxed">{t('packDesc')}</p>
-          </div>
-        </div>
-
-        <div className="grid sm:grid-cols-3 gap-3 mb-5">
-          <a
-            href="/exports/turfu-research-pack-README.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
-          >
-            <FileText size={18} className="text-accent flex-shrink-0" />
-            <div className="min-w-0">
-              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">README</div>
-              <div className="text-body-sm font-semibold text-ink truncate">{t('packReadmeLabel')}</div>
-            </div>
-          </a>
-          <a
-            href="/exports/turfu-research-pack-METHODOLOGY.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
-          >
-            <FileText size={18} className="text-accent flex-shrink-0" />
-            <div className="min-w-0">
-              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">Methodology</div>
-              <div className="text-body-sm font-semibold text-ink truncate">{t('packMethodLabel')}</div>
-            </div>
-          </a>
-          <a
-            href="/exports/turfu-research-pack-DEPLOYMENT_GUIDE.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
-          >
-            <FileText size={18} className="text-accent flex-shrink-0" />
-            <div className="min-w-0">
-              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">Deployment</div>
-              <div className="text-body-sm font-semibold text-ink truncate">{t('packDeployLabel')}</div>
-            </div>
-          </a>
-        </div>
-
-        <a
-          href="/exports/turfu-research-pack-2026-05-30.zip"
-          download
-          className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
+      {/* Open Science — link to dedicated page */}
+      <section className="mb-16">
+        <Link
+          href={`/${locale}/research/open-science`}
+          className="block p-7 rounded-3xl border-2 border-accent/30 bg-gradient-to-br from-accent-light/40 via-paper to-paper hover:border-accent hover:shadow-md transition-all group"
         >
-          <Download size={18} /> {t('packDownload')}
-        </a>
-        <p className="text-caption text-ink-tertiary mt-3">{t('packLicense')}</p>
-      </section>
-
-      {/* NLEX Context */}
-      <section className="mb-16 p-6 bg-paper-warm rounded-2xl border border-border">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-lg bg-layer-2 flex items-center justify-center flex-shrink-0">
-            <FlaskConical size={20} className="text-white" />
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center flex-shrink-0">
+              <Package size={24} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-caption uppercase tracking-wider font-mono text-accent font-semibold">{t('packBadge')}</span>
+                <span className="text-caption text-ink-tertiary">2026-05-30</span>
+              </div>
+              <h2 className="font-display text-2xl text-ink mb-2 group-hover:text-accent transition-colors">{t('packTitle')}</h2>
+              <p className="text-body text-ink-secondary leading-relaxed mb-3">{t('packDesc')}</p>
+              <div className="inline-flex items-center gap-2 text-accent font-medium text-body-sm">
+                {t('packExplore')} <ArrowRight size={16} />
+              </div>
+            </div>
           </div>
-          <div className="flex-1">
-            <h2 className="font-display text-xl text-ink mb-2">{t('nlexTitle')}</h2>
-            <p className="text-body text-ink-secondary leading-relaxed mb-3">{t('nlexDesc')}</p>
-            <a
-              href="https://nlaw.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-accent hover:text-accent-hover font-medium text-body-sm"
-            >
-              {t('nlexLink')} <ExternalLink size={14} />
-            </a>
-          </div>
-        </div>
+        </Link>
       </section>
 
       {/* Research Papers */}

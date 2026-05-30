@@ -140,6 +140,11 @@
     "closing": "TURFu n'est pas un récit. C'est une infrastructure de maturation — à l'intersection de l'anthropologie de la technique, de la cybernétique et de la recherche transdisciplinaire."
   },
   "researchPage": {
+    "programmeBadge": "Programme TURFu — Recherche",
+    "metricPublished": "Paper publié",
+    "metricSubmitted": "Paper soumis",
+    "metricAIRoles": "Rôles IA distincts",
+    "metricRefs": "Références biblio",
     "title": "Programme de Recherche",
     "metaDescription": "Programme de recherche TURFu : formalisation catégorielle de la viabilité, philosophie politique, open science avec vérification adversariale par IA.",
     "subtitle": "Open science, vérification adversariale, versionnement public. Notre recherche est transparente de bout en bout.",
@@ -160,6 +165,7 @@
     "packMethodLabel": "5 patterns IA-assistés",
     "packDeployLabel": "Guide intégration",
     "packDownload": "Télécharger le pack complet (82 MB)",
+    "packExplore": "Explorer le pack Open Science",
     "packLicense": "CC-BY 4.0 (méthodologie + narratifs + documents stratégiques) — voir LICENSE.md dans le pack.",
     "nlexTitle": "Contexte NLEX — Natural Law Debates Explorer",
     "nlexDesc": "L'initiative NLEX confronte systématiquement les grandes traditions du droit naturel : droit naturel classique, école autrichienne, opérationnalisme de Doolittle, pragmatique transcendantale de Habermas. Les débats structurés (thèse/antithèse/synthèse) ont révélé des patterns récurrents — équivocations terminologiques, sauts inférentiels injustifiés, prémisses implicites incompatibles — qui ont généré les travaux formels présentés ici.",
@@ -173,9 +179,25 @@
     "backToResearch": "Programme de recherche",
     "versionsTitle": "Historique des versions",
     "auditsTitle": "Audits et évaluations",
-    "viewOnNLEX": "Voir le dossier complet sur NLEX",
-    "fullDossier": "Le dossier complet — genèse, guide de lecture, documents téléchargeables, discussions — est disponible sur NLEX.",
-    "openNLEX": "Ouvrir sur NLEX"
+    "citationPublished": "Citation (version publiée)",
+    "citationSubmitted": "Citation (version soumise)",
+    "shareLink": "Accès libre"
+  },
+  "openSciencePage": {
+    "badge": "Open Science Pack",
+    "title": "Open Science à l'ère des agents IA",
+    "lead": "Notre programme de recherche, conduit avec des agents IA comme collaborateurs cognitifs, est documenté de bout en bout. Historique intégral des itérations, audits adversariaux multi-agents, réponses R&R pré-construites — exposés publiquement comme exemplar de Open Science transdisciplinaire.",
+    "backToResearch": "Programme de recherche",
+    "backToOpenScience": "Open Science",
+    "packTitle": "TURFu Research Pack 2026-05-30",
+    "packDesc": "Export intégral au 30 mai 2026 : deux papers (BioSystems publié, SRBS soumis), historique complet d'itérations, reviews multi-agents IA, response letters, shadow R&R package, cover letters, et 4 patterns méthodologiques réutilisables. Tout sous CC-BY 4.0 pour méthodologie et narratifs.",
+    "packMetricFiles": "Fichiers",
+    "packMetricSize": "Taille",
+    "packMetricPapers": "Papers",
+    "packDownloadZip": "Télécharger le ZIP (82 MB)",
+    "packBrowseReadme": "Parcourir le README",
+    "packLicense": "Pack sous CC-BY 4.0 pour la méthodologie, les narratifs et les documents stratégiques. Voir LICENSE.md dans le pack.",
+    "docsTitle": "Méthodologie & Patterns"
   },
   "ecosystemPage": {
     "title": "L'écosystème TURFu",

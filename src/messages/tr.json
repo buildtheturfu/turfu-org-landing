@@ -140,6 +140,11 @@
     "closing": "TURFu n'est pas un récit. C'est une infrastructure de maturation — à l'intersection de l'anthropologie de la technique, de la cybernétique et de la recherche transdisciplinaire."
   },
   "researchPage": {
+    "programmeBadge": "TURFu Programi — Arastirma",
+    "metricPublished": "Yayinlanan makale",
+    "metricSubmitted": "Gonderilen makale",
+    "metricAIRoles": "Belirgin AI rolu",
+    "metricRefs": "Kaynak",
     "title": "Arastirma Programi",
     "metaDescription": "TURFu arastirma programi: viabilite kategorik formalizasyonu, siyaset felsefesi, YZ dogrulamali acik bilim.",
     "subtitle": "Acik bilim, cekismeli dogrulama, kamusal versiyonlama. Arastirmamiz bastan sona seffaftir.",
@@ -160,6 +165,7 @@
     "packMethodLabel": "5 AI-destekli desen",
     "packDeployLabel": "Entegrasyon kilavuzu",
     "packDownload": "Tam paketi indir (82 MB)",
+    "packExplore": "Acik Bilim Paketini kesfet",
     "packLicense": "CC-BY 4.0 (metodoloji + anlatilar + stratejik belgeler) — paketteki LICENSE.md belgesine bakin.",
     "nlexTitle": "NLEX Baglami — Natural Law Debates Explorer",
     "nlexDesc": "NLEX girisimi, buyuk dogal hukuk geleneklerini sistematik olarak karsilastirir: klasik dogal hukuk, Avusturya okulu, Doolittle operasyonalizmi ve Habermas'in pragmatik-transandantalizmi.",
@@ -173,9 +179,25 @@
     "backToResearch": "Arastirma programi",
     "versionsTitle": "Versiyon gecmisi",
     "auditsTitle": "Denetimler ve degerlendirmeler",
-    "viewOnNLEX": "NLEX'te tam dosyayi gor",
-    "fullDossier": "Tam dosya — genesis, okuma rehberi, indirilebilir belgeler, tartismalar — NLEX'te mevcuttur.",
-    "openNLEX": "NLEX'te ac"
+    "citationPublished": "Alinti (yayinlanmis surum)",
+    "citationSubmitted": "Alinti (gonderilmis surum)",
+    "shareLink": "Acik erisim"
+  },
+  "openSciencePage": {
+    "badge": "Acik Bilim Paketi",
+    "title": "AI ajanlari caginda Acik Bilim",
+    "lead": "Bilissel isbirlikciler olarak AI ajanlariyla yurutulen arastirma programimiz bastan sona belgelenmistir. Butun yineleme gecmisi, cok ajanli karsiti denetimler, onceden hazirlanmis R&R yanitlari — transdisipliner Acik Bilimin orneklemesi olarak kamuya acik.",
+    "backToResearch": "Arastirma programi",
+    "backToOpenScience": "Acik Bilim",
+    "packTitle": "TURFu Research Pack 2026-05-30",
+    "packDesc": "2026-05-30 itibariyla butun ihracat: iki makale, tam yineleme gecmisi, cok ajanli AI incelemeleri, yanit mektuplari, golge R&R paketi, kapak mektuplari ve 4 yeniden kullanilabilir metodoloji deseni.",
+    "packMetricFiles": "Dosyalar",
+    "packMetricSize": "Boyut",
+    "packMetricPapers": "Makaleler",
+    "packDownloadZip": "ZIP'i indir (82 MB)",
+    "packBrowseReadme": "README'yi gozat",
+    "packLicense": "Metodoloji, anlatilar ve stratejik belgeler icin CC-BY 4.0 altinda. Paketteki LICENSE.md belgesine bakin.",
+    "docsTitle": "Metodoloji ve Desenler"
   },
   "ecosystemPage": {
     "title": "TURFu Ekosistemi",
