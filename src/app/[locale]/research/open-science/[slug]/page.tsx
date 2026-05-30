@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, FileText } from 'lucide-react';
 import { getOpenScienceDoc, listOpenScienceDocs } from '@/lib/research-content';
 import MarkdownRenderer from '@/components/research/MarkdownRenderer';
+import TableOfContents from '@/components/research/TableOfContents';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -39,6 +40,8 @@ export default async function OpenScienceDocPage({ params: { locale, slug } }: P
         </div>
         <h1 className="font-display text-3xl md:text-4xl text-ink leading-tight">{doc.title}</h1>
       </header>
+
+      <TableOfContents content={doc.body} />
 
       <article>
         <MarkdownRenderer content={doc.body} />

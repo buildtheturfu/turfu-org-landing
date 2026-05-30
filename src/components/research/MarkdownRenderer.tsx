@@ -9,6 +9,25 @@ function clean<T extends { node?: unknown }>(props: T): Omit<T, 'node'> {
   return rest;
 }
 
+function textContent(children: React.ReactNode): string {
+  if (typeof children === 'string') return children;
+  if (typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map(textContent).join('');
+  if (children && typeof children === 'object' && 'props' in children) {
+    return textContent((children as { props: { children: React.ReactNode } }).props.children);
+  }
+  return '';
+}
+
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
 const components: Components = {
   h1: ({ children, ...props }) => (
     <h1
@@ -18,19 +37,30 @@ const components: Components = {
       {children}
     </h1>
   ),
-  h2: ({ children, ...props }) => (
-    <h2
-      {...clean(props)}
-      className="font-display text-2xl md:text-3xl text-ink leading-tight mt-12 mb-4 pb-2 border-b border-border"
-    >
-      {children}
-    </h2>
-  ),
-  h3: ({ children, ...props }) => (
-    <h3 {...clean(props)} className="font-display text-xl text-ink leading-snug mt-8 mb-3">
-      {children}
-    </h3>
-  ),
+  h2: ({ children, ...props }) => {
+    const id = slugifyHeading(textContent(children));
+    return (
+      <h2
+        {...clean(props)}
+        id={id}
+        className="font-display text-2xl md:text-3xl text-ink leading-tight mt-12 mb-4 pb-2 border-b border-border scroll-mt-24"
+      >
+        {children}
+      </h2>
+    );
+  },
+  h3: ({ children, ...props }) => {
+    const id = slugifyHeading(textContent(children));
+    return (
+      <h3
+        {...clean(props)}
+        id={id}
+        className="font-display text-xl text-ink leading-snug mt-8 mb-3 scroll-mt-24"
+      >
+        {children}
+      </h3>
+    );
+  },
   h4: ({ children, ...props }) => (
     <h4
       {...clean(props)}

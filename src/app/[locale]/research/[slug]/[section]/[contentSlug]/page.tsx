@@ -5,7 +5,16 @@ import { getResearchContent, listPaperSections, ResearchSectionKind } from '@/li
 import { getResearchPaperBySlug, researchPapers } from '@/data/research';
 import PaperSubNav from '@/components/research/PaperSubNav';
 import MarkdownRenderer from '@/components/research/MarkdownRenderer';
+import VersionTimeline from '@/components/research/VersionTimeline';
+import TableOfContents from '@/components/research/TableOfContents';
 import type { Metadata } from 'next';
+
+// Data-driven content slugs that get auto-enriched with the paper's version timeline.
+const DATA_DRIVEN_SLUGS = new Set([
+  'genese',
+  'biosystems-revise-and-resubmit',
+  'srbs-submission-journey',
+]);
 
 interface Props {
   params: { locale: string; slug: string; section: string; contentSlug: string };
@@ -92,8 +101,13 @@ export default async function ResearchContentPage({
         </h1>
       </header>
 
+      <TableOfContents content={content.body} />
+
       <article>
         <MarkdownRenderer content={content.body} />
+        {DATA_DRIVEN_SLUGS.has(contentSlug) && (
+          <VersionTimeline versions={paper.versions} title="Historique des versions" />
+        )}
       </article>
     </ProseLayout>
   );
