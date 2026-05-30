@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import GridLayout from '@/components/layout/GridLayout';
 import { researchPapers } from '@/data/research';
 import Link from 'next/link';
-import { ArrowRight, ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
+import { ArrowRight, ExternalLink, BookOpen, FlaskConical, Download, Package, FileText } from 'lucide-react';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -54,6 +54,71 @@ export default async function ResearchPage({ params: { locale } }: Props) {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Open Science Pack */}
+      <section className="mb-16 p-6 rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent-light/30 to-paper">
+        <div className="flex items-start gap-4 mb-5">
+          <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+            <Package size={20} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-caption uppercase tracking-wider font-mono text-accent font-semibold">{t('packBadge')}</span>
+              <span className="text-caption text-ink-tertiary">2026-05-30</span>
+            </div>
+            <h2 className="font-display text-2xl text-ink mb-2">{t('packTitle')}</h2>
+            <p className="text-body text-ink-secondary leading-relaxed">{t('packDesc')}</p>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-3 mb-5">
+          <a
+            href="/exports/turfu-research-pack-README.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
+          >
+            <FileText size={18} className="text-accent flex-shrink-0" />
+            <div className="min-w-0">
+              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">README</div>
+              <div className="text-body-sm font-semibold text-ink truncate">{t('packReadmeLabel')}</div>
+            </div>
+          </a>
+          <a
+            href="/exports/turfu-research-pack-METHODOLOGY.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
+          >
+            <FileText size={18} className="text-accent flex-shrink-0" />
+            <div className="min-w-0">
+              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">Methodology</div>
+              <div className="text-body-sm font-semibold text-ink truncate">{t('packMethodLabel')}</div>
+            </div>
+          </a>
+          <a
+            href="/exports/turfu-research-pack-DEPLOYMENT_GUIDE.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 p-3 bg-paper rounded-lg border border-border hover:border-accent transition-colors"
+          >
+            <FileText size={18} className="text-accent flex-shrink-0" />
+            <div className="min-w-0">
+              <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary">Deployment</div>
+              <div className="text-body-sm font-semibold text-ink truncate">{t('packDeployLabel')}</div>
+            </div>
+          </a>
+        </div>
+
+        <a
+          href="/exports/turfu-research-pack-2026-05-30.zip"
+          download
+          className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
+        >
+          <Download size={18} /> {t('packDownload')}
+        </a>
+        <p className="text-caption text-ink-tertiary mt-3">{t('packLicense')}</p>
       </section>
 
       {/* NLEX Context */}
