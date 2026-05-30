@@ -15,7 +15,7 @@ import {
   Award,
   GitBranch,
 } from 'lucide-react';
-import { listPaperSections } from '@/lib/research-content';
+import { listPaperSections, type Locale } from '@/lib/research-content';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -72,7 +72,7 @@ export default async function ResearchPaperPage({ params: { locale, slug } }: Pr
   if (!paper) notFound();
 
   const t = await getTranslations('researchDetail');
-  const contents = listPaperSections(slug);
+  const contents = listPaperSections(slug, locale as Locale);
   const grouped: Record<string, typeof contents> = {
     narrative: [],
     reviews: [],

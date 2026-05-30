@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next';
 import { researchPapers } from '@/data/research';
-import { listPaperSections, listOpenScienceDocs } from '@/lib/research-content';
+import { listPaperSections, listOpenScienceDocs, type Locale } from '@/lib/research-content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://turfu.org';
-  const locales = ['fr', 'en', 'tr'];
+  const locales: Locale[] = ['fr', 'en', 'tr'];
   const topPages = ['', '/vision', '/publications', '/ecosystem', '/join', '/research'];
   const now = new Date();
 
@@ -23,7 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   // /research/open-science + docs
-  const openScienceDocs = listOpenScienceDocs();
   for (const locale of locales) {
     entries.push({
       url: `${baseUrl}/${locale}/research/open-science`,
@@ -31,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     });
+    const openScienceDocs = listOpenScienceDocs(locale);
     for (const doc of openScienceDocs) {
       entries.push({
         url: `${baseUrl}/${locale}/research/open-science/${doc.slug}`,
@@ -43,7 +43,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Paper landings + sections
   for (const paper of researchPapers) {
-    const sections = listPaperSections(paper.slug);
     for (const locale of locales) {
       entries.push({
         url: `${baseUrl}/${locale}/research/${paper.slug}`,
@@ -51,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'monthly',
         priority: paper.status === 'published' ? 0.95 : 0.85,
       });
+      const sections = listPaperSections(paper.slug, locale);
       for (const content of sections) {
         entries.push({
           url: `${baseUrl}/${locale}/research/${paper.slug}/${content.section}/${content.slug}`,

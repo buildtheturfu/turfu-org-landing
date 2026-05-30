@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import ProseLayout from '@/components/layout/ProseLayout';
 import Link from 'next/link';
 import { ArrowLeft, FileText } from 'lucide-react';
-import { getOpenScienceDoc, listOpenScienceDocs } from '@/lib/research-content';
+import { getOpenScienceDoc, listOpenScienceDocs, type Locale } from '@/lib/research-content';
 import MarkdownRenderer from '@/components/research/MarkdownRenderer';
 import TableOfContents from '@/components/research/TableOfContents';
+import LocaleNotice from '@/components/research/LocaleNotice';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -14,14 +15,20 @@ interface Props {
 }
 
 export function generateStaticParams() {
-  const locales = ['fr', 'en', 'tr'];
-  const docs = listOpenScienceDocs();
-  return docs.flatMap((doc) => locales.map((locale) => ({ locale, slug: doc.slug })));
+  const locales: Locale[] = ['fr', 'en', 'tr'];
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    const docs = listOpenScienceDocs(locale);
+    for (const doc of docs) {
+      params.push({ locale, slug: doc.slug });
+    }
+  }
+  return params;
 }
 
 export default async function OpenScienceDocPage({ params: { locale, slug } }: Props) {
   setRequestLocale(locale);
-  const doc = getOpenScienceDoc(slug);
+  const doc = getOpenScienceDoc(slug, locale as Locale);
   if (!doc) notFound();
   const t = await getTranslations('openSciencePage');
 
@@ -41,6 +48,10 @@ export default async function OpenScienceDocPage({ params: { locale, slug } }: P
         <h1 className="font-display text-3xl md:text-4xl text-ink leading-tight">{doc.title}</h1>
       </header>
 
+      {doc.isFallback && (
+        <LocaleNotice requestedLocale={locale as Locale} servedLocale={doc.servedLocale} />
+      )}
+
       <TableOfContents content={doc.body} />
 
       <article>
@@ -50,8 +61,10 @@ export default async function OpenScienceDocPage({ params: { locale, slug } }: P
   );
 }
 
-export async function generateMetadata({ params: { slug } }: Props): Promise<Metadata> {
-  const doc = getOpenScienceDoc(slug);
+export async function generateMetadata({
+  params: { locale, slug },
+}: Props): Promise<Metadata> {
+  const doc = getOpenScienceDoc(slug, locale as Locale);
   if (!doc) return { title: 'Not Found' };
   return {
     title: `${doc.title} — TURFu Open Science`,

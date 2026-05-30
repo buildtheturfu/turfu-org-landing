@@ -13,7 +13,7 @@ import {
   Network,
   ArrowLeft,
 } from 'lucide-react';
-import { listOpenScienceDocs } from '@/lib/research-content';
+import { listOpenScienceDocs, type Locale } from '@/lib/research-content';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -46,7 +46,7 @@ const PATTERN_META: Record<string, { icon: JSX.Element; tag: string }> = {
 export default async function OpenSciencePage({ params: { locale } }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations('openSciencePage');
-  const docs = listOpenScienceDocs();
+  const docs = listOpenScienceDocs(locale as Locale);
 
   // Order: overview first, then patterns
   const ordered = [

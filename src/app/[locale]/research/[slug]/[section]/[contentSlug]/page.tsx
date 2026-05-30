@@ -1,12 +1,18 @@
 import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ProseLayout from '@/components/layout/ProseLayout';
-import { getResearchContent, listPaperSections, ResearchSectionKind } from '@/lib/research-content';
+import {
+  getResearchContent,
+  listPaperSections,
+  type Locale,
+  type ResearchSectionKind,
+} from '@/lib/research-content';
 import { getResearchPaperBySlug, researchPapers } from '@/data/research';
 import PaperSubNav from '@/components/research/PaperSubNav';
 import MarkdownRenderer from '@/components/research/MarkdownRenderer';
 import VersionTimeline from '@/components/research/VersionTimeline';
 import TableOfContents from '@/components/research/TableOfContents';
+import LocaleNotice from '@/components/research/LocaleNotice';
 import type { Metadata } from 'next';
 
 // Data-driven content slugs that get auto-enriched with the paper's version timeline.
@@ -23,12 +29,12 @@ interface Props {
 const VALID_SECTIONS: ResearchSectionKind[] = ['narrative', 'reviews', 'strategic'];
 
 export function generateStaticParams() {
-  const locales = ['fr', 'en', 'tr'];
+  const locales: Locale[] = ['fr', 'en', 'tr'];
   const params: { locale: string; slug: string; section: string; contentSlug: string }[] = [];
   for (const paper of researchPapers) {
-    const sections = listPaperSections(paper.slug);
-    for (const content of sections) {
-      for (const locale of locales) {
+    for (const locale of locales) {
+      const sections = listPaperSections(paper.slug, locale);
+      for (const content of sections) {
         params.push({
           locale,
           slug: paper.slug,
@@ -64,10 +70,15 @@ export default async function ResearchContentPage({
   const paper = getResearchPaperBySlug(slug);
   if (!paper) notFound();
 
-  const content = getResearchContent(slug, section as ResearchSectionKind, contentSlug);
+  const content = getResearchContent(
+    slug,
+    section as ResearchSectionKind,
+    contentSlug,
+    locale as Locale,
+  );
   if (!content) notFound();
 
-  const allSections = listPaperSections(slug);
+  const allSections = listPaperSections(slug, locale as Locale);
   const navSections = VALID_SECTIONS.filter((s) => allSections.some((c) => c.section === s)).map(
     (s) => ({
       title: sectionLabel(s),
@@ -101,6 +112,10 @@ export default async function ResearchContentPage({
         </h1>
       </header>
 
+      {content.isFallback && (
+        <LocaleNotice requestedLocale={locale as Locale} servedLocale={content.servedLocale} />
+      )}
+
       <TableOfContents content={content.body} />
 
       <article>
@@ -114,10 +129,15 @@ export default async function ResearchContentPage({
 }
 
 export async function generateMetadata({
-  params: { slug, section, contentSlug },
+  params: { locale, slug, section, contentSlug },
 }: Props): Promise<Metadata> {
   const paper = getResearchPaperBySlug(slug);
-  const content = getResearchContent(slug, section as ResearchSectionKind, contentSlug);
+  const content = getResearchContent(
+    slug,
+    section as ResearchSectionKind,
+    contentSlug,
+    locale as Locale,
+  );
   if (!paper || !content) return { title: 'Not Found' };
   return {
     title: `${content.title} — ${paper.title} — TURFu`,
