@@ -14,50 +14,58 @@ export default function CTA() {
   ];
 
   return (
-    <section id="cta" className="py-20 bg-paper-warm">
-      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="cta" className="py-24 md:py-32 bg-paper-warm/40">
+      <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
+        {/* Eyebrow + headline */}
+        <div className="flex items-center gap-3 mb-6">
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('title')}
+          </span>
+        </div>
+
         <motion.h2
-          className="text-3xl md:text-4xl font-display font-bold text-center mb-6"
-          initial={{ opacity: 0, y: 20 }}
+          className="font-display text-4xl md:text-5xl text-ink mb-6 leading-[1.05] max-w-3xl"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          {t('title')}
+          <span className="italic">{t('intro')}</span>
         </motion.h2>
 
-        <motion.p
-          className="text-lg text-ink-secondary text-center max-w-3xl mx-auto mb-16 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {t('intro')}
-        </motion.p>
-
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Actions — editorial listing */}
+        <div className="mt-16 grid md:grid-cols-3 gap-x-10 gap-y-12 md:divide-x md:divide-rule-soft border-t-2 border-accent pt-12">
           {actions.map((action, index) => (
             <motion.div
               key={action.key}
-              className="p-8 rounded-2xl bg-paper border border-border text-center"
-              initial={{ opacity: 0, y: 20 }}
+              className="md:px-6 first:pl-0 last:pr-0"
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.05 }}
             >
-              <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
-                <action.icon size={32} className="text-white" />
+              <div className="flex items-baseline gap-3 mb-5">
+                <span className="font-display italic text-3xl text-gold leading-none">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <action.icon size={18} className="text-accent" />
               </div>
 
-              <h3 className="text-xl font-bold mb-3">{t(action.key)}</h3>
+              <h3 className="font-display text-2xl text-ink mb-3 leading-tight">
+                {t(action.key)}
+              </h3>
 
-              <p className="text-ink-secondary mb-6">{t(`${action.key}_desc`)}</p>
+              <p className="text-body-sm text-ink-secondary mb-6 leading-relaxed">
+                {t(`${action.key}_desc`)}
+              </p>
 
               <a
                 href={action.href}
-                className="inline-flex items-center gap-2 text-accent hover:text-accent-hover transition-colors font-medium"
+                className="group inline-flex items-center gap-3 text-ink hover:text-accent font-medium transition-colors"
                 target={action.href.startsWith('http') ? '_blank' : undefined}
                 rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               >
+                <span className="h-px w-6 bg-gold transition-all group-hover:w-12" />
                 {t(`${action.key}_btn`)}
                 <ArrowRight size={16} />
               </a>

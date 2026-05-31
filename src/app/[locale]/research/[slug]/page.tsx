@@ -5,7 +5,7 @@ import { getResearchPaperBySlug, researchPapers } from '@/data/research';
 import ProseLayout from '@/components/layout/ProseLayout';
 import Link from 'next/link';
 import {
-  ArrowLeft,
+  ArrowRight,
   ExternalLink,
   FileText,
   Star,
@@ -83,66 +83,88 @@ export default async function ResearchPaperPage({ params: { locale, slug } }: Pr
   });
 
   return (
-    <ProseLayout className="py-16">
+    <ProseLayout className="py-20 md:py-28">
       {/* Back nav */}
       <Link
         href={`/${locale}/research`}
-        className="inline-flex items-center gap-2 text-ink-tertiary hover:text-ink text-body-sm mb-8 transition-colors"
+        className="group inline-flex items-center gap-3 text-ink-tertiary hover:text-accent text-body-sm mb-12 transition-colors"
       >
-        <ArrowLeft size={16} /> {t('backToResearch')}
+        <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
+        {t('backToResearch')}
       </Link>
 
-      {/* Header */}
-      <header className="mb-10">
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <StatusBadge status={paper.status} />
-          <span className="text-caption text-ink-tertiary">{paper.discipline}</span>
+      {/* Editorial header */}
+      <header className="mb-16">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {paper.discipline}
+          </span>
           {paper.targetJournal && (
-            <span className="text-caption text-ink-tertiary">→ {paper.targetJournal}</span>
+            <>
+              <span className="text-rule">·</span>
+              <span className="text-caption font-mono uppercase tracking-wider text-ink-tertiary">
+                {paper.targetJournal}
+              </span>
+            </>
           )}
         </div>
 
-        <h1 className="font-display text-3xl md:text-4xl text-ink leading-tight mb-3">
+        <div className="mb-6">
+          <StatusBadge status={paper.status} />
+        </div>
+
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05] mb-6">
           {paper.title}
         </h1>
-        <p className="text-lg text-ink-secondary italic mb-6">{paper.subtitle}</p>
+        <p className="font-display italic text-xl md:text-2xl text-ink-secondary leading-snug mb-8 max-w-3xl">
+          {paper.subtitle}
+        </p>
 
-        <div className="flex flex-wrap items-center gap-4 text-caption text-ink-tertiary">
-          {paper.authors.map((a) => (
-            <span key={a.name} className="flex items-center gap-1">
-              <Users size={14} />
+        {/* Authors line */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-caption text-ink-tertiary pb-6 mb-6 border-b border-rule-soft">
+          {paper.authors.map((a, i) => (
+            <span key={a.name} className="flex items-center gap-2">
+              {i > 0 && <span className="text-rule">·</span>}
+              <Users size={13} className="text-gold" />
               {a.name}
-              {a.role === 'ai-collaborator' && <span className="text-layer-1">(IA)</span>}
+              {a.role === 'ai-collaborator' && (
+                <span className="font-mono uppercase tracking-wider text-gold">[IA]</span>
+              )}
             </span>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-1.5 mt-6">
-          {paper.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 bg-paper-warm rounded text-caption text-ink-tertiary border border-border"
-            >
-              {tag}
+        {/* Tags — italic editorial list */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          {paper.tags.map((tag, i) => (
+            <span key={tag} className="flex items-center gap-2">
+              {i > 0 && <span className="text-rule text-caption">·</span>}
+              <span className="text-caption text-ink-tertiary italic">{tag}</span>
             </span>
           ))}
         </div>
       </header>
 
-      {/* Citation + canonical links */}
+      {/* Citation + canonical links — editorial block */}
       {paper.citation && (
-        <section className="mb-10 p-5 rounded-2xl border-l-4 border-accent bg-accent-light/20">
-          <div className="text-caption font-mono uppercase tracking-widest text-accent mb-2">
-            {paper.status === 'published' ? t('citationPublished') : t('citationSubmitted')}
+        <section className="mb-16 border-y-2 border-accent py-8">
+          <div className="flex items-center gap-3 mb-4">
+            <ExternalLink size={14} className="text-gold" />
+            <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+              {paper.status === 'published' ? t('citationPublished') : t('citationSubmitted')}
+            </span>
           </div>
-          <p className="text-body italic text-ink mb-3">{paper.citation}</p>
-          <div className="flex flex-wrap gap-2">
+          <p className="font-display italic text-lg text-ink leading-relaxed mb-6 break-words">
+            {paper.citation}
+          </p>
+          <div className="flex flex-wrap gap-4">
             {paper.doiUrl && (
               <a
                 href={paper.doiUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-body-sm rounded-lg hover:bg-accent-hover transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-paper text-body-sm font-medium rounded-sm hover:bg-accent-hover transition-colors"
               >
                 <ExternalLink size={14} /> DOI
               </a>
@@ -152,51 +174,65 @@ export default async function ResearchPaperPage({ params: { locale, slug } }: Pr
                 href={paper.shareLinkUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-paper border border-accent text-accent text-body-sm rounded-lg hover:bg-accent-light transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 border border-accent text-accent text-body-sm font-medium rounded-sm hover:bg-accent-light transition-colors"
               >
                 <BookOpen size={14} /> {t('shareLink')}
                 {paper.shareLinkExpires && (
-                  <span className="text-caption opacity-80">→ {paper.shareLinkExpires}</span>
+                  <span className="text-caption opacity-80 font-mono">
+                    → {paper.shareLinkExpires}
+                  </span>
                 )}
               </a>
             )}
             {paper.submissionUuid && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-paper-warm border border-border text-ink-tertiary text-caption font-mono rounded-lg">
-                <GitBranch size={14} /> Wiley UUID: {paper.submissionUuid.slice(0, 8)}…
+              <span className="inline-flex items-center gap-2 px-3 py-2 text-ink-tertiary text-caption font-mono">
+                <GitBranch size={13} className="text-gold" />
+                Wiley UUID: {paper.submissionUuid.slice(0, 8)}…
               </span>
             )}
           </div>
         </section>
       )}
 
-      <hr className="border-border mb-10" />
-
       {/* Native research content sections */}
       {Object.entries(grouped).map(([sectionKind, items]) => {
         if (items.length === 0) return null;
         const iconMap: Record<string, JSX.Element> = {
-          narrative: <BookOpen size={18} />,
-          reviews: <Award size={18} />,
-          strategic: <FileText size={18} />,
+          narrative: <BookOpen size={14} />,
+          reviews: <Award size={14} />,
+          strategic: <FileText size={14} />,
         };
         return (
-          <section key={sectionKind} className="mb-10">
-            <h2 className="font-display text-xl text-ink mb-4 flex items-center gap-2">
-              {iconMap[sectionKind]} {sectionLabel(sectionKind)}
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {items.map((item) => (
+          <section key={sectionKind} className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="h-px w-8 bg-gold" />
+              <span className="text-gold">{iconMap[sectionKind]}</span>
+              <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+                {sectionLabel(sectionKind)}
+              </h2>
+            </div>
+            <div className="divide-y divide-rule-soft">
+              {items.map((item, idx) => (
                 <Link
                   key={`${item.section}-${item.slug}`}
                   href={`/${locale}/research/${slug}/${item.section}/${item.slug}`}
-                  className="block p-4 rounded-xl border border-border bg-paper-warm hover:border-accent hover:bg-paper transition-all group"
+                  className="group flex items-start gap-5 py-5 -mx-4 px-4 sm:-mx-6 sm:px-6 transition-colors hover:bg-accent-light/40"
                 >
-                  <div className="text-caption font-mono uppercase tracking-widest text-ink-tertiary mb-1">
-                    {item.fileName.replace(/\.md$/, '')}
+                  <span className="font-mono italic text-caption text-gold mt-1 hidden sm:block">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-caption font-mono text-ink-tertiary mb-1">
+                      {item.fileName.replace(/\.(fr|en|tr)?\.?md$/, '')}
+                    </div>
+                    <div className="font-display text-lg text-ink group-hover:text-accent transition-colors leading-snug">
+                      {item.title}
+                    </div>
                   </div>
-                  <div className="text-body font-medium text-ink group-hover:text-accent transition-colors">
-                    {item.title}
-                  </div>
+                  <ArrowRight
+                    size={16}
+                    className="text-ink-tertiary group-hover:text-accent group-hover:translate-x-1 transition-all flex-shrink-0 mt-2 hidden sm:block"
+                  />
                 </Link>
               ))}
             </div>
@@ -204,73 +240,99 @@ export default async function ResearchPaperPage({ params: { locale, slug } }: Pr
         );
       })}
 
-      {/* Version History */}
-      <section className="mb-12">
-        <h2 className="font-display text-2xl text-ink mb-6 flex items-center gap-2">
-          <Clock size={20} /> {t('versionsTitle')}
-        </h2>
-        <div className="space-y-3">
-          {paper.versions.map((v, i) => (
-            <div
-              key={v.version}
-              className={`flex items-center gap-4 p-4 rounded-lg border ${
-                i === paper.versions.length - 1
-                  ? 'border-accent/30 bg-accent-light/30'
-                  : 'border-border bg-paper-warm/50'
-              }`}
-            >
-              <div className="font-mono text-body-sm font-semibold text-ink w-16">v{v.version}</div>
-              <div className="flex-1">
-                <span className="text-body-sm text-ink">{v.status}</span>
-                <span className="text-caption text-ink-tertiary ml-3">{v.date}</span>
-              </div>
-              {v.scores && (
-                <div className="flex flex-wrap gap-3 text-caption text-ink-tertiary">
-                  {Object.entries(v.scores).map(([key, val]) => (
-                    <span key={key} className="flex items-center gap-1">
-                      <Star size={12} className="text-accent" />
-                      {key}: {val}/10
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+      {/* Version History — editorial timeline */}
+      <section className="mb-16">
+        <div className="flex items-center gap-3 mb-8">
+          <span className="h-px w-8 bg-gold" />
+          <Clock size={14} className="text-gold" />
+          <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('versionsTitle')}
+          </h2>
         </div>
+        <ol className="relative border-l-2 border-rule-soft ml-3 space-y-5">
+          {paper.versions.map((v, i) => {
+            const isLatest = i === paper.versions.length - 1;
+            return (
+              <li key={v.version} className="ml-6 relative">
+                <span
+                  className={`absolute -left-[33px] top-1 w-3.5 h-3.5 rounded-full border-2 ${
+                    isLatest
+                      ? 'bg-gold border-gold ring-4 ring-gold-light'
+                      : 'bg-paper border-rule'
+                  }`}
+                />
+                <div
+                  className={`py-4 px-5 border ${
+                    isLatest
+                      ? 'border-accent bg-accent-light/40'
+                      : 'border-rule-soft bg-paper-warm/30'
+                  }`}
+                >
+                  <div className="flex flex-wrap items-baseline gap-3 mb-1.5">
+                    <span className="font-mono text-body-sm font-semibold text-ink">
+                      v{v.version}
+                    </span>
+                    <span className="text-caption text-ink-tertiary font-mono">{v.date}</span>
+                    {isLatest && (
+                      <span className="ml-auto text-caption font-mono uppercase tracking-widest text-gold">
+                        Latest
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-body-sm text-ink leading-relaxed">{v.status}</p>
+                  {v.scores && (
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption text-ink-tertiary mt-3">
+                      {Object.entries(v.scores).map(([key, val]) => (
+                        <span key={key} className="flex items-center gap-1.5">
+                          <Star size={11} className="text-gold" />
+                          {key}: <strong className="text-ink">{val}</strong>/10
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
       </section>
 
-      {/* Audits */}
+      {/* Audits — editorial verdicts */}
       {paper.audits.length > 0 && (
-        <section className="mb-12">
-          <h2 className="font-display text-2xl text-ink mb-6 flex items-center gap-2">
-            <FileText size={20} /> {t('auditsTitle')}
-          </h2>
-          <div className="space-y-4">
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <span className="h-px w-8 bg-gold" />
+            <FileText size={14} className="text-gold" />
+            <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+              {t('auditsTitle')}
+            </h2>
+          </div>
+          <div className="divide-y divide-rule-soft">
             {paper.audits.map((audit) => (
-              <div
-                key={audit.slug}
-                className="p-5 bg-paper-warm rounded-xl border border-border"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-ink">{audit.label}</h3>
-                  <span className="text-caption text-ink-tertiary">{audit.reviewer}</span>
+              <article key={audit.slug} className="py-8">
+                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+                  <h3 className="font-display text-lg text-ink">{audit.label}</h3>
+                  <span className="text-caption font-mono uppercase tracking-wider text-ink-tertiary">
+                    {audit.reviewer}
+                  </span>
                 </div>
-                <p className="text-body-sm text-ink-secondary italic mb-3">
-                  &laquo; {audit.verdict} &raquo;
-                </p>
+                <blockquote className="border-l-2 border-gold pl-5 py-1 my-3">
+                  <p className="font-display italic text-lg text-ink-secondary leading-snug">
+                    « {audit.verdict} »
+                  </p>
+                </blockquote>
                 {audit.scores && (
-                  <div className="flex flex-wrap gap-3 text-caption">
+                  <div className="flex flex-wrap gap-x-5 gap-y-1 text-caption text-ink-tertiary mt-3">
                     {Object.entries(audit.scores).map(([key, val]) => (
-                      <span
-                        key={key}
-                        className="px-2 py-0.5 bg-paper rounded border border-border"
-                      >
-                        {key.replace(/_/g, ' ')}: <strong>{val}/10</strong>
+                      <span key={key} className="flex items-center gap-1.5">
+                        <Star size={11} className="text-gold" />
+                        {key.replace(/_/g, ' ')}:{' '}
+                        <strong className="text-ink">{val}</strong>/10
                       </span>
                     ))}
                   </div>
                 )}
-              </div>
+              </article>
             ))}
           </div>
         </section>

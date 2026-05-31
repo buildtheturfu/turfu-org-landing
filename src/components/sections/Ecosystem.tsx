@@ -8,68 +8,67 @@ export default function Ecosystem() {
   const t = useTranslations('ecosystem');
 
   const layers = [
-    { key: 'layer0', icon: Shield, color: 'bg-layer-0' },
-    { key: 'layer1', icon: Rocket, color: 'bg-layer-1' },
-    { key: 'layer2', icon: Boxes, color: 'bg-layer-2' },
+    { key: 'layer0', icon: Shield },
+    { key: 'layer1', icon: Rocket },
+    { key: 'layer2', icon: Boxes },
   ];
 
   return (
-    <section id="ecosystem" className="py-20 bg-paper">
-      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="ecosystem" className="py-24 md:py-32 bg-paper">
+      <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
+        {/* Eyebrow + headline */}
+        <div className="flex items-center gap-3 mb-6">
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('title')}
+          </span>
+        </div>
+
         <motion.h2
-          className="text-3xl md:text-4xl font-display font-bold text-center mb-6"
-          initial={{ opacity: 0, y: 20 }}
+          className="font-display text-4xl md:text-5xl lg:text-6xl text-ink mb-8 leading-[1.05] max-w-4xl"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-          {t('title')}
+          <span className="italic">{t('intro')}</span>
         </motion.h2>
 
-        <motion.p
-          className="text-lg text-ink-secondary text-center max-w-3xl mx-auto mb-16 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {t('intro')}
-        </motion.p>
-
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Layers — editorial listing with gold numerals */}
+        <div className="mt-20 divide-y divide-rule-soft border-t border-rule-soft">
           {layers.map((layer, index) => (
-            <motion.div
+            <motion.article
               key={layer.key}
-              className="relative p-8 rounded-2xl bg-paper border border-border overflow-hidden group"
-              initial={{ opacity: 0, y: 20 }}
+              className="py-12 grid md:grid-cols-[auto_1fr_2fr] gap-8 md:gap-10 items-start"
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.05, duration: 0.5 }}
             >
-              <div
-                className={`absolute inset-0 ${layer.color} opacity-0 group-hover:opacity-10 transition-opacity`}
-              />
+              {/* Index + icon */}
+              <div className="flex md:flex-col items-center md:items-start gap-4">
+                <span className="font-display italic text-5xl md:text-6xl text-gold leading-none">
+                  {index}
+                </span>
+                <div className="w-10 h-px bg-rule-soft hidden md:block" />
+                <layer.icon size={20} className="text-accent" />
+              </div>
 
-              <div className="relative z-10">
-                <div
-                  className={`w-14 h-14 rounded-xl ${layer.color} flex items-center justify-center mb-6`}
-                >
-                  <layer.icon size={28} className="text-white" />
-                </div>
-
-                <h3 className="text-xl font-bold mb-2">{t(`${layer.key}_name`)}</h3>
-
-                <p className="text-accent font-medium mb-4">
+              {/* Name + role */}
+              <div>
+                <h3 className="font-display text-2xl md:text-3xl text-ink mb-2 leading-tight">
+                  {t(`${layer.key}_name`)}
+                </h3>
+                <p className="font-mono text-caption uppercase tracking-[0.14em] text-accent">
                   {t(`${layer.key}_role`)}
                 </p>
-
-                <p className="text-ink-secondary leading-relaxed">
-                  {t(`${layer.key}_desc`)}
-                </p>
               </div>
 
-              <div className="absolute top-4 right-4 text-6xl font-bold text-ink/5">
-                {index}
-              </div>
-            </motion.div>
+              {/* Description */}
+              <p className="text-body text-ink-secondary leading-relaxed">
+                {t(`${layer.key}_desc`)}
+              </p>
+            </motion.article>
           ))}
         </div>
       </div>
