@@ -31,6 +31,16 @@ const config: Config = {
           DEFAULT: 'var(--accent)',
           hover: 'var(--accent-hover)',
           light: 'var(--accent-light)',
+          soft: 'var(--accent-soft)',
+        },
+        gold: {
+          DEFAULT: 'var(--gold)',
+          hover: 'var(--gold-hover)',
+          light: 'var(--gold-light)',
+        },
+        rule: {
+          DEFAULT: 'var(--border)',
+          soft: 'var(--rule-soft)',
         },
       },
       fontFamily: {

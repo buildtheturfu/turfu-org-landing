@@ -11,55 +11,70 @@ export default function Hero() {
   const locale = useLocale();
 
   return (
-    <section className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent" />
+    <section className="pt-32 pb-24 md:pt-40 md:pb-32 relative">
+      {/* Subtle background ornament — gold rule top, navy wash bottom */}
+      <div className="absolute inset-x-0 top-16 h-px bg-gold/30" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-accent-light/40" />
 
-      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16 relative">
+        {/* Eyebrow — navy + gold rule */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6 leading-tight text-ink">
-            {t('tagline')}
-          </h1>
-
-          <p className="text-lg sm:text-xl text-ink-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
-            {t('subtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href={`/${locale}/publications`}
-              className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
-            >
-              <BookOpen size={18} className="mr-2" />
-              {t('cta_primary')}
-            </Link>
-            <Link
-              href={`/${locale}/vision`}
-              className="inline-flex items-center justify-center px-6 py-3 border border-border hover:border-ink-tertiary text-ink font-medium rounded-lg transition-colors"
-            >
-              {t('cta_secondary')}
-              <ArrowRight size={18} className="ml-2" />
-            </Link>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center gap-3 mb-8"
         >
-          <div className="w-6 h-10 rounded-full border-2 border-border flex items-start justify-center p-2">
-            <motion.div
-              className="w-1.5 h-1.5 bg-ink/50 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            TURFu — Centre Transdisciplinaire
+          </span>
+        </motion.div>
+
+        {/* Editorial headline — left-aligned, large, italic accent */}
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.05 }}
+          className="font-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[5rem] leading-[1.05] text-ink max-w-5xl mb-10"
+        >
+          {t('tagline')}
+        </motion.h1>
+
+        {/* Subtitle — long-form, editorial measure */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-lg md:text-xl text-ink-secondary leading-relaxed max-w-3xl mb-14"
+        >
+          {t('subtitle')}
+        </motion.p>
+
+        {/* CTAs — primary navy, secondary text link with gold rule */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="flex flex-col sm:flex-row sm:items-center gap-5"
+        >
+          <Link
+            href={`/${locale}/publications`}
+            className="inline-flex items-center justify-center px-7 py-3.5 bg-accent hover:bg-accent-hover text-paper font-medium rounded-sm transition-colors group"
+          >
+            <BookOpen size={18} className="mr-2.5" />
+            {t('cta_primary')}
+            <ArrowRight
+              size={16}
+              className="ml-2 -mr-1 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
             />
-          </div>
+          </Link>
+          <Link
+            href={`/${locale}/vision`}
+            className="inline-flex items-center gap-3 px-2 py-2 text-ink hover:text-accent font-medium transition-colors group border-b border-transparent hover:border-gold"
+          >
+            <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
+            {t('cta_secondary')}
+          </Link>
         </motion.div>
       </div>
     </section>

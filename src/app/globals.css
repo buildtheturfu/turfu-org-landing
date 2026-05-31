@@ -1,35 +1,65 @@
+/* TURFu OS Doc Charter v1 — colour canon (typography loaded via next/font) */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --ink: #1C1917;
-    --ink-secondary: #78716C;
-    --ink-tertiary: #A8A29E;
-    --paper: #FAFAF9;
-    --paper-warm: #F5F5F4;
-    --paper-depth: #E7E5E4;
-    --border: #D6D3D1;
-    --layer-0: #7C3AED;
-    --layer-0-light: #EDE9FE;
-    --layer-1: #0D9488;
-    --layer-1-light: #CCFBF1;
-    --layer-2: #EA580C;
-    --layer-2-light: #FFF7ED;
-    --accent: #B45309;
-    --accent-hover: #92400E;
-    --accent-light: #FFFBEB;
+    /* Doc Charter v1 canon */
+    --ink: #14161b;             /* body text — near-black navy */
+    --ink-secondary: #2d2f37;   /* secondary text — soft ink */
+    --ink-tertiary: #6a6757;    /* meta, captions — warm muted */
+    --paper: #fbf8f1;           /* warm cream */
+    --paper-warm: #f3eee0;      /* alt warm tone (cards, blockquotes) */
+    --paper-depth: #e8e4d3;     /* deeper warm (subtle rules) */
+    --border: #d8d2bf;          /* warm rule on paper */
+    --rule-soft: #e8e4d3;       /* very subtle rules on white */
+
+    /* Brand accents */
+    --accent: #1f3a5f;          /* navy — h2, accent rules */
+    --accent-hover: #15294a;    /* deeper navy on hover */
+    --accent-light: #e6ecf3;    /* navy wash for surfaces */
+    --accent-soft: #4a6488;     /* sub-headings, soft callouts */
+
+    --gold: #a07a32;            /* gold — tags, h2 prefix rules, ornaments */
+    --gold-hover: #8a6628;
+    --gold-light: #f5edd8;
+
+    /* Legacy layer system → derived from new palette for backward compat */
+    --layer-0: #4a6488;         /* navy-soft */
+    --layer-0-light: #e6ecf3;
+    --layer-1: #1f3a5f;         /* navy */
+    --layer-1-light: #e6ecf3;
+    --layer-2: #a07a32;         /* gold */
+    --layer-2-light: #f5edd8;
   }
 
   .dark {
-    --ink: #F5F5F4;
-    --ink-secondary: #A8A29E;
-    --ink-tertiary: #78716C;
-    --paper: #1C1917;
-    --paper-warm: #292524;
-    --paper-depth: #44403C;
-    --border: #57534E;
+    --ink: #f3eee0;
+    --ink-secondary: #d8d2bf;
+    --ink-tertiary: #a09b85;
+    --paper: #14161b;
+    --paper-warm: #1c1f27;
+    --paper-depth: #2a2d36;
+    --border: #3a3d46;
+    --rule-soft: #2a2d36;
+
+    --accent: #6b86b0;          /* lighter navy on dark */
+    --accent-hover: #8aa3c8;
+    --accent-light: rgba(107, 134, 176, 0.12);
+    --accent-soft: #94a8c8;
+
+    --gold: #d4a85b;
+    --gold-hover: #e6bd76;
+    --gold-light: rgba(212, 168, 91, 0.12);
+
+    --layer-0: #8aa3c8;
+    --layer-0-light: rgba(138, 163, 200, 0.12);
+    --layer-1: #6b86b0;
+    --layer-1-light: rgba(107, 134, 176, 0.12);
+    --layer-2: #d4a85b;
+    --layer-2-light: rgba(212, 168, 91, 0.12);
   }
 
   html {

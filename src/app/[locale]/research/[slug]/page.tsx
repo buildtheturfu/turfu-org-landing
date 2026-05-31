@@ -31,10 +31,10 @@ export function generateStaticParams() {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    draft: 'bg-paper-warm text-ink-tertiary',
-    'working-paper': 'bg-layer-0-light text-layer-0',
-    submitted: 'bg-layer-1-light text-layer-1',
-    published: 'bg-accent-light text-accent',
+    draft: 'border-rule text-ink-tertiary',
+    'working-paper': 'border-accent-soft text-accent-soft',
+    submitted: 'border-accent text-accent',
+    published: 'border-gold text-gold bg-gold-light/40',
   };
   const labels: Record<string, string> = {
     draft: 'Brouillon',
@@ -44,7 +44,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   return (
     <span
-      className={`inline-block px-3 py-1 rounded-full text-caption font-medium ${
+      className={`inline-block px-3 py-1 border rounded-sm text-caption font-mono uppercase tracking-wider ${
         styles[status] || styles.draft
       }`}
     >

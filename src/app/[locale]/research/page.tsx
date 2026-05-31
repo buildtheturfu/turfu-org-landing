@@ -12,19 +12,23 @@ interface Props {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    'draft': 'bg-paper-warm text-ink-tertiary',
-    'working-paper': 'bg-layer-0-light text-layer-0',
-    'submitted': 'bg-layer-1-light text-layer-1',
-    'published': 'bg-accent-light text-accent',
+    draft: 'border-rule text-ink-tertiary',
+    'working-paper': 'border-accent-soft text-accent-soft',
+    submitted: 'border-accent text-accent',
+    published: 'border-gold text-gold bg-gold-light/40',
   };
   const labels: Record<string, string> = {
-    'draft': 'Brouillon',
+    draft: 'Brouillon',
     'working-paper': 'Working paper',
-    'submitted': 'Soumis',
-    'published': 'Publie',
+    submitted: 'Soumis',
+    published: 'Publié',
   };
   return (
-    <span className={`inline-block px-2.5 py-0.5 rounded-full text-caption font-medium ${styles[status] || styles.draft}`}>
+    <span
+      className={`inline-block px-2.5 py-0.5 border rounded-sm text-caption font-mono uppercase tracking-wider ${
+        styles[status] || styles.draft
+      }`}
+    >
       {labels[status] || status}
     </span>
   );
@@ -35,127 +39,182 @@ export default async function ResearchPage({ params: { locale } }: Props) {
   const t = await getTranslations('researchPage');
 
   return (
-    <GridLayout className="py-16">
-      {/* Header */}
-      <div className="max-w-3xl mb-12">
-        <div className="text-caption font-mono uppercase tracking-widest text-accent mb-3">
-          {t('programmeBadge')}
+    <GridLayout className="py-20 md:py-28">
+      {/* Editorial header — gold rule + navy eyebrow + large serif headline */}
+      <div className="max-w-4xl mb-20">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('programmeBadge')}
+          </span>
         </div>
-        <h1 className="font-display text-4xl md:text-5xl text-ink mb-4 leading-tight">{t('title')}</h1>
-        <p className="text-lg text-ink-secondary leading-relaxed mb-6">{t('subtitle')}</p>
-        <p className="text-body text-ink-secondary leading-relaxed">{t('programmeIntro')}</p>
+        <h1 className="font-display text-5xl md:text-6xl lg:text-7xl text-ink mb-8 leading-[1.05]">
+          {t('title')}
+        </h1>
+        <p className="text-xl md:text-2xl text-ink-secondary leading-relaxed mb-6 font-display italic">
+          {t('subtitle')}
+        </p>
+        <p className="text-body text-ink-secondary leading-relaxed max-w-3xl">{t('programmeIntro')}</p>
       </div>
 
-      {/* At-a-glance metrics */}
-      <section className="mb-16 grid sm:grid-cols-4 gap-3">
-        {[
-          { metric: '1', label: t('metricPublished'), accent: true },
-          { metric: '1', label: t('metricSubmitted') },
-          { metric: '5', label: t('metricAIRoles') },
-          { metric: '37', label: t('metricRefs') },
-        ].map((m) => (
-          <div
-            key={m.label}
-            className={`p-4 rounded-xl border text-center ${
-              m.accent ? 'border-accent/40 bg-accent-light/30' : 'border-border bg-paper-warm'
-            }`}
-          >
-            <div className={`font-display text-3xl ${m.accent ? 'text-accent' : 'text-ink'}`}>
-              {m.metric}
-            </div>
-            <div className="text-caption text-ink-tertiary uppercase tracking-wider mt-1">
-              {m.label}
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* Methodology */}
-      <section className="mb-16">
-        <h2 className="font-display text-2xl text-ink mb-6">{t('methodologyTitle')}</h2>
-        <div className="grid md:grid-cols-2 gap-4">
-          {['art', 'stigmergic', 'adversarial', 'versioning'].map((key) => (
-            <div key={key} className="p-5 bg-paper-warm rounded-xl border border-border">
-              <h3 className="font-semibold text-ink mb-1.5">{t(`method_${key}_title`)}</h3>
-              <p className="text-body-sm text-ink-secondary leading-relaxed">{t(`method_${key}_desc`)}</p>
+      {/* At-a-glance metrics — editorial inline rule, no cards */}
+      <section className="mb-24 border-y border-border py-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 md:divide-x md:divide-rule-soft">
+          {[
+            { metric: '1', label: t('metricPublished') },
+            { metric: '1', label: t('metricSubmitted') },
+            { metric: '5', label: t('metricAIRoles') },
+            { metric: '37', label: t('metricRefs') },
+          ].map((m) => (
+            <div key={m.label} className="text-center md:px-4 first:pl-0 last:pr-0">
+              <div className="font-display text-5xl md:text-6xl text-accent leading-none mb-3">
+                {m.metric}
+              </div>
+              <div className="text-caption text-ink-tertiary uppercase tracking-[0.14em]">
+                {m.label}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Open Science — link to dedicated page */}
-      <section className="mb-16">
+      {/* Methodology — typographic, no cards. Each method on its own line. */}
+      <section className="mb-24">
+        <div className="flex items-center gap-3 mb-8">
+          <span className="h-px w-8 bg-gold" />
+          <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('methodologyTitle')}
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-2 gap-x-10 gap-y-10">
+          {['art', 'stigmergic', 'adversarial', 'versioning'].map((key, i) => (
+            <article key={key} className="border-t border-rule-soft pt-6">
+              <div className="flex items-baseline gap-3 mb-3">
+                <span className="font-mono text-caption text-gold">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="font-display text-xl text-ink leading-tight">
+                  {t(`method_${key}_title`)}
+                </h3>
+              </div>
+              <p className="text-body-sm text-ink-secondary leading-relaxed">
+                {t(`method_${key}_desc`)}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Open Science Pack — editorial CTA with serif italic headline */}
+      <section className="mb-24">
         <Link
           href={`/${locale}/research/open-science`}
-          className="block p-7 rounded-3xl border-2 border-accent/30 bg-gradient-to-br from-accent-light/40 via-paper to-paper hover:border-accent hover:shadow-md transition-all group"
+          className="group block border-y-2 border-accent py-12 transition-colors hover:bg-accent-light/40"
         >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center flex-shrink-0">
-              <Package size={24} className="text-white" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-caption uppercase tracking-wider font-mono text-accent font-semibold">{t('packBadge')}</span>
-                <span className="text-caption text-ink-tertiary">2026-05-30</span>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="flex-1 max-w-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <Package size={16} className="text-gold" />
+                <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+                  {t('packBadge')}
+                </span>
+                <span className="text-caption text-ink-tertiary">— 2026-05-30</span>
               </div>
-              <h2 className="font-display text-2xl text-ink mb-2 group-hover:text-accent transition-colors">{t('packTitle')}</h2>
-              <p className="text-body text-ink-secondary leading-relaxed mb-3">{t('packDesc')}</p>
-              <div className="inline-flex items-center gap-2 text-accent font-medium text-body-sm">
-                {t('packExplore')} <ArrowRight size={16} />
+              <h2 className="font-display text-3xl md:text-4xl text-ink mb-4 leading-tight group-hover:text-accent transition-colors">
+                <span className="italic">{t('packTitle')}</span>
+              </h2>
+              <p className="text-body text-ink-secondary leading-relaxed mb-5">
+                {t('packDesc')}
+              </p>
+              <div className="inline-flex items-center gap-3 text-accent font-medium">
+                <span className="h-px w-6 bg-gold transition-all group-hover:w-12" />
+                {t('packExplore')}
+                <ArrowRight size={16} />
               </div>
             </div>
           </div>
         </Link>
       </section>
 
-      {/* Research Papers */}
+      {/* Research Papers — editorial listing, no cards */}
       <section>
-        <h2 className="font-display text-2xl text-ink mb-8">{t('papersTitle')}</h2>
-        <div className="space-y-6">
-          {researchPapers.map((paper) => {
+        <div className="flex items-center gap-3 mb-10">
+          <span className="h-px w-8 bg-gold" />
+          <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            {t('papersTitle')}
+          </h2>
+        </div>
+        <div className="divide-y divide-rule-soft">
+          {researchPapers.map((paper, idx) => {
             const latestVersion = paper.versions[paper.versions.length - 1];
             return (
               <Link
                 key={paper.slug}
                 href={`/${locale}/research/${paper.slug}`}
-                className="block p-6 bg-paper border border-border rounded-xl hover:shadow-sm hover:border-accent/20 transition-all group"
+                className="group block py-10 -mx-4 px-4 sm:-mx-6 sm:px-6 transition-colors hover:bg-accent-light/30"
               >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-3">
-                    <StatusBadge status={paper.status} />
-                    {paper.targetJournal && (
-                      <span className="text-caption text-ink-tertiary">{paper.targetJournal}</span>
-                    )}
+                <div className="flex items-start gap-6">
+                  {/* Index number — serif italic */}
+                  <div className="font-display italic text-3xl text-gold leading-none mt-1 hidden sm:block">
+                    {String(idx + 1).padStart(2, '0')}
                   </div>
-                  <ArrowRight size={18} className="text-ink-tertiary group-hover:text-accent transition-colors flex-shrink-0 mt-0.5" />
-                </div>
 
-                <h3 className="font-display text-xl md:text-2xl text-ink mb-2 group-hover:text-accent transition-colors">
-                  {paper.title}
-                </h3>
-                <p className="text-body-sm text-ink-secondary italic mb-3">{paper.subtitle}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                      <StatusBadge status={paper.status} />
+                      {paper.targetJournal && (
+                        <>
+                          <span className="text-rule">·</span>
+                          <span className="text-caption font-mono text-ink-tertiary uppercase tracking-wider">
+                            {paper.targetJournal}
+                          </span>
+                        </>
+                      )}
+                    </div>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-caption text-ink-tertiary mb-4">
-                  <span>{paper.authors.map((a) => a.name).join(', ')}</span>
-                  <span>{paper.discipline}</span>
-                  <span>{paper.versions.length} versions</span>
-                  <span>{paper.audits.length} audits</span>
-                  {latestVersion?.scores && (
-                    <span>
-                      Architecture: {Object.values(latestVersion.scores)[0]}/10
-                    </span>
-                  )}
-                </div>
+                    <h3 className="font-display text-2xl md:text-3xl text-ink leading-tight mb-2 group-hover:text-accent transition-colors">
+                      {paper.title}
+                    </h3>
+                    <p className="font-display italic text-lg text-ink-secondary leading-snug mb-5">
+                      {paper.subtitle}
+                    </p>
 
-                <div className="flex flex-wrap gap-1.5">
-                  {paper.tags.slice(0, 5).map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 bg-paper-warm rounded text-caption text-ink-tertiary">
-                      {tag}
-                    </span>
-                  ))}
-                  {paper.tags.length > 5 && (
-                    <span className="text-caption text-ink-tertiary">+{paper.tags.length - 5}</span>
-                  )}
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-caption text-ink-tertiary mb-4">
+                      <span>{paper.authors.map((a) => a.name).join(', ')}</span>
+                      <span className="text-rule">·</span>
+                      <span>{paper.discipline}</span>
+                      <span className="text-rule">·</span>
+                      <span>{paper.versions.length} versions</span>
+                      <span className="text-rule">·</span>
+                      <span>{paper.audits.length} audits</span>
+                      {latestVersion?.scores && (
+                        <>
+                          <span className="text-rule">·</span>
+                          <span className="font-mono">
+                            Architecture {Object.values(latestVersion.scores)[0]}/10
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      {paper.tags.slice(0, 5).map((tag) => (
+                        <span key={tag} className="text-caption text-ink-tertiary italic">
+                          {tag}
+                        </span>
+                      ))}
+                      {paper.tags.length > 5 && (
+                        <span className="text-caption text-ink-tertiary">
+                          +{paper.tags.length - 5}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <ArrowRight
+                    size={18}
+                    className="text-ink-tertiary group-hover:text-accent group-hover:translate-x-1 transition-all flex-shrink-0 mt-2 hidden sm:block"
+                  />
                 </div>
               </Link>
             );
@@ -163,19 +222,27 @@ export default async function ResearchPage({ params: { locale } }: Props) {
         </div>
       </section>
 
-      {/* Link to publications */}
-      <section className="mt-16 pt-8 border-t border-border">
-        <div className="flex items-center gap-3 mb-4">
-          <BookOpen size={20} className="text-accent" />
-          <h2 className="font-display text-xl text-ink">{t('publicationsLink')}</h2>
+      {/* Link to publications — editorial footer */}
+      <section className="mt-24 pt-10 border-t border-border">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <BookOpen size={16} className="text-gold" />
+              <h2 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+                {t('publicationsLink')}
+              </h2>
+            </div>
+            <p className="text-body text-ink-secondary leading-relaxed">{t('publicationsLinkDesc')}</p>
+          </div>
+          <Link
+            href={`/${locale}/publications`}
+            className="inline-flex items-center gap-3 text-ink hover:text-accent font-medium group whitespace-nowrap"
+          >
+            <span className="h-px w-6 bg-gold transition-all group-hover:w-12" />
+            {t('viewPublications')}
+            <ArrowRight size={16} />
+          </Link>
         </div>
-        <p className="text-body text-ink-secondary mb-4">{t('publicationsLinkDesc')}</p>
-        <Link
-          href={`/${locale}/publications`}
-          className="inline-flex items-center gap-2 text-accent hover:text-accent-hover font-medium"
-        >
-          {t('viewPublications')} <ArrowRight size={16} />
-        </Link>
       </section>
     </GridLayout>
   );
