@@ -50,33 +50,38 @@ export default function Navbar() {
   const isActive = (href: string) => pathname.startsWith(href);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-paper/80 backdrop-blur-lg border-b border-border">
-      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-paper/85 backdrop-blur-lg border-b border-rule-soft">
+      <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center gap-2">
-            <span className="text-xl font-bold text-accent">TURFu</span>
+          {/* Logo — editorial wordmark with gold rule */}
+          <Link href={`/${locale}`} className="flex items-center gap-3 group">
+            <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
+            <span className="font-display text-xl text-ink tracking-tight">TURFu</span>
           </Link>
 
-          {/* Desktop nav links */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.key}
-                href={link.href}
-                className={`text-body-sm transition-colors ${
-                  isActive(link.href)
-                    ? 'text-ink font-medium'
-                    : 'text-ink-secondary hover:text-ink'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* Desktop nav links — editorial uppercase mono */}
+          <div className="hidden md:flex items-center gap-7">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  className={`relative text-caption font-mono uppercase tracking-[0.14em] transition-colors py-1 ${
+                    active ? 'text-accent' : 'text-ink-secondary hover:text-ink'
+                  }`}
+                >
+                  {link.label}
+                  {active && (
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-gold" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Desktop controls */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
             <LanguageSwitcher />
             <InlineThemeToggle />
           </div>
@@ -88,33 +93,38 @@ export default function Navbar() {
             aria-label={isOpen ? t('close') : t('menu')}
             aria-expanded={isOpen}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.key}
-                  href={link.href}
-                  className={`py-3 text-lg transition-colors ${
-                    isActive(link.href)
-                      ? 'text-ink font-medium'
-                      : 'text-ink-secondary hover:text-ink'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="border-t border-border my-4" />
-              <div className="flex items-center gap-3">
-                <LanguageSwitcher />
-                <InlineThemeToggle />
-              </div>
+          <div className="md:hidden py-6 border-t border-rule-soft">
+            <div className="flex flex-col divide-y divide-rule-soft">
+              {navLinks.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.key}
+                    href={link.href}
+                    className={`group flex items-center gap-3 py-4 transition-colors ${
+                      active ? 'text-accent' : 'text-ink-secondary hover:text-ink'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span
+                      className={`h-px transition-all ${
+                        active ? 'w-8 bg-gold' : 'w-4 bg-rule group-hover:w-6 group-hover:bg-gold'
+                      }`}
+                    />
+                    <span className="font-display text-xl">{link.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="mt-6 pt-6 border-t border-rule-soft flex items-center gap-2">
+              <LanguageSwitcher />
+              <InlineThemeToggle />
             </div>
           </div>
         )}

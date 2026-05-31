@@ -46,12 +46,20 @@ export default async function PublicationsPage({
   const hasFilters = !!(searchParams.discipline || searchParams.tag);
 
   return (
-    <GridLayout className="py-16">
-      <h1 className="font-display text-4xl text-ink mb-2">{t('title')}</h1>
-      <p className="text-body text-ink-secondary mb-8">{t('subtitle')}</p>
+    <GridLayout className="py-20 md:py-28">
+      <div className="mb-16 max-w-4xl">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="h-px w-12 bg-gold" />
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            Publications
+          </span>
+        </div>
+        <h1 className="font-display text-5xl md:text-6xl text-ink mb-6 leading-[1.05]">{t('title')}</h1>
+        <p className="font-display italic text-xl md:text-2xl text-ink-secondary leading-snug">{t('subtitle')}</p>
+      </div>
 
       {(disciplines.length > 0 || tags.length > 0) && (
-        <div className="mb-8">
+        <div className="mb-12 border-y border-rule-soft py-6">
           <FilterBar
             disciplines={disciplines}
             tags={tags}
@@ -68,7 +76,7 @@ export default async function PublicationsPage({
       )}
 
       {publications.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
           {publications.map((pub) => (
             <PublicationCard key={pub.id} publication={pub} locale={locale} />
           ))}

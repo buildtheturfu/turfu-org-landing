@@ -33,22 +33,32 @@ export default function Footer() {
     { href: `/${locale}/privacy`, label: t('privacy') },
   ];
 
+  const columnHeader = (label: string) => (
+    <div className="flex items-center gap-3 mb-5">
+      <span className="h-px w-6 bg-gold" />
+      <h3 className="text-caption font-mono uppercase tracking-[0.18em] text-accent">{label}</h3>
+    </div>
+  );
+
   return (
-    <footer className="bg-paper-warm border-t border-border pt-16 pb-8">
-      <div className="max-w-layout mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+    <footer className="bg-paper-warm/50 border-t border-rule pt-20 pb-10 mt-12">
+      <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Brand column */}
-          <div className="flex flex-col gap-4">
-            <span className="text-xl font-bold text-accent">TURFu</span>
-            <p className="text-body-sm text-ink-secondary">
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-gold" />
+              <span className="font-display text-2xl text-ink tracking-tight">TURFu</span>
+            </div>
+            <p className="font-display italic text-body text-ink-secondary leading-snug">
               {t('tagline')}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5 mt-2">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-ink-secondary hover:text-ink transition-colors"
+                  className="text-ink-tertiary hover:text-accent transition-colors"
                   aria-label={link.label}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -61,40 +71,37 @@ export default function Footer() {
 
           {/* Navigation column */}
           <div>
-            <h3 className="text-body-sm font-medium text-ink mb-4">
-              {t('nav_title')}
-            </h3>
-            <nav className="flex flex-col">
+            {columnHeader(t('nav_title'))}
+            <nav className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-body-sm text-ink-secondary hover:text-ink transition-colors block py-1"
+                  className="group inline-flex items-center gap-2.5 text-body-sm text-ink-secondary hover:text-accent transition-colors w-fit"
                 >
+                  <span className="h-px w-3 bg-rule transition-all group-hover:w-5 group-hover:bg-gold" />
                   {link.label}
                 </Link>
               ))}
             </nav>
           </div>
 
-          {/* Ecosystem / Inter-sites column */}
+          {/* Ecosystem column */}
           <div>
-            <h3 className="text-body-sm font-medium text-ink mb-4">
-              {t('sites_title')}
-            </h3>
-            <div className="flex flex-col gap-3">
+            {columnHeader(t('sites_title'))}
+            <div className="flex flex-col gap-4">
               {siteLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="block"
+                  className="block group"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="text-body-sm text-ink-secondary hover:text-ink transition-colors">
+                  <span className="font-display text-body text-ink group-hover:text-accent transition-colors">
                     {link.name}
                   </span>
-                  <span className="block text-caption text-ink-tertiary">
+                  <span className="block text-caption text-ink-tertiary italic mt-0.5">
                     {link.desc}
                   </span>
                 </a>
@@ -104,16 +111,15 @@ export default function Footer() {
 
           {/* Legal column */}
           <div>
-            <h3 className="text-body-sm font-medium text-ink mb-4">
-              {t('legal_title')}
-            </h3>
-            <nav className="flex flex-col">
+            {columnHeader(t('legal_title'))}
+            <nav className="flex flex-col gap-2">
               {legalLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-body-sm text-ink-secondary hover:text-ink transition-colors block py-1"
+                  className="group inline-flex items-center gap-2.5 text-body-sm text-ink-secondary hover:text-accent transition-colors w-fit"
                 >
+                  <span className="h-px w-3 bg-rule transition-all group-hover:w-5 group-hover:bg-gold" />
                   {link.label}
                 </Link>
               ))}
@@ -121,11 +127,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-border mt-12 pt-8">
-          <p className="text-caption text-ink-tertiary">
-            &copy; {t('copyright')}
-          </p>
+        {/* Bottom bar — editorial colophon */}
+        <div className="border-t border-rule-soft mt-16 pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p className="text-caption text-ink-tertiary font-mono">&copy; {t('copyright')}</p>
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-ink-tertiary italic">
+            Centre Transdisciplinaire de Recherche
+          </span>
         </div>
       </div>
     </footer>
