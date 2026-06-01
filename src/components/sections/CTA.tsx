@@ -16,22 +16,32 @@ export default function CTA() {
   return (
     <section id="cta" className="py-24 md:py-32 bg-paper-warm/40">
       <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
-        {/* Eyebrow + headline */}
+        {/* Eyebrow + headline + intro */}
         <div className="flex items-center gap-3 mb-6">
           <span className="h-px w-12 bg-gold" />
           <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
-            {t('title')}
+            Participer
           </span>
         </div>
 
         <motion.h2
-          className="font-display text-4xl md:text-5xl text-ink mb-6 leading-[1.05] max-w-3xl"
+          className="font-display text-4xl md:text-5xl text-ink leading-[1.05] mb-6 max-w-3xl"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <span className="italic">{t('intro')}</span>
+          {t('title')}
         </motion.h2>
+
+        <motion.p
+          className="font-display italic text-lg md:text-xl text-ink-secondary leading-relaxed max-w-3xl"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+        >
+          {t('intro')}
+        </motion.p>
 
         {/* Actions — editorial listing */}
         <div className="mt-16 grid md:grid-cols-3 gap-x-10 gap-y-12 md:divide-x md:divide-rule-soft border-t-2 border-accent pt-12">

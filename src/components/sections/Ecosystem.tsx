@@ -16,23 +16,33 @@ export default function Ecosystem() {
   return (
     <section id="ecosystem" className="py-24 md:py-32 bg-paper">
       <div className="max-w-layout mx-auto px-6 sm:px-10 lg:px-16">
-        {/* Eyebrow + headline */}
+        {/* Eyebrow + title + intro */}
         <div className="flex items-center gap-3 mb-6">
           <span className="h-px w-12 bg-gold" />
           <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
-            {t('title')}
+            Architecture
           </span>
         </div>
 
         <motion.h2
-          className="font-display text-4xl md:text-5xl lg:text-6xl text-ink mb-8 leading-[1.05] max-w-4xl"
+          className="font-display text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05] mb-8 max-w-4xl"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="italic">{t('intro')}</span>
+          {t('title')}
         </motion.h2>
+
+        <motion.p
+          className="font-display italic text-lg md:text-xl text-ink-secondary leading-relaxed max-w-3xl"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          {t('intro')}
+        </motion.p>
 
         {/* Layers — editorial listing with gold numerals */}
         <div className="mt-20 divide-y divide-rule-soft border-t border-rule-soft">
