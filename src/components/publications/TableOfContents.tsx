@@ -70,10 +70,13 @@ export function TableOfContents() {
     <>
       {/* Desktop: sticky sidebar */}
       <nav className="hidden xl:block fixed right-[max(1rem,calc((100vw-1200px)/2-16rem))] top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <p className="text-caption font-semibold text-ink-tertiary uppercase tracking-wider mb-3">
-          Sommaire
-        </p>
-        <ul className="space-y-1 border-l border-border">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="h-px w-6 bg-gold" />
+          <p className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            Sommaire
+          </p>
+        </div>
+        <ul className="space-y-1 border-l border-rule-soft">
           {headings.map(({ id, text, level }) => (
             <li key={id}>
               <a
@@ -83,12 +86,12 @@ export function TableOfContents() {
                   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
                   setActiveId(id);
                 }}
-                className={`block text-[13px] leading-snug py-1 transition-colors border-l-2 -ml-[2px] ${
+                className={`block text-[13px] leading-snug py-1.5 transition-colors border-l-2 -ml-[2px] ${
                   level === 1 ? 'pl-3' : level === 2 ? 'pl-5' : 'pl-7'
                 } ${
                   activeId === id
-                    ? 'border-accent text-accent font-medium'
-                    : 'border-transparent text-ink-tertiary hover:text-ink-secondary'
+                    ? 'border-gold text-accent font-medium'
+                    : 'border-transparent text-ink-tertiary hover:text-accent'
                 }`}
               >
                 {text}
@@ -102,7 +105,7 @@ export function TableOfContents() {
       <div className="xl:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-accent text-white rounded-full shadow-lg flex items-center justify-center hover:bg-accent-hover transition-colors"
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-accent text-paper border border-gold/30 rounded-sm flex items-center justify-center hover:bg-accent-hover transition-colors"
           aria-label="Table des matières"
         >
           {isOpen ? <X size={20} /> : <List size={20} />}
@@ -111,13 +114,16 @@ export function TableOfContents() {
         {isOpen && (
           <>
             <div
-              className="fixed inset-0 bg-ink/20 z-40"
+              className="fixed inset-0 bg-ink/30 z-40"
               onClick={() => setIsOpen(false)}
             />
-            <nav className="fixed bottom-20 right-6 z-50 w-72 max-h-[60vh] overflow-y-auto bg-paper border border-border rounded-xl shadow-xl p-4">
-              <p className="text-caption font-semibold text-ink-tertiary uppercase tracking-wider mb-3">
-                Sommaire
-              </p>
+            <nav className="fixed bottom-20 right-6 z-50 w-72 max-h-[60vh] overflow-y-auto bg-paper border-2 border-accent rounded-sm p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="h-px w-6 bg-gold" />
+                <p className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+                  Sommaire
+                </p>
+              </div>
               <ul className="space-y-1">
                 {headings.map(({ id, text, level }) => (
                   <li key={id}>
@@ -131,12 +137,10 @@ export function TableOfContents() {
                       }}
                       className={`block text-[13px] leading-snug py-1.5 transition-colors ${
                         level === 1 ? 'font-medium' : ''
-                      } ${
-                        level === 2 ? 'pl-4' : level === 3 ? 'pl-8' : ''
-                      } ${
+                      } ${level === 2 ? 'pl-4' : level === 3 ? 'pl-8' : ''} ${
                         activeId === id
                           ? 'text-accent'
-                          : 'text-ink-secondary hover:text-ink'
+                          : 'text-ink-secondary hover:text-accent'
                       }`}
                     >
                       {text}

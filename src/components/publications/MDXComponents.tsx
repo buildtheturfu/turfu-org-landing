@@ -2,46 +2,54 @@ import type { MDXComponents } from 'mdx/types';
 
 function QuoteBlock({ children, cite }: { children: React.ReactNode; cite?: string }) {
   return (
-    <blockquote className="border-l-4 border-accent pl-6 my-8 italic text-ink-secondary">
+    <blockquote className="border-l-2 border-gold pl-6 my-10 font-display italic text-xl text-ink-secondary leading-snug">
       {children}
-      {cite && <footer className="mt-2 text-caption not-italic">— {cite}</footer>}
+      {cite && (
+        <footer className="mt-4 text-caption font-mono uppercase tracking-wider not-italic text-ink-tertiary">
+          — {cite}
+        </footer>
+      )}
     </blockquote>
   );
 }
 
-function InfoBox({ children, type = 'info' }: { children: React.ReactNode; type?: 'info' | 'warning' | 'note' }) {
+function InfoBox({
+  children,
+  type = 'info',
+}: {
+  children: React.ReactNode;
+  type?: 'info' | 'warning' | 'note';
+}) {
   const styles = {
-    info: 'bg-layer-1-light border-layer-1',
-    warning: 'bg-layer-2-light border-layer-2',
-    note: 'bg-paper-warm border-border',
+    info: 'border-accent bg-accent-light/30',
+    warning: 'border-gold bg-gold-light/30',
+    note: 'border-rule bg-paper-warm/50',
   };
   return (
-    <div className={`border-l-4 ${styles[type]} p-4 my-6 rounded-r`}>
-      {children}
-    </div>
+    <div className={`border-l-2 ${styles[type]} px-5 py-4 my-8`}>{children}</div>
   );
 }
 
 function LayerBadge({ layer }: { layer: 0 | 1 | 2 }) {
-  const config = {
-    0: { label: 'Layer 0 - Fondations', className: 'bg-layer-0-light text-layer-0' },
-    1: { label: 'Layer 1 - Coordination', className: 'bg-layer-1-light text-layer-1' },
-    2: { label: 'Layer 2 - Interfaces', className: 'bg-layer-2-light text-layer-2' },
+  const labels: Record<0 | 1 | 2, string> = {
+    0: 'Layer 0 — Fondations',
+    1: 'Layer 1 — Coordination',
+    2: 'Layer 2 — Interfaces',
   };
-  const { label, className } = config[layer];
   return (
-    <span className={`inline-block px-3 py-1 rounded-full text-caption font-medium ${className}`}>
-      {label}
+    <span className="inline-block px-3 py-1 border border-accent text-accent rounded-sm text-caption font-mono uppercase tracking-wider">
+      {labels[layer]}
     </span>
   );
 }
 
 function Figure({ src, alt, caption }: { src: string; alt?: string; caption?: string }) {
   return (
-    <figure className="my-8">
-      <img src={src} alt={alt || caption || ''} className="rounded-lg w-full" />
+    <figure className="my-10">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt || caption || ''} className="w-full border border-rule-soft" />
       {caption && (
-        <figcaption className="mt-2 text-center text-caption text-ink-secondary">
+        <figcaption className="mt-3 text-center text-caption font-mono italic text-ink-tertiary">
           {caption}
         </figcaption>
       )}
@@ -59,87 +67,96 @@ export const mdxComponents: MDXComponents = {
   h1: (props) => (
     <h1
       {...props}
-      className="font-display text-[2rem] md:text-[2.5rem] text-ink mt-16 mb-6 leading-[1.15] tracking-tight border-b border-border pb-4"
+      className="font-display text-[2.25rem] md:text-[2.75rem] text-ink mt-16 mb-6 leading-[1.05] border-b border-rule pb-4"
     />
   ),
   h2: (props) => (
     <h2
       {...props}
-      className="font-display text-[1.5rem] md:text-[1.75rem] text-ink mt-12 mb-4 leading-[1.2]"
+      className="font-display text-[1.75rem] md:text-[2rem] text-ink mt-14 mb-4 leading-[1.1] pb-2 border-b border-rule-soft"
     />
   ),
   h3: (props) => (
     <h3
       {...props}
-      className="font-display text-[1.25rem] md:text-[1.375rem] text-ink mt-8 mb-3 leading-[1.3]"
+      className="font-display text-[1.375rem] md:text-[1.5rem] text-ink mt-10 mb-3 leading-[1.2]"
     />
   ),
-  h4: (props) => <h4 {...props} className="text-lg font-semibold text-ink mt-6 mb-2" />,
+  h4: (props) => (
+    <h4
+      {...props}
+      className="font-mono text-caption uppercase tracking-[0.18em] text-accent mt-8 mb-2"
+    />
+  ),
   p: (props) => (
     <p
       {...props}
-      className="text-body text-ink leading-[1.8] mb-5 text-justify hyphens-auto"
+      className="text-body text-ink-secondary leading-[1.8] mb-5 break-words"
     />
   ),
   a: (props) => (
     <a
       {...props}
-      className="text-accent hover:text-accent-hover underline underline-offset-2 decoration-accent/30 hover:decoration-accent transition-colors"
+      className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-gold transition-colors break-words"
     />
   ),
   blockquote: (props) => (
     <blockquote
       {...props}
-      className="border-l-4 border-accent/40 pl-6 pr-2 my-8 italic text-ink-secondary leading-[1.7] bg-paper-warm/50 py-4 rounded-r"
+      className="border-l-2 border-gold pl-6 my-10 font-display italic text-xl text-ink-secondary leading-snug not-italic"
     />
   ),
   code: (props) => (
     <code
       {...props}
-      className="font-mono text-body-sm bg-paper-warm px-1.5 py-0.5 rounded text-accent"
+      className="font-mono text-code bg-paper-warm border border-rule-soft px-1.5 py-0.5 rounded-sm text-ink break-words"
     />
   ),
   pre: (props) => (
     <pre
       {...props}
-      className="font-mono text-body-sm bg-paper-depth p-4 rounded-lg my-6 overflow-x-auto"
+      className="font-mono text-code bg-paper-warm border border-rule-soft p-5 my-8 max-w-full overflow-x-auto"
     />
   ),
   ul: (props) => (
     <ul
       {...props}
-      className="list-disc list-outside ml-6 mb-5 space-y-2 text-body text-ink leading-[1.7]"
+      className="list-disc list-outside ml-6 mb-5 space-y-2 text-body text-ink-secondary leading-[1.7] marker:text-gold"
     />
   ),
   ol: (props) => (
     <ol
       {...props}
-      className="list-decimal list-outside ml-6 mb-5 space-y-2 text-body text-ink leading-[1.7]"
+      className="list-decimal list-outside ml-6 mb-5 space-y-2 text-body text-ink-secondary leading-[1.7] marker:text-gold marker:font-mono"
     />
   ),
-  li: (props) => <li {...props} className="text-body text-ink leading-[1.7] pl-1" />,
+  li: (props) => <li {...props} className="text-body text-ink-secondary leading-[1.7] pl-1" />,
   hr: () => (
-    <hr className="border-none my-12 flex justify-center before:content-['✦'] before:text-ink-tertiary before:text-lg before:tracking-[0.5em]" />
+    <hr className="border-none my-14 flex justify-center before:content-['✦'] before:text-gold before:text-lg before:tracking-[0.5em]" />
   ),
   strong: (props) => <strong {...props} className="font-semibold text-ink" />,
   em: (props) => <em {...props} className="italic text-ink" />,
   table: (props) => (
-    <div className="overflow-x-auto my-8 rounded-lg border border-border">
+    <div className="max-w-full overflow-x-auto my-8 border border-rule-soft -mx-4 sm:mx-0">
       <table {...props} className="w-full text-body-sm" />
     </div>
   ),
-  thead: (props) => <thead {...props} className="bg-paper-warm" />,
+  thead: (props) => (
+    <thead {...props} className="bg-paper-warm border-b border-rule-soft" />
+  ),
   th: (props) => (
     <th
       {...props}
-      className="text-left font-semibold text-ink text-caption uppercase tracking-wider border-b border-border px-4 py-3"
+      className="text-left font-semibold text-ink text-caption uppercase tracking-[0.14em] px-4 py-3"
     />
   ),
   td: (props) => (
     <td
       {...props}
-      className="text-ink border-b border-border/50 px-4 py-3 leading-snug"
+      className="text-ink-secondary border-t border-rule-soft px-4 py-3 leading-snug align-top"
     />
   ),
-  tr: (props) => <tr {...props} className="hover:bg-paper-warm/50 transition-colors" />,
+  tr: (props) => (
+    <tr {...props} className="hover:bg-paper-warm/40 transition-colors" />
+  ),
 };
