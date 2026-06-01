@@ -7,11 +7,11 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 const LAYER_COLORS: Record<number, string> = {
-  0: '#7C3AED',
-  1: '#0D9488',
-  2: '#EA580C',
+  0: '#4a6488',
+  1: '#1f3a5f',
+  2: '#a07a32',
 };
-const DEFAULT_ACCENT = '#B45309';
+const DEFAULT_ACCENT = '#1f3a5f';
 
 function truncate(text: string, max: number): string {
   if (text.length <= max) return text;
@@ -44,7 +44,7 @@ export default async function OGImage({
         flexDirection: 'column',
         width: '100%',
         height: '100%',
-        backgroundColor: '#FAFAF9',
+        backgroundColor: '#fbf8f1',
       }}>
         {/* Accent stripe */}
         <div style={{
@@ -66,7 +66,7 @@ export default async function OGImage({
             display: 'flex',
             fontFamily: 'Instrument Serif',
             fontSize: 52,
-            color: '#1C1917',
+            color: '#14161b',
             lineHeight: 1.15,
             marginBottom: '20px',
           }}>
@@ -78,7 +78,8 @@ export default async function OGImage({
             <div style={{
               display: 'flex',
               fontSize: 24,
-              color: '#78716C',
+              color: '#2d2f37',
+              fontStyle: 'italic',
               lineHeight: 1.4,
             }}>
               {abstract}
@@ -99,11 +100,13 @@ export default async function OGImage({
             {discipline ? (
               <div style={{
                 display: 'flex',
-                backgroundColor: accentColor + '1A',
+                border: `1px solid ${accentColor}`,
                 color: accentColor,
-                fontSize: 16,
-                padding: '6px 16px',
-                borderRadius: '6px',
+                fontSize: 14,
+                padding: '4px 12px',
+                borderRadius: '2px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
               }}>
                 {discipline}
               </div>
@@ -115,8 +118,9 @@ export default async function OGImage({
             <div style={{
               display: 'flex',
               fontSize: 20,
-              color: '#A8A29E',
-              letterSpacing: '0.05em',
+              color: '#6a6757',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
             }}>
               TURFu
             </div>
