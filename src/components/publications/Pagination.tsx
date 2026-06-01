@@ -42,31 +42,35 @@ export function Pagination({
     .replace('{total}', String(totalPages));
 
   return (
-    <div className="flex items-center justify-center gap-4 mt-8">
+    <div className="flex items-center justify-between gap-6 mt-16 pt-8 border-t border-rule-soft">
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={!hasPrev}
-        className={`px-4 py-2 border border-border rounded text-body-sm text-ink transition-colors ${
+        className={`group inline-flex items-center gap-3 text-body-sm font-medium transition-colors ${
           hasPrev
-            ? 'hover:bg-paper-warm cursor-pointer'
-            : 'opacity-50 cursor-not-allowed'
+            ? 'text-ink hover:text-accent cursor-pointer'
+            : 'opacity-40 cursor-not-allowed text-ink-tertiary'
         }`}
       >
+        <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
         {translations.previous}
       </button>
 
-      <span className="text-body-sm text-ink-secondary">{pageText}</span>
+      <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+        {pageText}
+      </span>
 
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={!hasNext}
-        className={`px-4 py-2 border border-border rounded text-body-sm text-ink transition-colors ${
+        className={`group inline-flex items-center gap-3 text-body-sm font-medium transition-colors ${
           hasNext
-            ? 'hover:bg-paper-warm cursor-pointer'
-            : 'opacity-50 cursor-not-allowed'
+            ? 'text-ink hover:text-accent cursor-pointer'
+            : 'opacity-40 cursor-not-allowed text-ink-tertiary'
         }`}
       >
         {translations.next}
+        <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
       </button>
     </div>
   );

@@ -4,25 +4,12 @@ interface PillTagProps {
   active?: boolean;
 }
 
-const layerStyles: Record<number, string> = {
-  0: 'bg-layer-0-light text-layer-0',
-  1: 'bg-layer-1-light text-layer-1',
-  2: 'bg-layer-2-light text-layer-2',
-};
+export function PillTag({ label, active }: PillTagProps) {
+  const base =
+    'inline-block px-2.5 py-0.5 border text-caption font-mono uppercase tracking-wider rounded-sm transition-colors';
+  const stateClass = active
+    ? 'border-accent text-accent bg-accent-light'
+    : 'border-rule text-ink-secondary hover:border-gold hover:text-gold';
 
-export function PillTag({ label, layer, active }: PillTagProps) {
-  const colorClass =
-    layer != null && layer in layerStyles
-      ? layerStyles[layer]
-      : 'bg-paper-depth text-ink-secondary';
-
-  const activeClass = active ? 'ring-2 ring-accent' : '';
-
-  return (
-    <span
-      className={`inline-block px-2.5 py-0.5 text-caption font-medium rounded-[6px] ${colorClass} ${activeClass}`}
-    >
-      {label}
-    </span>
-  );
+  return <span className={`${base} ${stateClass}`}>{label}</span>;
 }

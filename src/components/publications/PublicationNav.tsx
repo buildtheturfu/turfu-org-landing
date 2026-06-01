@@ -14,37 +14,40 @@ interface PublicationNavProps {
 
 export function PublicationNav({ prev, next, locale, translations }: PublicationNavProps) {
   return (
-    <nav className="border-t border-border mt-16 pt-8">
-      <div className="grid grid-cols-3 gap-4 items-start">
-        <div>
+    <nav className="border-t-2 border-accent mt-20 pt-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <div className="md:order-1">
           {prev && (
-            <Link href={`/${locale}/publications/${prev.slug}`} className="group">
-              <span className="text-caption text-ink-tertiary block">
-                {translations.previousArticle}
+            <Link href={`/${locale}/publications/${prev.slug}`} className="group block">
+              <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent block mb-3">
+                ← {translations.previousArticle}
               </span>
-              <span className="text-body-sm text-ink group-hover:text-accent transition-colors line-clamp-2">
+              <span className="font-display text-lg text-ink group-hover:text-accent transition-colors line-clamp-3 italic">
                 {prev.title}
               </span>
             </Link>
           )}
         </div>
 
-        <div className="text-center">
+        <div className="md:order-2 text-center">
           <Link
             href={`/${locale}/publications`}
-            className="text-body-sm text-accent hover:text-accent-hover transition-colors"
+            className="group inline-flex flex-col items-center gap-2"
           >
-            {translations.backToFeed}
+            <span className="h-px w-12 bg-gold transition-all group-hover:w-20" />
+            <span className="text-caption font-mono uppercase tracking-[0.18em] text-ink hover:text-accent transition-colors">
+              {translations.backToFeed}
+            </span>
           </Link>
         </div>
 
-        <div className="text-right">
+        <div className="md:order-3 text-right">
           {next && (
-            <Link href={`/${locale}/publications/${next.slug}`} className="group">
-              <span className="text-caption text-ink-tertiary block">
-                {translations.nextArticle}
+            <Link href={`/${locale}/publications/${next.slug}`} className="group block">
+              <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent block mb-3">
+                {translations.nextArticle} →
               </span>
-              <span className="text-body-sm text-ink group-hover:text-accent transition-colors line-clamp-2">
+              <span className="font-display text-lg text-ink group-hover:text-accent transition-colors line-clamp-3 italic">
                 {next.title}
               </span>
             </Link>

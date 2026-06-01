@@ -45,18 +45,16 @@ export function FilterBar({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-5">
       {/* Discipline filter */}
       {disciplines.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-caption text-ink-secondary font-medium">
-            Discipline:
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            Discipline
           </span>
+          <span className="text-rule">·</span>
           <button onClick={() => navigate('discipline', null)}>
-            <PillTag
-              label={translations.allDisciplines}
-              active={!activeDiscipline}
-            />
+            <PillTag label={translations.allDisciplines} active={!activeDiscipline} />
           </button>
           {disciplines.map((d) => (
             <button key={d} onClick={() => navigate('discipline', d)}>
@@ -68,10 +66,11 @@ export function FilterBar({
 
       {/* Tag filter */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-caption text-ink-secondary font-medium">
-            Tags:
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="text-caption font-mono uppercase tracking-[0.18em] text-accent">
+            Tags
           </span>
+          <span className="text-rule">·</span>
           <button onClick={() => navigate('tag', null)}>
             <PillTag label={translations.allTags} active={!activeTag} />
           </button>
@@ -88,8 +87,9 @@ export function FilterBar({
         <div>
           <button
             onClick={() => router.push(pathname, { scroll: false })}
-            className="text-body-sm text-accent hover:text-accent-hover underline underline-offset-2"
+            className="group inline-flex items-center gap-3 text-body-sm text-ink hover:text-accent font-medium transition-colors"
           >
+            <span className="h-px w-6 bg-gold transition-all group-hover:w-10" />
             {translations.clearFilters}
           </button>
         </div>

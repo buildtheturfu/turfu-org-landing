@@ -23,7 +23,7 @@ export default function ThemeToggle() {
   if (!mounted) {
     return (
       <div
-        className="fixed bottom-5 right-20 z-30 w-11 h-11"
+        className="fixed bottom-6 right-20 z-30 w-12 h-12"
         aria-hidden="true"
       />
     );
@@ -38,7 +38,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-5 right-20 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-paper-depth hover:bg-paper-warm text-ink shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-paper"
+      className="fixed bottom-6 right-20 z-30 w-12 h-12 flex items-center justify-center rounded-sm bg-paper-warm border border-rule hover:border-gold text-ink transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-paper"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       <AnimatePresence mode="wait" initial={false}>
